@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Toys</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
+    <div class="max-w-4xl mx-auto">
+        <!-- 헤더 -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-gray-800 mb-3">🧸 My Toys</h1>
+            <p class="text-gray-500 text-lg">재미있는 도구 모음</p>
+        </div>
+        <!-- 도구 목록 -->
+        <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+            <!-- 로또 번호 생성기 -->
+            <a href="lotto-generator.html"
+                class="group bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md hover:border-blue-300 transition-all duration-200">
+                <div class="text-5xl mb-4">🎱</div>
+                <h2 class="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors mb-2">
+                    로또 번호 생성기
+                </h2>
+                <p class="text-sm text-gray-500">
+                    조건을 설정하고 행운의 로또 번호를 생성하세요. 이전 당첨번호 제외, 연속번호 제한 등 다양한 옵션을 지원합니다.
+                </p>
+                <div class="mt-4 text-xs text-blue-500 font-medium group-hover:underline">
+                    바로가기 →
+                </div>
+            </a>
+            <!-- 추후 추가될 도구 자리 -->
+            <div class="bg-white border border-dashed border-gray-300 rounded-xl p-6 flex flex-col items-center justify-center text-center opacity-50">
+                <div class="text-4xl mb-3">➕</div>
+                <p class="text-sm text-gray-400">더 많은 도구가 추가될 예정입니다</p>
+            </div>
+        </div>
+        <!-- 푸터 -->
+        <div class="mt-16 text-center text-xs text-gray-400">
+            <p>© 2026 My Toys</p>
+        </div>
+    </div>
+</body>
+</html>

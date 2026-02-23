@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로또 번호 생성기</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div class="max-w-6xl mx-auto">
+        <!-- 헤더 -->
+        <div class="text-center mb-8">
+            <a href="index.html" class="inline-block mb-4 text-sm text-blue-600 hover:text-blue-800 transition-colors">← 홈으로 돌아가기</a>
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">🎱 로또 번호 생성기</h1>
+            <p class="text-gray-600">조건을 설정하고 행운의 번호를 생성하세요</p>
+        </div>
+        <!-- 성공 알림 -->
+        <div id="successAlert" class="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg hidden animate-fade-in">
+            <p class="text-sm text-green-800">✨ 최신 당첨번호 조회 성공!</p>
+        </div>
+        <!-- 에러 알림 -->
+        <div id="errorAlert" class="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg hidden">
+            <p class="text-sm text-yellow-800" id="errorMessage"></p>
+            <button onclick="fetchLatestLottoNumbers()" class="text-xs text-yellow-700 underline mt-1 hover:text-yellow-900">
+                다시 시도
+            </button>
+        </div>
+        <!-- 메인 컨텐츠 -->
+        <div class="grid md:grid-cols-2 gap-6">
+            <!-- 설정 패널 -->
+            <div class="bg-white border border-gray-200 p-6 rounded-lg shadow-sm">
+                <h2 class="text-xl font-semibold mb-6">생성 설정</h2>
+                <div class="space-y-4">
+                    <!-- 생성 개수 -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            생성할 번호 세트 개수
+                        </label>
+                        <input type="number" id="count" min="1" max="10" value="1"
+                            class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <!-- 제외 옵션 -->
+                    <div class="space-y-3 border-t pt-4">
+                        <div class="flex items-start gap-2">
+                            <input type="checkbox" id="excludePrevious" class="w-4 h-4 mt-0.5 text-blue-600 rounded">
+                            <label for="excludePrevious" class="text-sm text-gray-700 flex-1">
+                                이전 추첨번호 제외
+                                <span id="latestInfo" class="block text-xs text-gray-500 mt-1"></span>
+                            </label>
+                            <button onclick="fetchLatestLottoNumbers()" id="refreshBtn"
+                                class="p-1 text-gray-500 hover:text-blue-600 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="excludeConsecutive" class="w-4 h-4 text-blue-600 rounded">
+                            <label for="excludeConsecutive" class="text-sm text-gray-700">
+                                최대 연속번호 제한 선택
+                            </label>
+                            <select id="consecutiveCount" class="ml-2 p-1 border border-gray-300 rounded text-sm">
+                                <option value="2">2개 연속</option>
+                                <option value="3">3개 연속</option>
+                                <option value="4">4개 연속</option>
+                                <option value="5">5개 연속</option>
+                                <option value="6">6개 연속</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- 포함할 번호 -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            포함할 번호 (콤마로 구분)
+                        </label>
+                        <input type="text" id="includeNumbers" placeholder="예: 7, 21, 33"
+                            class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <!-- 제외할 번호 -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            제외할 번호 (콤마로 구분)
+                        </label>
+                        <input type="text" id="excludeNumbers" placeholder="예: 1, 7, 13, 21"
+                            class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <!-- 구간별 최대 개수 -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            구간별 최대 선택 개수
+                        </label>
+                        <div class="grid grid-cols-2 gap-2 text-sm">
+                            <div class="flex items-center gap-2">
+                                <span class="w-12 text-xs">1-10:</span>
+                                <select id="region1" class="p-1 border border-gray-300 rounded flex-1">
+                                    <option value="0">0개</option>
+                                    <option value="1">1개</option>
+                                    <option value="2">2개</option>
+                                    <option value="3">3개</option>
+                                    <option value="4">4개</option>
+                                    <option value="5">5개</option>
+                                    <option value="6" selected>6개</option>
+                                </select>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-12 text-xs">11-20:</span>
+                                <select id="region2" class="p-1 border border-gray-300 rounded flex-1">
+                                    <option value="0">0개</option>
+                                    <option value="1">1개</option>
+                                    <option value="2">2개</option>
+                                    <option value="3">3개</option>
+                                    <option value="4">4개</option>
+                                    <option value="5">5개</option>
+                                    <option value="6" selected>6개</option>
+                                </select>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-12 text-xs">21-30:</span>
+                                <select id="region3" class="p-1 border border-gray-300 rounded flex-1">
+                                    <option value="0">0개</option>
+                                    <option value="1">1개</option>
+                                    <option value="2">2개</option>
+                                    <option value="3">3개</option>
+                                    <option value="4">4개</option>
+                                    <option value="5">5개</option>
+                                    <option value="6" selected>6개</option>
+                                </select>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-12 text-xs">31-40:</span>
+                                <select id="region4" class="p-1 border border-gray-300 rounded flex-1">
+                                    <option value="0">0개</option>
+                                    <option value="1">1개</option>
+                                    <option value="2">2개</option>
+                                    <option value="3">3개</option>
+                                    <option value="4">4개</option>
+                                    <option value="5">5개</option>
+                                    <option value="6" selected>6개</option>
+                                </select>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-12 text-xs">41-45:</span>
+                                <select id="region5" class="p-1 border border-gray-300 rounded flex-1">
+                                    <option value="0">0개</option>
+                                    <option value="1">1개</option>
+                                    <option value="2">2개</option>
+                                    <option value="3">3개</option>
+                                    <option value="4">4개</option>
+                                    <option value="5" selected>5개</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 버튼들 -->
+                <div class="flex gap-2 mt-6">
+                    <button onclick="generateNumbers()"
+                        class="flex-1 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors font-medium shadow-sm">
+                        번호 생성
+                    </button>
+                    <button onclick="resetSettings()"
+                        class="px-4 py-2 border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-colors">
+                        초기화
+                    </button>
+                </div>
+            </div>
+            <!-- 결과 패널 -->
+            <div class="bg-white border border-gray-200 p-6 rounded-lg shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-semibold">생성된 번호</h2>
+                    <button onclick="copyToClipboard()" id="copyBtn"
+                        class="hidden items-center gap-2 px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors">
+                        복사
+                    </button>
+                </div>
+                <div id="resultsContainer">
+                    <div class="text-center py-12 text-gray-500">
+                        <div class="text-6xl mb-4">🎲</div>
+                        <p>조건을 설정하고 '번호 생성' 버튼을 눌러주세요</p>
+                    </div>
+                </div>
+                <!-- 번호 색상 가이드 -->
+                <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">번호 색상 가이드</h3>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 bg-yellow-400 rounded-full shadow-sm"></div>
+                            <span>1~10 (노란색)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 bg-sky-400 rounded-full shadow-sm"></div>
+                            <span>11~20 (하늘색)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 bg-red-400 rounded-full shadow-sm"></div>
+                            <span>21~30 (빨간색)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 bg-gray-400 rounded-full shadow-sm"></div>
+                            <span>31~40 (회색)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-4 h-4 bg-green-400 rounded-full shadow-sm"></div>
+                            <span>41~45 (연두색)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 푸터 -->
+        <div class="mt-8 text-center text-xs text-gray-500 space-y-1">
+            <p>※ 본 생성기는 재미를 위한 도구입니다. 로또 당첨을 보장하지 않습니다.</p>
+            <p id="footerInfo">최신 당첨번호 조회 중...</p>
+        </div>
+    </div>
+    <script>
+        // 전역 변수
+        let latestWinningNumbers = [];
+        let latestRound = null;
+        let bonusNumber = null;
+        let drawDate = null;
+        let generatedNumbers = [];
+        // 로컬 스토리지 캐시
+        function getCachedLottoData() {
+            try {
+                const cached = localStorage.getItem('latestLottoData');
+                if (cached) {
+                    const data = JSON.parse(cached);
+                    const cacheTime = new Date(data.timestamp);
+                    const now = new Date();
+                    if (now - cacheTime < 6 * 60 * 60 * 1000) {
+                        return data;
+                    }
+                }
+            } catch (e) {
+                console.error('캐시 읽기 오류:', e);
+            }
+            return null;
+        }
+        function cacheLottoData(round, numbers, bonus, date) {
+            try {
+                const data = {
+                    round,
+                    numbers,
+                    bonusNumber: bonus,
+                    drawDate: date,
+                    timestamp: new Date().toISOString()
+                };
+                localStorage.setItem('latestLottoData', JSON.stringify(data));
+            } catch (e) {
+                console.error('캐시 저장 오류:', e);
+            }
+        }
+        // 날짜 포맷팅
+        function formatDate(dateStr) {
+            if (!dateStr || dateStr.length !== 8) return dateStr;
+            return `${dateStr.slice(0, 4)}.${dateStr.slice(4, 6)}.${dateStr.slice(6, 8)}`;
+        }
+        // 최신 당첨번호 조회
+        async function fetchLatestLottoNumbers() {
+            const refreshBtn = document.getElementById('refreshBtn');
+            refreshBtn.querySelector('svg').classList.add('animate-spin');
+            // 캐시 확인
+            const cached = getCachedLottoData();
+            if (cached) {
+                latestWinningNumbers = cached.numbers;
+                latestRound = cached.round;
+                bonusNumber = cached.bonusNumber;
+                drawDate = cached.drawDate;
+                updateLatestInfo();
+            }
+            try {
+                const url = 'https://www.dhlottery.co.kr/lt645/selectPstLt645Info.do';
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                const data = await response.json();
+
+                if (data?.data?.list && Array.isArray(data.data.list) && data.data.list.length > 0) {
+                    const item = data.data.list[0];
+
+                    const numbers = [
+                        parseInt(item.tm1WnNo),
+                        parseInt(item.tm2WnNo),
+                        parseInt(item.tm3WnNo),
+                        parseInt(item.tm4WnNo),
+                        parseInt(item.tm5WnNo),
+                        parseInt(item.tm6WnNo)
+                    ];
+
+                    const round = parseInt(item.ltEpsd);
+                    const bonus = parseInt(item.bnsWnNo);
+                    const date = formatDate(item.ltRflYmd);
+
+                    const validNumbers = numbers.every(n => n >= 1 && n <= 45);
+
+                    if (validNumbers && numbers.length === 6 && round > 0) {
+                        latestWinningNumbers = numbers;
+                        latestRound = round;
+                        bonusNumber = bonus;
+                        drawDate = date;
+                        cacheLottoData(round, numbers, bonus, date);
+
+                        showSuccess(`${round}회차 - ${date}`);
+                        updateLatestInfo();
+                        hideError();
+                    }
+                }
+            } catch (error) {
+                console.error('조회 오류:', error);
+                showError(`조회 실패: ${error.message}`);
+            } finally {
+                refreshBtn.querySelector('svg').classList.remove('animate-spin');
+            }
+        }
+        // UI 업데이트
+        function updateLatestInfo() {
+            const latestInfo = document.getElementById('latestInfo');
+            const footerInfo = document.getElementById('footerInfo');
+
+            if (latestRound && latestWinningNumbers.length > 0) {
+                const info = `${latestRound}회 (${drawDate}): ${latestWinningNumbers.join(', ')} + ${bonusNumber}`;
+                latestInfo.textContent = info;
+                footerInfo.textContent = `최신 당첨번호: ${info}`;
+                document.getElementById('excludePrevious').disabled = false;
+            } else {
+                latestInfo.textContent = '조회 실패 - 이 기능을 사용할 수 없습니다';
+                footerInfo.textContent = '최신 당첨번호 조회 실패';
+                document.getElementById('excludePrevious').disabled = true;
+            }
+        }
+        function showSuccess(message) {
+            const alert = document.getElementById('successAlert');
+            alert.querySelector('p').textContent = `✨ 최신 당첨번호 조회 성공! (${message})`;
+            alert.classList.remove('hidden');
+            setTimeout(() => alert.classList.add('hidden'), 3000);
+        }
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorAlert').classList.remove('hidden');
+        }
+        function hideError() {
+            document.getElementById('errorAlert').classList.add('hidden');
+        }
+        // 번호 색상
+        function getNumberColor(number) {
+            if (number >= 1 && number <= 10) return 'bg-yellow-400 text-black';
+            if (number >= 11 && number <= 20) return 'bg-sky-400 text-white';
+            if (number >= 21 && number <= 30) return 'bg-red-400 text-white';
+            if (number >= 31 && number <= 40) return 'bg-gray-400 text-white';
+            if (number >= 41 && number <= 45) return 'bg-green-400 text-white';
+            return 'bg-gray-200 text-black';
+        }
+        // 연속 번호 체크
+        function checkConsecutiveNumbers(numbers, maxConsecutive) {
+            let consecutiveCount = 1;
+            for (let i = 1; i < numbers.length; i++) {
+                if (numbers[i] === numbers[i - 1] + 1) {
+                    consecutiveCount++;
+                    if (consecutiveCount >= maxConsecutive) return true;
+                } else {
+                    consecutiveCount = 1;
+                }
+            }
+            return false;
+        }
+        // 번호 생성
+        function generateNumbers() {
+            const count = parseInt(document.getElementById('count').value);
+            const excludePrevious = document.getElementById('excludePrevious').checked;
+            const excludeConsecutive = document.getElementById('excludeConsecutive').checked;
+            const consecutiveCount = parseInt(document.getElementById('consecutiveCount').value);
+            const includeNumbers = document.getElementById('includeNumbers').value;
+            const excludeNumbers = document.getElementById('excludeNumbers').value;
+
+            const regionLimits = [
+                parseInt(document.getElementById('region1').value),
+                parseInt(document.getElementById('region2').value),
+                parseInt(document.getElementById('region3').value),
+                parseInt(document.getElementById('region4').value),
+                parseInt(document.getElementById('region5').value)
+            ];
+            const results = [];
+            const excludedNumbers = new Set();
+            const requiredNumbers = new Set();
+            // 이전 당첨번호 제외
+            if (excludePrevious && latestWinningNumbers.length > 0) {
+                latestWinningNumbers.forEach(num => excludedNumbers.add(num));
+            }
+            // 사용자 지정 제외
+            if (excludeNumbers) {
+                excludeNumbers.split(',')
+                    .map(n => parseInt(n.trim()))
+                    .filter(n => n >= 1 && n <= 45)
+                    .forEach(num => excludedNumbers.add(num));
+            }
+            // 사용자 지정 포함
+            if (includeNumbers) {
+                includeNumbers.split(',')
+                    .map(n => parseInt(n.trim()))
+                    .filter(n => n >= 1 && n <= 45)
+                    .forEach(num => {
+                        if (!excludedNumbers.has(num)) requiredNumbers.add(num);
+                    });
+            }
+            const regions = [
+                { min: 1, max: 10, limit: regionLimits[0] },
+                { min: 11, max: 20, limit: regionLimits[1] },
+                { min: 21, max: 30, limit: regionLimits[2] },
+                { min: 31, max: 40, limit: regionLimits[3] },
+                { min: 41, max: 45, limit: regionLimits[4] }
+            ];
+            for (let i = 0; i < count; i++) {
+                let attempts = 0;
+                let validSet = false;
+                let numbers = [];
+                while (!validSet && attempts < 1000) {
+                    numbers = [];
+                    const availableNumbers = [];
+                    for (const region of regions) {
+                        if (region.limit === 0) continue;
+
+                        const regionNumbers = [];
+                        for (let num = region.min; num <= region.max; num++) {
+                            if (!excludedNumbers.has(num)) {
+                                regionNumbers.push(num);
+                            }
+                        }
+
+                        const selectedCount = Math.min(region.limit, regionNumbers.length);
+                        const shuffled = regionNumbers.sort(() => Math.random() - 0.5);
+                        availableNumbers.push(...shuffled.slice(0, selectedCount));
+                    }
+                    if (availableNumbers.length >= 6) {
+                        const requiredArray = Array.from(requiredNumbers);
+                        const remainingSlots = 6 - requiredArray.length;
+
+                        if (remainingSlots >= 0) {
+                            const nonRequiredNumbers = availableNumbers.filter(num => !requiredNumbers.has(num));
+                            const shuffled = nonRequiredNumbers.sort(() => Math.random() - 0.5);
+                            const selectedNumbers = shuffled.slice(0, remainingSlots);
+                            numbers = [...requiredArray, ...selectedNumbers].sort((a, b) => a - b);
+                        } else {
+                            const shuffledRequired = requiredArray.sort(() => Math.random() - 0.5);
+                            numbers = shuffledRequired.slice(0, 6).sort((a, b) => a - b);
+                        }
+                        if (excludeConsecutive) {
+                            if (!checkConsecutiveNumbers(numbers, consecutiveCount)) {
+                                validSet = true;
+                            }
+                        } else {
+                            validSet = true;
+                        }
+                    }
+                    attempts++;
+                }
+                if (validSet && numbers.length === 6) {
+                    results.push(numbers);
+                } else {
+                    const fallbackNumbers = [];
+                    while (fallbackNumbers.length < 6) {
+                        const num = Math.floor(Math.random() * 45) + 1;
+                        if (!fallbackNumbers.includes(num) && !excludedNumbers.has(num)) {
+                            fallbackNumbers.push(num);
+                        }
+                    }
+                    results.push(fallbackNumbers.sort((a, b) => a - b));
+                }
+            }
+            generatedNumbers = results;
+            displayResults();
+        }
+        // 결과 표시
+        function displayResults() {
+            const container = document.getElementById('resultsContainer');
+            const copyBtn = document.getElementById('copyBtn');
+
+            if (generatedNumbers.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 text-gray-500">
+                        <div class="text-6xl mb-4">🎲</div>
+                        <p>조건을 설정하고 '번호 생성' 버튼을 눌러주세요</p>
+                    </div>
+                `;
+                copyBtn.classList.add('hidden');
+                return;
+            }
+            let html = '<div class="space-y-3">';
+            generatedNumbers.forEach((numbers, index) => {
+                html += `
+                    <div class="p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-sm text-gray-600 font-medium">${index + 1}번째 세트</span>
+                        </div>
+                        <div class="flex gap-2 flex-wrap">
+                            ${numbers.map(num => `
+                                <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shadow-sm ${getNumberColor(num)}">
+                                    ${num}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+
+            container.innerHTML = html;
+            copyBtn.classList.remove('hidden');
+            copyBtn.classList.add('flex');
+        }
+        // 클립보드 복사
+        function copyToClipboard() {
+            const text = generatedNumbers
+                .map((numbers, index) => `${index + 1}. ${numbers.join(', ')}`)
+                .join('\n');
+
+            navigator.clipboard.writeText(text).then(() => {
+                alert('번호가 클립보드에 복사되었습니다!');
+            }).catch(err => {
+                alert('복사에 실패했습니다.');
+            });
+        }
+        // 설정 초기화
+        function resetSettings() {
+            document.getElementById('count').value = 1;
+            document.getElementById('excludePrevious').checked = false;
+            document.getElementById('excludeConsecutive').checked = false;
+            document.getElementById('consecutiveCount').value = 2;
+            document.getElementById('includeNumbers').value = '';
+            document.getElementById('excludeNumbers').value = '';
+            document.getElementById('region1').value = 6;
+            document.getElementById('region2').value = 6;
+            document.getElementById('region3').value = 6;
+            document.getElementById('region4').value = 6;
+            document.getElementById('region5').value = 5;
+
+            generatedNumbers = [];
+            displayResults();
+        }
+        // 초기 실행
+        fetchLatestLottoNumbers();
+    </script>
+</body>
+</html>
