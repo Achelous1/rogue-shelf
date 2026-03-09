@@ -4,20 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>연금복권 번호 생성기 - 720+ 맞춤 번호 생성 | My Toys</title>
-    <meta name="description" content="연금복권720+ 번호를 조건에 맞게 자동 생성하는 무료 도구입니다. 조 선택, 포함/제외 숫자 설정, 연속 동일 숫자 제한 등 다양한 옵션을 지원합니다.">
+    <meta name="description" content="연금복권720+ 번호를 조건에 맞게 자동 생성하는 무료 도구입니다. 1~5조 전체 세트 생성, 포함/제외 숫자 설정, 연속 동일 숫자 제한 등 다양한 옵션을 지원합니다.">
     <meta name="keywords" content="연금복권 번호 생성기, 연금복권720, 연금복권 자동번호, 연금복권 당첨, 무료 복권 생성">
     <meta name="robots" content="index, follow">
     <meta name="author" content="My Toys">
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="연금복권 번호 생성기 - 720+ 맞춤 번호 생성">
-    <meta property="og:description" content="연금복권720+ 번호를 조건에 맞게 자동 생성하는 무료 도구입니다. 조 선택, 포함/제외 숫자 설정, 연속 동일 숫자 제한 등 다양한 옵션을 지원합니다.">
+    <meta property="og:description" content="연금복권720+ 번호를 조건에 맞게 자동 생성하는 무료 도구입니다. 1~5조 전체 세트 생성, 포함/제외 숫자 설정, 연속 동일 숫자 제한 등 다양한 옵션을 지원합니다.">
     <meta property="og:locale" content="ko_KR">
     <meta property="og:site_name" content="My Toys">
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="연금복권 번호 생성기 - 720+ 맞춤 번호 생성">
-    <meta name="twitter:description" content="연금복권720+ 번호를 조건에 맞게 자동 생성하는 무료 도구. 조 선택, 포함/제외 숫자, 연속 동일 숫자 제한 등 다양한 옵션 지원.">
+    <meta name="twitter:description" content="연금복권720+ 번호를 조건에 맞게 자동 생성하는 무료 도구. 1~5조 전체 세트 생성, 포함/제외 숫자, 연속 동일 숫자 제한 등 다양한 옵션 지원.">
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google AdSense -->
     <meta name="google-adsense-account" content="ca-pub-4857107637953203">
@@ -29,7 +29,7 @@
       "@context": "https://schema.org",
       "@type": "WebApplication",
       "name": "연금복권 번호 생성기",
-      "description": "연금복권720+ 번호를 조건에 맞게 자동 생성하는 무료 도구. 조 선택, 포함/제외 숫자 설정, 연속 동일 숫자 제한 등 다양한 옵션을 지원합니다.",
+      "description": "연금복권720+ 번호를 조건에 맞게 자동 생성하는 무료 도구. 1~5조 전체 세트 생성, 포함/제외 숫자 설정, 연속 동일 숫자 제한 등 다양한 옵션을 지원합니다.",
       "applicationCategory": "UtilitiesApplication",
       "operatingSystem": "Web",
       "inLanguage": "ko",
@@ -45,23 +45,17 @@
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .animate-fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out; }
         @keyframes spin {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
-        .animate-spin {
-            animation: spin 1s linear infinite;
+        .animate-spin { animation: spin 1s linear infinite; }
+        @keyframes setReveal {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes numberReveal {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        .animate-reveal {
-            animation: numberReveal 0.4s ease-out forwards;
-        }
+        .animate-set-reveal { animation: setReveal 0.35s ease-out forwards; }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
@@ -80,9 +74,7 @@
         <!-- 에러 알림 -->
         <div id="errorAlert" class="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg hidden">
             <p class="text-sm text-yellow-800" id="errorMessage"></p>
-            <button onclick="fetchLatestNumbers()" class="text-xs text-yellow-700 underline mt-1 hover:text-yellow-900">
-                다시 시도
-            </button>
+            <button onclick="fetchLatestNumbers()" class="text-xs text-yellow-700 underline mt-1 hover:text-yellow-900">다시 시도</button>
         </div>
 
         <!-- 메인 컨텐츠 -->
@@ -92,20 +84,6 @@
                 <h2 class="text-xl font-semibold mb-6">생성 설정</h2>
                 <div class="space-y-5">
 
-                    <!-- 조 선택 -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">조 선택</label>
-                        <select id="joSelect"
-                            class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 bg-white">
-                            <option value="0">랜덤 (자동 선택)</option>
-                            <option value="1">1조</option>
-                            <option value="2">2조</option>
-                            <option value="3">3조</option>
-                            <option value="4">4조</option>
-                            <option value="5">5조</option>
-                        </select>
-                    </div>
-
                     <!-- 생성 개수 -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -113,6 +91,7 @@
                         </label>
                         <input type="number" id="count" min="1" max="50" value="5"
                             class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+                        <p class="text-xs text-gray-400 mt-1">세트당 1~5조 번호가 모두 생성됩니다</p>
                     </div>
 
                     <!-- 최근 당첨번호 제외 -->
@@ -135,9 +114,7 @@
 
                     <!-- 포함할 숫자 -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                            포함할 숫자
-                        </label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">포함할 숫자</label>
                         <p class="text-xs text-gray-400 mb-2">반드시 포함할 숫자(0~9)를 콤마로 구분 (예: 3, 7)</p>
                         <input type="text" id="includeDigits" placeholder="예: 3, 7"
                             class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
@@ -145,40 +122,33 @@
 
                     <!-- 제외할 숫자 -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                            제외할 숫자
-                        </label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">제외할 숫자</label>
                         <p class="text-xs text-gray-400 mb-2">포함하지 않을 숫자(0~9)를 콤마로 구분 (예: 0, 1)</p>
                         <input type="text" id="excludeDigits" placeholder="예: 0, 1"
                             class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
                     </div>
 
-                    <!-- 연속 동일 숫자 제한 -->
+                    <!-- 연속 동일 숫자 / 최대 등장 횟수 -->
                     <div class="border-t pt-4 space-y-3">
                         <div class="flex items-center gap-2">
                             <input type="checkbox" id="enableMaxConsecutive" class="w-4 h-4 text-blue-600 rounded"
                                 onchange="document.getElementById('maxConsecutiveSame').disabled = !this.checked">
-                            <label for="enableMaxConsecutive" class="text-sm text-gray-700">
-                                연속 동일 숫자 제한
-                            </label>
+                            <label for="enableMaxConsecutive" class="text-sm text-gray-700">연속 동일 숫자 제한</label>
                             <select id="maxConsecutiveSame" disabled
                                 class="ml-auto p-1 border border-gray-300 rounded text-sm disabled:opacity-40">
                                 <option value="1">최대 1개 (연속 불가)</option>
                                 <option value="2" selected>최대 2개 (예: 33 허용)</option>
                                 <option value="3">최대 3개 (예: 333 허용)</option>
-                                <option value="4">최대 4개 (예: 3333 허용)</option>
-                                <option value="5">최대 5개 (예: 33333 허용)</option>
+                                <option value="4">최대 4개</option>
+                                <option value="5">최대 5개</option>
                             </select>
                         </div>
                         <p class="text-xs text-gray-400 ml-6">예: 최대 2개 → <span class="font-mono">336712</span> ✅ &nbsp;<span class="font-mono">333712</span> ❌</p>
 
-                        <!-- 동일 숫자 최대 등장 횟수 -->
                         <div class="flex items-center gap-2">
                             <input type="checkbox" id="enableMaxSameCount" class="w-4 h-4 text-blue-600 rounded"
                                 onchange="document.getElementById('maxSameDigitCount').disabled = !this.checked">
-                            <label for="enableMaxSameCount" class="text-sm text-gray-700">
-                                같은 숫자 최대 등장 횟수
-                            </label>
+                            <label for="enableMaxSameCount" class="text-sm text-gray-700">같은 숫자 최대 등장 횟수</label>
                             <select id="maxSameDigitCount" disabled
                                 class="ml-auto p-1 border border-gray-300 rounded text-sm disabled:opacity-40">
                                 <option value="1">최대 1번</option>
@@ -271,134 +241,118 @@
 
     <script>
         // 전역 변수
-        let latestJo = null;
         let latestNumber = null;
-        let latestBonusNumber = null;
         let latestRound = null;
         let latestDrawDate = null;
-        let generatedSets = [];
+        let generatedNumbers = [];
 
         // 조 색상
-        const JO_COLORS = {
-            1: { bg: 'bg-yellow-400', text: 'text-black', label: '1조' },
-            2: { bg: 'bg-blue-500',   text: 'text-white', label: '2조' },
-            3: { bg: 'bg-red-500',    text: 'text-white', label: '3조' },
-            4: { bg: 'bg-green-500',  text: 'text-white', label: '4조' },
-            5: { bg: 'bg-purple-500', text: 'text-white', label: '5조' },
-        };
+        const JO_STYLES = [
+            { bg: 'bg-yellow-400', text: 'text-gray-900' },
+            { bg: 'bg-blue-500',   text: 'text-white'   },
+            { bg: 'bg-red-500',    text: 'text-white'   },
+            { bg: 'bg-green-500',  text: 'text-white'   },
+            { bg: 'bg-purple-500', text: 'text-white'   },
+        ];
 
-        // 캐시 관리
+        // ─── 캐시 ────────────────────────────────────────
         function getCachedData() {
             try {
-                const cached = localStorage.getItem('latestPensionData');
-                if (cached) {
-                    const data = JSON.parse(cached);
-                    if (new Date() - new Date(data.timestamp) < 6 * 60 * 60 * 1000) return data;
-                }
+                const raw = localStorage.getItem('latestPensionData');
+                if (!raw) return null;
+                const data = JSON.parse(raw);
+                if (new Date() - new Date(data.timestamp) < 6 * 60 * 60 * 1000) return data;
             } catch (e) {}
             return null;
         }
 
-        function cacheData(round, jo, number, bonus, date) {
+        function setCachedData(round, number, date) {
             try {
                 localStorage.setItem('latestPensionData', JSON.stringify({
-                    round, jo, number, bonus, date,
-                    timestamp: new Date().toISOString()
+                    round, number, date, timestamp: new Date().toISOString()
                 }));
             } catch (e) {}
         }
 
-        function formatDate(dateStr) {
-            if (!dateStr || dateStr.length !== 8) return dateStr;
-            return `${dateStr.slice(0,4)}.${dateStr.slice(4,6)}.${dateStr.slice(6,8)}`;
+        function formatDate(s) {
+            if (!s || s.length !== 8) return s || '';
+            return `${s.slice(0,4)}.${s.slice(4,6)}.${s.slice(6,8)}`;
         }
 
-        // 최신 당첨번호 조회
+        // ─── API 조회 ─────────────────────────────────────
         async function fetchLatestNumbers() {
-            const refreshBtn = document.getElementById('refreshBtn');
-            refreshBtn.querySelector('svg').classList.add('animate-spin');
+            document.getElementById('refreshBtn').querySelector('svg').classList.add('animate-spin');
 
-            // 캐시 먼저 적용
+            // 캐시 우선 적용
             const cached = getCachedData();
-            if (cached) {
-                applyFetchedData(cached.round, cached.jo, cached.number, cached.bonus, cached.date);
-            }
+            if (cached) applyData(cached.round, cached.number, cached.date);
 
             try {
-                const url = 'https://www.dhlottery.co.kr/lt720/selectPstLt720Info.do';
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: { 'Accept': 'application/json' }
+                // POST 방식 시도 (내부 API)
+                const res = await fetch('https://www.dhlottery.co.kr/lt720/selectPstLt720Info.do', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
                 });
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                const data = await response.json();
+                const text = await res.text();
 
+                // HTML이 반환되면 API 미지원으로 처리
+                if (text.trimStart().startsWith('<')) throw new Error('API 미지원');
+
+                const data = JSON.parse(text);
                 if (data?.data?.list?.length > 0) {
                     const item = data.data.list[0];
                     const round = parseInt(item.ltEpsd);
-                    const jo = parseInt(item.joWnNo ?? item.jo ?? item.joNo);
-                    const number = String(item.sixWnNo ?? item.wnNo ?? item.wlmNo ?? '').padStart(6, '0');
-                    const bonus = String(item.bnsWnNo ?? '').padStart(6, '0');
+                    const number = String(
+                        item.sixWnNo ?? item.wnNo ?? item.wlmNo ?? ''
+                    ).padStart(6, '0');
                     const date = formatDate(item.ltRflYmd ?? item.drwYmd ?? '');
 
-                    if (round > 0 && jo >= 1 && jo <= 5 && number.length === 6) {
-                        cacheData(round, jo, number, bonus, date);
-                        applyFetchedData(round, jo, number, bonus, date);
+                    if (round > 0 && number.length === 6) {
+                        setCachedData(round, number, date);
+                        applyData(round, number, date);
                         showSuccess(`${round}회차 - ${date}`);
                         hideError();
-                    } else {
-                        throw new Error('데이터 형식 오류');
+                        return;
                     }
-                } else {
-                    throw new Error('당첨번호 없음');
                 }
-            } catch (error) {
-                console.error('조회 오류:', error);
+                throw new Error('데이터 파싱 실패');
+            } catch (err) {
+                console.warn('연금복권 API 조회 실패:', err.message);
                 if (!cached) {
-                    showError(`최신 당첨번호 조회 실패: ${error.message}`);
-                    updateLatestInfo(false);
+                    showError('최근 당첨번호를 자동으로 불러올 수 없습니다. 직접 입력하거나 이 옵션을 사용하지 마세요.');
+                    setLatestInfoFailed();
                 }
             } finally {
-                refreshBtn.querySelector('svg').classList.remove('animate-spin');
+                document.getElementById('refreshBtn').querySelector('svg').classList.remove('animate-spin');
             }
         }
 
-        function applyFetchedData(round, jo, number, bonus, date) {
+        function applyData(round, number, date) {
             latestRound = round;
-            latestJo = jo;
             latestNumber = number;
-            latestBonusNumber = bonus;
             latestDrawDate = date;
-            updateLatestInfo(true);
+
+            const info = `${round}회 (${date}): ${number}`;
+            document.getElementById('latestInfo').textContent = info;
+            document.getElementById('footerInfo').textContent = `최신 당첨번호: ${info}`;
+            document.getElementById('excludePrevious').disabled = false;
         }
 
-        function updateLatestInfo(success) {
-            const latestInfo = document.getElementById('latestInfo');
-            const footerInfo = document.getElementById('footerInfo');
-            const checkbox = document.getElementById('excludePrevious');
-
-            if (success && latestRound && latestNumber) {
-                const info = `${latestRound}회 (${latestDrawDate}): ${latestJo}조 ${latestNumber.slice(0,3)}-${latestNumber.slice(3)}`;
-                latestInfo.textContent = info;
-                footerInfo.textContent = `최신 당첨번호: ${info}`;
-                checkbox.disabled = false;
-            } else {
-                latestInfo.textContent = '조회 실패 - 이 기능을 사용할 수 없습니다';
-                footerInfo.textContent = '';
-                checkbox.disabled = true;
-                checkbox.checked = false;
-            }
+        function setLatestInfoFailed() {
+            document.getElementById('latestInfo').textContent = '조회 실패 - 이 기능을 사용할 수 없습니다';
+            document.getElementById('excludePrevious').disabled = true;
+            document.getElementById('excludePrevious').checked = false;
         }
 
-        function showSuccess(message) {
-            const alert = document.getElementById('successAlert');
-            alert.querySelector('p').textContent = `✨ 최신 당첨번호 조회 성공! (${message})`;
-            alert.classList.remove('hidden');
-            setTimeout(() => alert.classList.add('hidden'), 3000);
+        function showSuccess(msg) {
+            const el = document.getElementById('successAlert');
+            el.querySelector('p').textContent = `✨ 최신 당첨번호 조회 성공! (${msg})`;
+            el.classList.remove('hidden');
+            setTimeout(() => el.classList.add('hidden'), 3000);
         }
 
-        function showError(message) {
-            document.getElementById('errorMessage').textContent = message;
+        function showError(msg) {
+            document.getElementById('errorMessage').textContent = msg;
             document.getElementById('errorAlert').classList.remove('hidden');
         }
 
@@ -406,96 +360,80 @@
             document.getElementById('errorAlert').classList.add('hidden');
         }
 
-        // 입력 파싱 (0~9 숫자만)
-        function parseDigitInput(value) {
-            if (!value.trim()) return new Set();
+        // ─── 입력 파싱 ────────────────────────────────────
+        function parseDigitInput(val) {
             const digits = new Set();
-            value.split(',').forEach(s => {
-                const n = s.trim();
-                if (/^[0-9]$/.test(n)) digits.add(n);
+            val.split(',').forEach(s => {
+                const d = s.trim();
+                if (/^[0-9]$/.test(d)) digits.add(d);
             });
             return digits;
         }
 
-        // 번호 하나 생성
-        function generateOne(options) {
-            const { selectedJo, includeDigits, excludeDigits,
-                    maxConsecutiveSame, maxSameDigitCount, excludedCombos } = options;
-
+        // ─── 번호 하나 생성 ───────────────────────────────
+        function generateOne(opts) {
+            const { includeDigits, excludeDigits, maxConsecSame, maxSameCount, excludedNums } = opts;
             const MAX = 2000;
-            for (let i = 0; i < MAX; i++) {
-                const jo = selectedJo || (Math.floor(Math.random() * 5) + 1);
-                const num = Math.floor(Math.random() * 1000000);
-                const numStr = num.toString().padStart(6, '0');
 
-                // 포함 숫자 체크
+            for (let i = 0; i < MAX; i++) {
+                const numStr = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+
+                // 포함 체크
                 if (includeDigits.size > 0) {
                     let ok = true;
-                    for (const d of includeDigits) {
-                        if (!numStr.includes(d)) { ok = false; break; }
-                    }
+                    for (const d of includeDigits) { if (!numStr.includes(d)) { ok = false; break; } }
                     if (!ok) continue;
                 }
 
-                // 제외 숫자 체크
+                // 제외 체크
                 if (excludeDigits.size > 0) {
                     let bad = false;
-                    for (const d of excludeDigits) {
-                        if (numStr.includes(d)) { bad = true; break; }
-                    }
+                    for (const d of excludeDigits) { if (numStr.includes(d)) { bad = true; break; } }
                     if (bad) continue;
                 }
 
                 // 연속 동일 숫자 체크
-                if (maxConsecutiveSame > 0) {
-                    let consec = 1, tooMany = false;
-                    for (let j = 1; j < numStr.length; j++) {
-                        if (numStr[j] === numStr[j - 1]) {
-                            consec++;
-                            if (consec > maxConsecutiveSame) { tooMany = true; break; }
-                        } else {
-                            consec = 1;
-                        }
+                if (maxConsecSame > 0) {
+                    let consec = 1, over = false;
+                    for (let j = 1; j < 6; j++) {
+                        consec = numStr[j] === numStr[j - 1] ? consec + 1 : 1;
+                        if (consec > maxConsecSame) { over = true; break; }
                     }
-                    if (tooMany) continue;
+                    if (over) continue;
                 }
 
                 // 동일 숫자 최대 등장 횟수 체크
-                if (maxSameDigitCount > 0) {
-                    const counts = {};
-                    for (const d of numStr) counts[d] = (counts[d] || 0) + 1;
-                    if (Object.values(counts).some(c => c > maxSameDigitCount)) continue;
+                if (maxSameCount > 0) {
+                    const cnt = {};
+                    for (const d of numStr) cnt[d] = (cnt[d] || 0) + 1;
+                    if (Object.values(cnt).some(c => c > maxSameCount)) continue;
                 }
 
-                // 최근 당첨 조합 제외
-                if (excludedCombos.has(`${jo}:${numStr}`)) continue;
+                // 최근 당첨 제외
+                if (excludedNums.has(numStr)) continue;
 
-                return { jo, numStr };
+                return numStr;
             }
             return null;
         }
 
-        // 번호 생성
+        // ─── 번호 생성 ────────────────────────────────────
         function generateNumbers() {
             const count = Math.min(50, Math.max(1, parseInt(document.getElementById('count').value) || 5));
-            const selectedJo = parseInt(document.getElementById('joSelect').value); // 0 = random
-
             const includeDigits = parseDigitInput(document.getElementById('includeDigits').value);
             const excludeDigits = parseDigitInput(document.getElementById('excludeDigits').value);
 
-            const enableConsec = document.getElementById('enableMaxConsecutive').checked;
-            const maxConsecutiveSame = enableConsec ? parseInt(document.getElementById('maxConsecutiveSame').value) : 0;
+            const maxConsecSame = document.getElementById('enableMaxConsecutive').checked
+                ? parseInt(document.getElementById('maxConsecutiveSame').value) : 0;
+            const maxSameCount = document.getElementById('enableMaxSameCount').checked
+                ? parseInt(document.getElementById('maxSameDigitCount').value) : 0;
 
-            const enableSameCount = document.getElementById('enableMaxSameCount').checked;
-            const maxSameDigitCount = enableSameCount ? parseInt(document.getElementById('maxSameDigitCount').value) : 0;
-
-            const excludePrevious = document.getElementById('excludePrevious').checked;
-            const excludedCombos = new Set();
-            if (excludePrevious && latestJo && latestNumber) {
-                excludedCombos.add(`${latestJo}:${latestNumber}`);
+            const excludedNums = new Set();
+            if (document.getElementById('excludePrevious').checked && latestNumber) {
+                excludedNums.add(latestNumber);
             }
 
-            // 포함/제외 겹침 검사
+            // 포함·제외 겹침 검사
             for (const d of includeDigits) {
                 if (excludeDigits.has(d)) {
                     alert(`숫자 ${d}가 포함할 숫자와 제외할 숫자에 동시에 있습니다.`);
@@ -503,28 +441,38 @@
                 }
             }
 
-            const options = { selectedJo, includeDigits, excludeDigits,
-                              maxConsecutiveSame, maxSameDigitCount, excludedCombos };
-
-            generatedSets = [];
+            const opts = { includeDigits, excludeDigits, maxConsecSame, maxSameCount, excludedNums };
+            generatedNumbers = [];
             let failCount = 0;
+
             for (let i = 0; i < count; i++) {
-                const result = generateOne(options);
-                if (result) {
-                    generatedSets.push(result);
-                } else {
-                    failCount++;
-                }
+                const num = generateOne(opts);
+                if (num) generatedNumbers.push(num);
+                else failCount++;
             }
 
             renderResults(failCount);
+        }
+
+        // ─── 결과 렌더링 ──────────────────────────────────
+        function renderDigitBoxes(numStr) {
+            return numStr.split('').map(d =>
+                `<span class="w-9 h-9 bg-gray-100 border-2 border-gray-300 rounded-lg flex items-center justify-center font-mono font-bold text-lg text-gray-800">${d}</span>`
+            ).join('');
+        }
+
+        function renderJoBadges() {
+            return [1,2,3,4,5].map(jo => {
+                const s = JO_STYLES[jo - 1];
+                return `<span class="px-2 py-0.5 rounded-full text-xs font-bold ${s.bg} ${s.text}">${jo}조</span>`;
+            }).join('');
         }
 
         function renderResults(failCount) {
             const container = document.getElementById('resultsContainer');
             const copyBtn = document.getElementById('copyBtn');
 
-            if (generatedSets.length === 0) {
+            if (generatedNumbers.length === 0) {
                 container.innerHTML = `
                     <div class="text-center py-12 text-gray-500">
                         <div class="text-5xl mb-4">😢</div>
@@ -537,20 +485,14 @@
             }
 
             let html = '<div class="space-y-3">';
-            generatedSets.forEach((set, idx) => {
-                const joColor = JO_COLORS[set.jo];
-                const n = set.numStr;
-                const formatted = `${n.slice(0,3)}-${n.slice(3)}`;
+            generatedNumbers.forEach((numStr, idx) => {
                 html += `
-                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg animate-reveal"
-                         style="animation-delay: ${idx * 50}ms">
-                        <span class="text-xs text-gray-400 w-6 text-right">${idx + 1}</span>
-                        <span class="inline-flex items-center justify-center w-10 h-10 rounded-full text-sm font-bold ${joColor.bg} ${joColor.text} shadow-sm flex-shrink-0">
-                            ${set.jo}조
-                        </span>
-                        <span class="font-mono text-2xl font-bold tracking-widest text-gray-800 flex-1">
-                            ${n[0]}<span class="text-gray-400 mx-0.5 text-lg font-normal"> </span>${n[1]}<span class="text-gray-400 mx-0.5 text-lg font-normal"> </span>${n[2]}<span class="mx-2 text-gray-300">-</span>${n[3]}<span class="text-gray-400 mx-0.5 text-lg font-normal"> </span>${n[4]}<span class="text-gray-400 mx-0.5 text-lg font-normal"> </span>${n[5]}
-                        </span>
+                    <div class="p-3 bg-gray-50 rounded-lg animate-set-reveal" style="animation-delay:${idx * 60}ms">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs text-gray-400 w-5">${idx + 1}</span>
+                            <div class="flex gap-1">${renderJoBadges()}</div>
+                        </div>
+                        <div class="flex gap-1.5 ml-7">${renderDigitBoxes(numStr)}</div>
                     </div>`;
             });
             html += '</div>';
@@ -564,11 +506,11 @@
             copyBtn.classList.add('flex');
         }
 
-        // 클립보드 복사
+        // ─── 복사 ─────────────────────────────────────────
         function copyToClipboard() {
-            if (!generatedSets.length) return;
-            const text = generatedSets.map((s, i) =>
-                `${i + 1}. ${s.jo}조 ${s.numStr.slice(0,3)}-${s.numStr.slice(3)}`
+            if (!generatedNumbers.length) return;
+            const text = generatedNumbers.map((n, i) =>
+                `${i + 1}. [1~5조] ${n}`
             ).join('\n');
             navigator.clipboard.writeText(text).then(() => {
                 const btn = document.getElementById('copyBtn');
@@ -578,9 +520,8 @@
             });
         }
 
-        // 초기화
+        // ─── 초기화 ───────────────────────────────────────
         function resetSettings() {
-            document.getElementById('joSelect').value = '0';
             document.getElementById('count').value = '5';
             document.getElementById('excludePrevious').checked = false;
             document.getElementById('includeDigits').value = '';
@@ -592,7 +533,7 @@
             document.getElementById('maxSameDigitCount').value = '2';
             document.getElementById('maxSameDigitCount').disabled = true;
 
-            generatedSets = [];
+            generatedNumbers = [];
             document.getElementById('resultsContainer').innerHTML = `
                 <div class="text-center py-12 text-gray-500">
                     <div class="text-6xl mb-4">🎰</div>
