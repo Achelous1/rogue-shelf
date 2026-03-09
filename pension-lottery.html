@@ -320,7 +320,8 @@
                     if (number) {
                         setCachedData(round, jo, number, bonus, date);
                         applyData(round, jo, number, bonus, date);
-                        showSuccess(round ? `${round}회차 - ${date}` : date);
+                        const joStr = jo ? `${jo}조 ` : '';
+                        showSuccess(`${round}회차 (${date}): ${joStr}${number}`);
                         hideError();
                         return;
                     }
