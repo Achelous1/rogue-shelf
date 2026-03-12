@@ -266,11 +266,13 @@
             flex-direction: column;
             align-items: center;
             padding: 0 6px;
-            cursor: pointer;
+            cursor: grab;
             user-select: none;
+            touch-action: none;
             position: relative;
             flex-shrink: 0;
         }
+        .lever-area:active { cursor: grabbing; }
         .lever-shaft {
             width: 10px;
             height: 100%;
@@ -290,9 +292,8 @@
             left: 50%;
             transform: translateX(-50%);
             top: 8px;
-            transition: top .15s ease-out;
+            /* transition removed — fully JS-controlled */
         }
-        .lever-area.pulled .lever-ball { top: calc(100% - 44px); }
         .lever-base {
             width: 22px;
             height: 14px;
@@ -663,6 +664,16 @@ let earned    = 0;
 let betIdx    = 3;  // index into BET_STEPS → 25
 let spinning  = false;
 
+// Lever drag state
+const LEVER_BALL_INIT_TOP  = 8;
+const LEVER_SNAP_THRESHOLD = 0.75; // 75% pull triggers auto-spin
+let leverBallTop          = LEVER_BALL_INIT_TOP;
+let leverDragging         = false;
+let leverDragStartY       = 0;
+let leverDragStartBallTop = LEVER_BALL_INIT_TOP;
+let leverSpringAnim       = null;
+let leverAutoCompleted    = false;
+
 const reels = [
     { symbols: [], offset: 0, animId: null, isSpinning: false, stopAnim: null },
     { symbols: [], offset: 0, animId: null, isSpinning: false, stopAnim: null },
@@ -901,15 +912,104 @@ function setHighlight(indices) {
 }
 
 // ════════════════════════════════════════════
-//   LEVER ANIMATION
+//   LEVER HELPERS
+// ════════════════════════════════════════════
+function getLeverRange() {
+    const shaft = document.querySelector('.lever-shaft');
+    const ball  = document.getElementById('lever-ball');
+    const min   = LEVER_BALL_INIT_TOP;
+    const max   = Math.max(min + 20, shaft.clientHeight - ball.offsetHeight - 18);
+    return { min, max };
+}
+
+function setLeverBallTop(top) {
+    leverBallTop = top;
+    document.getElementById('lever-ball').style.top = top + 'px';
+}
+
+function springBackLever(fromTop) {
+    if (leverSpringAnim) { leverSpringAnim.cancel(); leverSpringAnim = null; }
+    const ball   = document.getElementById('lever-ball');
+    const mid1   = Math.max(0, LEVER_BALL_INIT_TOP - 8);  // overshoot up
+    const mid2   = LEVER_BALL_INIT_TOP + 4;               // settle bounce
+    const anim   = ball.animate([
+        { top: fromTop + 'px' },
+        { top: mid1   + 'px', offset: 0.55 },
+        { top: mid2   + 'px', offset: 0.78 },
+        { top: LEVER_BALL_INIT_TOP + 'px' },
+    ], { duration: 420, easing: 'ease-out', fill: 'forwards' });
+    leverSpringAnim = anim;
+    anim.onfinish = () => {
+        setLeverBallTop(LEVER_BALL_INIT_TOP);
+        if (leverSpringAnim === anim) { anim.cancel(); leverSpringAnim = null; }
+    };
+}
+
+// ════════════════════════════════════════════
+//   LEVER ANIMATION (button / keyboard spin)
 // ════════════════════════════════════════════
 async function animateLever() {
-    const lever = document.getElementById('lever');
-    lever.classList.add('pulled');
-    await sleep(320);
-    lever.classList.remove('pulled');
-    await sleep(200);
+    if (leverSpringAnim) { leverSpringAnim.cancel(); leverSpringAnim = null; }
+    const { max } = getLeverRange();
+    const ball = document.getElementById('lever-ball');
+    // Snap down
+    const snapAnim = ball.animate([
+        { top: leverBallTop + 'px' },
+        { top: max + 'px' },
+    ], { duration: 120, easing: 'ease-in', fill: 'forwards' });
+    await new Promise(r => { snapAnim.onfinish = r; });
+    setLeverBallTop(max);
+    snapAnim.cancel();
+    // Spring back
+    springBackLever(max);
+    await sleep(420);
 }
+
+// ════════════════════════════════════════════
+//   LEVER INTERACTION (drag / touch)
+// ════════════════════════════════════════════
+(function initLeverInteraction() {
+    const leverArea = document.getElementById('lever');
+
+    leverArea.addEventListener('pointerdown', e => {
+        if (spinning) return;
+        if (leverSpringAnim) { leverSpringAnim.cancel(); leverSpringAnim = null; }
+        leverDragging      = true;
+        leverAutoCompleted = false;
+        leverDragStartY    = e.clientY;
+        leverDragStartBallTop = leverBallTop;
+        leverArea.setPointerCapture(e.pointerId);
+        e.preventDefault();
+    });
+
+    leverArea.addEventListener('pointermove', e => {
+        if (!leverDragging || leverAutoCompleted) return;
+        const { min, max } = getLeverRange();
+        const range  = max - min;
+        const deltaY = e.clientY - leverDragStartY;
+        const newTop = Math.max(min, Math.min(max, leverDragStartBallTop + deltaY));
+        setLeverBallTop(newTop);
+
+        // Auto-complete past threshold
+        if ((newTop - min) / range >= LEVER_SNAP_THRESHOLD) {
+            leverAutoCompleted = true;
+            leverDragging      = false;
+            leverArea.releasePointerCapture(e.pointerId);
+            setLeverBallTop(max);
+            springBackLever(max);
+            doSpin(true);
+        }
+    });
+
+    function onRelease(e) {
+        if (!leverDragging) return;
+        leverDragging = false;
+        leverArea.releasePointerCapture(e.pointerId);
+        springBackLever(leverBallTop);  // spring back, no spin
+    }
+    leverArea.addEventListener('pointerup',     onRelease);
+    leverArea.addEventListener('pointercancel', onRelease);
+})();
 
 // ════════════════════════════════════════════
 //   DETERMINE SPIN RESULTS (weighted)
@@ -922,7 +1022,7 @@ function pickResults() {
 // ════════════════════════════════════════════
 //   MAIN SPIN
 // ════════════════════════════════════════════
-async function doSpin() {
+async function doSpin(skipLeverAnim = false) {
     if (spinning) return;
     const bet = getBet();
     if (chips < bet) {
@@ -938,7 +1038,7 @@ async function doSpin() {
     chips -= bet;
     updateDisplays();
 
-    await animateLever();
+    if (!skipLeverAnim) await animateLever();
 
     const results = pickResults();
 
@@ -1011,7 +1111,7 @@ document.getElementById('btn-pay').addEventListener('click', () => {
 document.getElementById('btn-pay-close').addEventListener('click', () => {
     document.getElementById('paytable-overlay').classList.remove('open');
 });
-document.getElementById('lever').addEventListener('click', doSpin);
+// Lever interaction is handled by initLeverInteraction() above (pointer events)
 
 // Keyboard
 document.addEventListener('keydown', e => {
