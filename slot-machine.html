@@ -619,9 +619,9 @@ let betIdx    = 3;  // index into BET_STEPS → 25
 let spinning  = false;
 
 const reels = [
-    { symbols: [], offset: 0, animId: null, isSpinning: false },
-    { symbols: [], offset: 0, animId: null, isSpinning: false },
-    { symbols: [], offset: 0, animId: null, isSpinning: false },
+    { symbols: [], offset: 0, animId: null, isSpinning: false, stopAnim: null },
+    { symbols: [], offset: 0, animId: null, isSpinning: false, stopAnim: null },
+    { symbols: [], offset: 0, animId: null, isSpinning: false, stopAnim: null },
 ];
 
 // ════════════════════════════════════════════
@@ -715,9 +715,18 @@ function startReelSpin(ri) {
     const H     = symH();
     const halfH = STRIP_N * H;
 
-    // Normalize offset into (-halfH, 0] — visually seamless since strip has 3 identical copies
-    r.offset = r.offset % halfH;   // JS % keeps sign of dividend → result in (-halfH, 0]
-    if (r.offset === 0 && ri !== 0) r.offset = 0; // 0 is valid (shows cells 0,1,2)
+    // ── KEY FIX ──────────────────────────────────────────────────────────────
+    // element.animate() with fill:'forwards' stays active in the CSS cascade
+    // at HIGHER priority than inline styles, overriding every rAF transform set.
+    // Cancelling it removes the fill effect so our inline style takes over.
+    if (r.stopAnim) {
+        r.stopAnim.cancel();   // clears fill:'forwards' override
+        r.stopAnim = null;
+    }
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // Normalize offset into (-halfH, 0] — visually seamless (3 identical copies)
+    r.offset = r.offset % halfH;   // JS % keeps sign → result in (-halfH, 0]
     document.getElementById('strip-' + ri).style.transform =
         'translateY(' + r.offset + 'px)';
 
@@ -795,8 +804,10 @@ function stopReel(ri, targetSym) {
              { transform: 'translateY(' + targetY + 'px)' }],
             { duration, easing: 'cubic-bezier(0.17, 0.67, 0.35, 1.0)', fill: 'forwards' }
         );
+        r.stopAnim = anim;  // stored so startReelSpin can cancel the fill effect
 
         anim.onfinish = () => {
+            // Set inline style to final position before the next spin cancels the animation
             strip.style.transform = 'translateY(' + targetY + 'px)';
             r.offset = targetY;
             resolve();
