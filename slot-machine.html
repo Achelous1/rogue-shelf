@@ -92,30 +92,61 @@
         .reel-section {
             display: flex;
             align-items: stretch;
-            padding: 14px 16px;
-            gap: 10px;
+            padding: 12px 14px 12px 12px;
+            gap: 8px;
             position: relative;
         }
 
-        /* Award badges */
-        .award-badge {
+        /* Awards column — all payouts stacked on the left */
+        .awards-col {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: #f0ebe0;
+            justify-content: space-around;
+            background: #f0ead8;
             border: 2px solid #8b1a1a;
             border-radius: 4px;
-            padding: 6px 4px;
-            min-width: 42px;
-            font-size: 0.55rem;
-            color: #222;
-            text-align: center;
-            gap: 2px;
+            padding: 4px 3px;
+            flex-shrink: 0;
+            width: 56px;
+            align-self: stretch;
+            gap: 0;
+        }
+        .aw-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1px 2px;
+            flex: 1;
+        }
+        .aw-s {
+            font-size: 0.6rem;
+            line-height: 1;
+            white-space: nowrap;
+        }
+        .aw-m {
+            font-size: 0.48rem;
+            color: #8b1a1a;
+            font-weight: 700;
+            font-family: 'Share Tech Mono', monospace;
+            white-space: nowrap;
+        }
+        .aw-div {
+            height: 1px;
+            background: #c8a898;
+            margin: 2px 2px;
             flex-shrink: 0;
         }
-        .award-badge .a-sym { font-size: 1rem; line-height: 1; }
-        .award-badge .a-val { font-weight: 700; color: #8b1a1a; font-size: 0.6rem; line-height: 1; }
+        .aw-bartag {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            font-size: 0.46rem;
+            color: #fff;
+            background: #333;
+            padding: 1px 2px;
+            border-radius: 2px;
+            border: 1px solid #666;
+            line-height: 1.2;
+        }
 
         /* Reels container */
         .reels-wrap {
@@ -485,6 +516,18 @@
             .ctrl-btn { font-size: 0.75rem; padding: 8px 2px; }
             .ctrl-btn .key { display: none; }
         }
+        /* Galaxy Fold outer screen (~280px) */
+        @media (max-width: 320px) {
+            :root { --sym-h: 58px; }
+            .reel-section { padding: 8px 6px 8px 6px; gap: 5px; }
+            .awards-col { width: 46px; }
+            .aw-s { font-size: 0.52rem; }
+            .aw-m { font-size: 0.42rem; }
+            .lever-shaft { width: 8px; }
+            .lever-ball { width: 26px; height: 26px; }
+            .machine-title { font-size: 1.1rem; letter-spacing: 0.15em; }
+            .machine-subtitle { font-size: 0.5rem; }
+        }
         @media (min-width: 560px) {
             :root { --sym-h: 90px; }
         }
@@ -507,13 +550,21 @@
 
     <!-- Reels Section -->
     <div class="reel-section">
-        <!-- Left badge -->
-        <div class="award-badge">
-            <div class="a-sym">7️⃣7️⃣7️⃣</div>
-            <div class="a-val">BET×30</div>
+        <!-- Left: all payout rows -->
+        <div class="awards-col">
+            <div class="aw-row"><span class="aw-s">🔔🔔🔔</span><span class="aw-m">×10</span></div>
+            <div class="aw-row"><span class="aw-s"><span class="aw-bartag">BAR</span>×3</span><span class="aw-m">×20</span></div>
+            <div class="aw-row"><span class="aw-s">7️⃣7️⃣7️⃣</span><span class="aw-m">×30</span></div>
+            <div class="aw-row"><span class="aw-s">🍇🍇🍇</span><span class="aw-m">×40</span></div>
+            <div class="aw-row"><span class="aw-s">🍑🍑🍑</span><span class="aw-m">×60</span></div>
+            <div class="aw-row"><span class="aw-s">🍊🍊🍊</span><span class="aw-m">×100</span></div>
+            <div class="aw-div"></div>
+            <div class="aw-row"><span class="aw-s">🍒</span><span class="aw-m">×2</span></div>
+            <div class="aw-row"><span class="aw-s">🍒🍒</span><span class="aw-m">×5</span></div>
+            <div class="aw-row"><span class="aw-s">🍒🍒🍒</span><span class="aw-m">×10</span></div>
         </div>
 
-        <!-- Reels + Lever -->
+        <!-- Reels -->
         <div class="reels-wrap">
             <div class="reel-frame">
                 <div class="payline"></div>
@@ -525,18 +576,12 @@
             </div>
         </div>
 
-        <!-- Lever -->
-        <div class="lever-area" id="lever" title="레버 당기기">
+        <!-- Lever (right) -->
+        <div class="lever-area" id="lever" title="레버 당기기" style="margin-left:4px;">
             <div class="lever-shaft">
                 <div class="lever-ball" id="lever-ball"></div>
             </div>
             <div class="lever-base"></div>
-        </div>
-
-        <!-- Right badge -->
-        <div class="award-badge">
-            <div class="a-sym">🍊🍊🍊</div>
-            <div class="a-val">BET×100</div>
         </div>
     </div>
 
