@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>슬롯머신 - My Toys</title>
+    <meta name="description" content="Fallout 스타일의 레트로 슬롯머신 게임. 체리, 7, BAR, 벨, 과일 심볼로 잭팟을 노려보세요!">
+    <meta name="keywords" content="슬롯머신, 슬롯게임, 온라인슬롯, 카지노게임, 레트로게임">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="My Toys">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="슬롯머신 - My Toys">
+    <meta property="og:description" content="Fallout 스타일의 레트로 슬롯머신 게임">
+    <meta property="og:locale" content="ko_KR">
+    <meta property="og:site_name" content="My Toys">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="슬롯머신 - My Toys">
+    <meta name="twitter:description" content="Fallout 스타일의 레트로 슬롯머신 게임">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sym-h: 80px;
+            --sym-w: 88px;
+            --reel-cols: 3;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: radial-gradient(ellipse at 50% 20%, #3a1800 0%, #1c0a00 45%, #080400 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Oswald', sans-serif;
+            color: #c8b49a;
+            padding: 16px;
+        }
+
+        /* ─── Machine ──────────────────────────────── */
+        .machine {
+            width: 100%;
+            max-width: 520px;
+            background: linear-gradient(170deg, #252525 0%, #111 55%, #1e1e1e 100%);
+            border: 2px solid #4a1010;
+            border-radius: 10px 10px 6px 6px;
+            box-shadow:
+                0 0 60px rgba(0,0,0,.9),
+                inset 0 1px 0 rgba(255,255,255,.06),
+                inset 0 -2px 0 rgba(0,0,0,.6);
+            position: relative;
+            overflow: visible;
+        }
+
+        /* Red trim bands */
+        .trim-top, .trim-bot {
+            height: 5px;
+            background: linear-gradient(90deg, transparent 2%, #8b1a1a 20%, #c0282828 50%, #8b1a1a 80%, transparent 98%);
+        }
+        .trim-top { border-radius: 10px 10px 0 0; }
+
+        /* Machine header */
+        .machine-header {
+            padding: 14px 20px 10px;
+            text-align: center;
+            border-bottom: 2px solid #3d0d0d;
+            background: linear-gradient(180deg, #1a1a1a, #111);
+        }
+        .machine-title {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            font-size: 1.6rem;
+            letter-spacing: 0.25em;
+            color: #d4a830;
+            text-shadow: 0 0 12px rgba(212,168,48,.5), 0 2px 4px rgba(0,0,0,.8);
+            text-transform: uppercase;
+        }
+        .machine-subtitle {
+            font-size: 0.6rem;
+            letter-spacing: 0.3em;
+            color: #6a5a4a;
+            margin-top: 2px;
+        }
+        .trim-line {
+            height: 2px;
+            margin: 6px 10px 0;
+            background: linear-gradient(90deg, transparent, #8b1a1a, transparent);
+        }
+
+        /* Reel section */
+        .reel-section {
+            display: flex;
+            align-items: stretch;
+            padding: 14px 16px;
+            gap: 10px;
+            position: relative;
+        }
+
+        /* Award badges */
+        .award-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #f0ebe0;
+            border: 2px solid #8b1a1a;
+            border-radius: 4px;
+            padding: 6px 4px;
+            min-width: 42px;
+            font-size: 0.55rem;
+            color: #222;
+            text-align: center;
+            gap: 2px;
+            flex-shrink: 0;
+        }
+        .award-badge .a-sym { font-size: 1rem; line-height: 1; }
+        .award-badge .a-val { font-weight: 700; color: #8b1a1a; font-size: 0.6rem; line-height: 1; }
+
+        /* Reels container */
+        .reels-wrap {
+            flex: 1;
+            position: relative;
+        }
+        .reel-frame {
+            background: #f5f0e8;
+            border: 3px solid #8b1a1a;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            box-shadow:
+                inset 0 0 20px rgba(0,0,0,.25),
+                0 0 10px rgba(139,26,26,.3);
+        }
+        /* Top/bottom shadow overlay on reels */
+        .reel-frame::before,
+        .reel-frame::after {
+            content: '';
+            position: absolute;
+            left: 0; right: 0;
+            height: 36px;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .reel-frame::before {
+            top: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,.55) 0%, transparent 100%);
+        }
+        .reel-frame::after {
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0,0,0,.55) 0%, transparent 100%);
+        }
+        /* Payline */
+        .payline {
+            position: absolute;
+            left: -6px; right: -6px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 3px;
+            background: rgba(200,80,80,.45);
+            z-index: 20;
+            pointer-events: none;
+            border-radius: 2px;
+        }
+        .payline::before, .payline::after {
+            content: '▶';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.65rem;
+            color: rgba(200,80,80,.7);
+        }
+        .payline::before { left: -14px; }
+        .payline::after { right: -14px; transform: translateY(-50%) scaleX(-1); }
+
+        /* Reel inner */
+        .reels-inner {
+            display: flex;
+            height: calc(var(--sym-h) * 3);
+        }
+        .reel-col {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            border-right: 1px solid #ddd8cc;
+        }
+        .reel-col:last-child { border-right: none; }
+        .reel-strip {
+            display: flex;
+            flex-direction: column;
+            will-change: transform;
+        }
+
+        /* Symbol cell */
+        .sym-cell {
+            height: var(--sym-h);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.4rem;
+            flex-shrink: 0;
+            background: #f8f4ec;
+            border-bottom: 1px solid #e5dece;
+            user-select: none;
+        }
+        .bar-sym {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: #fff;
+            background: linear-gradient(160deg, #444, #222);
+            padding: 4px 9px;
+            border: 2px solid #666;
+            border-radius: 3px;
+            letter-spacing: 0.18em;
+            text-shadow: 0 1px 2px #000;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 2px 4px rgba(0,0,0,.4);
+        }
+
+        /* Reel win highlight */
+        .reel-col.win-hl { background: rgba(245,200,66,.12); }
+        .reel-col.win-hl .sym-cell { background: #fffbe8; }
+
+        /* Lever */
+        .lever-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 6px;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+            flex-shrink: 0;
+        }
+        .lever-shaft {
+            width: 10px;
+            height: 100%;
+            background: linear-gradient(90deg, #666, #ccc 45%, #888 55%, #555);
+            border-radius: 5px;
+            position: relative;
+            box-shadow: 2px 2px 6px rgba(0,0,0,.5);
+        }
+        .lever-ball {
+            width: 36px;
+            height: 36px;
+            background: radial-gradient(circle at 35% 30%, #c97a3a, #5c2a10 60%, #3a1a08);
+            border-radius: 50%;
+            border: 2px solid #8b4513;
+            box-shadow: 0 4px 10px rgba(0,0,0,.7), inset 0 -2px 4px rgba(0,0,0,.4);
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 8px;
+            transition: top .15s ease-out;
+        }
+        .lever-area.pulled .lever-ball { top: calc(100% - 44px); }
+        .lever-base {
+            width: 22px;
+            height: 14px;
+            background: linear-gradient(180deg, #555, #333);
+            border-radius: 3px;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 2px 6px rgba(0,0,0,.5);
+        }
+
+        /* Machine footer */
+        .machine-footer {
+            padding: 0 16px 14px;
+        }
+
+        /* Grand prize label */
+        .grand-prize {
+            text-align: center;
+            padding: 8px 0 10px;
+            position: relative;
+        }
+        .grand-prize::before, .grand-prize::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 25%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #8b1a1a);
+        }
+        .grand-prize::before { left: 5%; }
+        .grand-prize::after { right: 5%; background: linear-gradient(90deg, #8b1a1a, transparent); }
+        .grand-prize span {
+            font-size: 0.75rem;
+            letter-spacing: 0.35em;
+            color: #8b6a3a;
+            text-transform: uppercase;
+        }
+
+        /* LCD display */
+        .lcd-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .lcd-panel {
+            flex: 1;
+            background: #050e05;
+            border: 1px solid #1a3a1a;
+            border-radius: 4px;
+            padding: 7px 10px;
+            font-family: 'Share Tech Mono', monospace;
+            box-shadow: inset 0 0 8px rgba(0,0,0,.5), 0 0 4px rgba(80,160,80,.1);
+        }
+        .lcd-label {
+            font-size: 0.58rem;
+            color: #3a6a3a;
+            letter-spacing: 0.08em;
+            margin-bottom: 1px;
+        }
+        .lcd-value {
+            font-size: 1rem;
+            color: #7cfc00;
+            text-shadow: 0 0 8px rgba(124,252,0,.6);
+            letter-spacing: 0.05em;
+        }
+
+        /* Result message */
+        #result-msg {
+            text-align: center;
+            min-height: 1.6em;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            color: #f5c842;
+            text-shadow: 0 0 10px rgba(245,200,66,.4);
+            margin-bottom: 10px;
+            transition: opacity .3s;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .ctrl-btn {
+            flex: 1;
+            background: linear-gradient(170deg, #2a2a2a, #1a1a1a);
+            border: 1px solid #4a1010;
+            border-radius: 5px;
+            color: #c8b49a;
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            padding: 9px 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: background .1s, color .1s, transform .1s;
+            white-space: nowrap;
+        }
+        .ctrl-btn:hover:not(:disabled) {
+            background: linear-gradient(170deg, #3a1a1a, #2a0d0d);
+            color: #f0e0c0;
+            border-color: #8b1a1a;
+        }
+        .ctrl-btn:active:not(:disabled) { transform: translateY(1px); }
+        .ctrl-btn:disabled { opacity: .35; cursor: not-allowed; }
+        .ctrl-btn.spin-btn {
+            flex: 2;
+            background: linear-gradient(170deg, #6a1a1a, #8b2020);
+            border-color: #9b2a2a;
+            color: #f5e8d0;
+            font-size: 0.95rem;
+            padding: 10px 4px;
+            box-shadow: 0 3px 10px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.08);
+        }
+        .ctrl-btn.spin-btn:hover:not(:disabled) {
+            background: linear-gradient(170deg, #8b2020, #a02828);
+        }
+        .ctrl-btn .key {
+            font-size: 0.6rem;
+            color: #8b1a1a;
+            margin-left: 4px;
+        }
+
+        /* Good luck strip */
+        .good-luck {
+            text-align: center;
+            padding: 8px 0 2px;
+            font-size: 0.65rem;
+            letter-spacing: 0.35em;
+            color: #5a4a3a;
+        }
+
+        /* ─── Paytable Modal ───────────────────────── */
+        #paytable-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.85);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        #paytable-overlay.open { display: flex; }
+        .paytable-box {
+            background: #f0ebe0;
+            border: 3px solid #8b1a1a;
+            border-radius: 6px;
+            padding: 20px;
+            max-width: 340px;
+            width: 100%;
+            color: #222;
+            box-shadow: 0 0 40px rgba(0,0,0,.8);
+        }
+        .paytable-title {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.25em;
+            text-align: center;
+            color: #8b1a1a;
+            margin-bottom: 14px;
+            border-bottom: 1px solid #c8a898;
+            padding-bottom: 8px;
+        }
+        .pt-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5px 4px;
+            border-bottom: 1px solid #ddd4c4;
+            font-size: 0.85rem;
+        }
+        .pt-row:last-child { border-bottom: none; }
+        .pt-syms { font-size: 1.15rem; letter-spacing: 0.08em; }
+        .pt-mult { font-weight: 700; color: #8b1a1a; font-family: 'Share Tech Mono', monospace; }
+        .pt-bar { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 0.75rem;
+                  background: #333; color: #fff; padding: 1px 5px; border-radius: 2px; border: 1px solid #666; }
+        .paytable-close {
+            margin-top: 14px;
+            width: 100%;
+            background: #8b1a1a;
+            border: none;
+            border-radius: 4px;
+            color: #f5e8d0;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            padding: 9px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Back link */
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 16px;
+            font-size: 0.7rem;
+            color: #5a4a3a;
+            text-decoration: none;
+            letter-spacing: 0.1em;
+        }
+        .back-link:hover { color: #c8b49a; }
+
+        /* ─── Mobile tweaks ────────────────────────── */
+        @media (max-width: 400px) {
+            :root { --sym-h: 66px; }
+            .machine-title { font-size: 1.3rem; }
+            .ctrl-btn { font-size: 0.75rem; padding: 8px 2px; }
+            .ctrl-btn .key { display: none; }
+        }
+        @media (min-width: 560px) {
+            :root { --sym-h: 90px; }
+        }
+    </style>
+</head>
+<body>
+
+<div style="width:100%;max-width:520px;">
+
+<!-- ══════════ MACHINE ══════════ -->
+<div class="machine">
+    <div class="trim-top"></div>
+
+    <!-- Header -->
+    <div class="machine-header">
+        <div class="machine-title">UTOPIS</div>
+        <div class="machine-subtitle">슬롯머신 &nbsp;·&nbsp; SLOT MACHINE</div>
+        <div class="trim-line"></div>
+    </div>
+
+    <!-- Reels Section -->
+    <div class="reel-section">
+        <!-- Left badge -->
+        <div class="award-badge">
+            <div class="a-sym">7️⃣7️⃣7️⃣</div>
+            <div class="a-val">BET×30</div>
+        </div>
+
+        <!-- Reels + Lever -->
+        <div class="reels-wrap">
+            <div class="reel-frame">
+                <div class="payline"></div>
+                <div class="reels-inner">
+                    <div class="reel-col" id="reel-0"><div class="reel-strip" id="strip-0"></div></div>
+                    <div class="reel-col" id="reel-1"><div class="reel-strip" id="strip-1"></div></div>
+                    <div class="reel-col" id="reel-2"><div class="reel-strip" id="strip-2"></div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lever -->
+        <div class="lever-area" id="lever" title="레버 당기기">
+            <div class="lever-shaft">
+                <div class="lever-ball" id="lever-ball"></div>
+            </div>
+            <div class="lever-base"></div>
+        </div>
+
+        <!-- Right badge -->
+        <div class="award-badge">
+            <div class="a-sym">🍊🍊🍊</div>
+            <div class="a-val">BET×100</div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="machine-footer">
+        <div class="grand-prize"><span>GRAND PRIZE</span></div>
+
+        <!-- LCD displays -->
+        <div class="lcd-row">
+            <div class="lcd-panel">
+                <div class="lcd-label">현재 베팅</div>
+                <div class="lcd-value" id="disp-bet">25</div>
+            </div>
+            <div class="lcd-panel">
+                <div class="lcd-label">칩 갯수</div>
+                <div class="lcd-value" id="disp-chips">10000</div>
+            </div>
+            <div class="lcd-panel">
+                <div class="lcd-label">획득 칩</div>
+                <div class="lcd-value" id="disp-earn">0</div>
+            </div>
+        </div>
+
+        <!-- Result message -->
+        <div id="result-msg"></div>
+
+        <!-- Buttons -->
+        <div class="controls">
+            <button class="ctrl-btn spin-btn" id="btn-spin">SPIN <span class="key">W</span></button>
+            <button class="ctrl-btn" id="btn-bet-up">베팅 ▲<span class="key">E</span></button>
+            <button class="ctrl-btn" id="btn-bet-dn">베팅 ▼<span class="key">Q</span></button>
+            <button class="ctrl-btn" id="btn-max">MAX<span class="key">S</span></button>
+            <button class="ctrl-btn" id="btn-pay">배당<span class="key">F</span></button>
+        </div>
+
+        <div class="good-luck">◆ &nbsp; GOOD LUCK &nbsp; ◆</div>
+    </div>
+
+    <div class="trim-bot"></div>
+</div>
+
+<a href="index.html" class="back-link">← My Toys 홈으로</a>
+</div>
+
+<!-- ══════════ PAYTABLE MODAL ══════════ -->
+<div id="paytable-overlay">
+    <div class="paytable-box">
+        <div class="paytable-title">★ 배당 목록 ★</div>
+        <div class="pt-row"><span class="pt-syms">🔔🔔🔔</span><span class="pt-mult">BET × 10</span></div>
+        <div class="pt-row"><span class="pt-syms"><span class="pt-bar">BAR</span>&nbsp;<span class="pt-bar">BAR</span>&nbsp;<span class="pt-bar">BAR</span></span><span class="pt-mult">BET × 20</span></div>
+        <div class="pt-row"><span class="pt-syms">7️⃣7️⃣7️⃣</span><span class="pt-mult">BET × 30</span></div>
+        <div class="pt-row"><span class="pt-syms">🍇🍇🍇</span><span class="pt-mult">BET × 40</span></div>
+        <div class="pt-row"><span class="pt-syms">🍑🍑🍑</span><span class="pt-mult">BET × 60</span></div>
+        <div class="pt-row"><span class="pt-syms">🍊🍊🍊</span><span class="pt-mult">BET × 100</span></div>
+        <div class="pt-row" style="background:#fffbe8"><span class="pt-syms">🍒──</span><span class="pt-mult">BET × 2</span></div>
+        <div class="pt-row" style="background:#fffbe8"><span class="pt-syms">🍒🍒─</span><span class="pt-mult">BET × 5</span></div>
+        <div class="pt-row" style="background:#fffbe8"><span class="pt-syms">🍒🍒🍒</span><span class="pt-mult">BET × 10</span></div>
+        <button class="paytable-close" id="btn-pay-close">닫기</button>
+    </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════
+//   CONSTANTS
+// ════════════════════════════════════════════
+const SYMBOLS  = ['🔔', 'BAR', '7️⃣', '🍇', '🍑', '🍊', '🍒'];
+// Weights: cherry is most common, orange least
+const WEIGHTS  = [12,   10,    8,    14,   10,   6,    40];
+const STRIP_N  = 24;   // unique symbols per reel
+const SPIN_SPEED = 14; // px per frame during spin (~840px/s at 60fps)
+const BET_STEPS  = [1,5,10,25,50,100,250,500,1000];
+const INIT_CHIPS = 10000;
+
+// ════════════════════════════════════════════
+//   STATE
+// ════════════════════════════════════════════
+let chips     = INIT_CHIPS;
+let earned    = 0;
+let betIdx    = 3;  // index into BET_STEPS → 25
+let spinning  = false;
+
+const reels = [
+    { symbols: [], offset: 0, animId: null, isSpinning: false },
+    { symbols: [], offset: 0, animId: null, isSpinning: false },
+    { symbols: [], offset: 0, animId: null, isSpinning: false },
+];
+
+// ════════════════════════════════════════════
+//   HELPERS
+// ════════════════════════════════════════════
+function getBet()    { return BET_STEPS[betIdx]; }
+function symH()      { return parseInt(getComputedStyle(document.documentElement).getPropertyValue('--sym-h')) || 80; }
+function sleep(ms)   { return new Promise(r => setTimeout(r, ms)); }
+
+function weightedRandom() {
+    const total = WEIGHTS.reduce((a,b) => a+b, 0);
+    let r = Math.random() * total;
+    for (let i = 0; i < SYMBOLS.length; i++) {
+        r -= WEIGHTS[i];
+        if (r <= 0) return SYMBOLS[i];
+    }
+    return SYMBOLS[SYMBOLS.length - 1];
+}
+
+function makeCell(sym) {
+    const div = document.createElement('div');
+    div.className = 'sym-cell';
+    if (sym === 'BAR') {
+        const s = document.createElement('span');
+        s.className = 'bar-sym';
+        s.textContent = 'BAR';
+        div.appendChild(s);
+    } else {
+        div.textContent = sym;
+    }
+    return div;
+}
+
+function updateDisplays() {
+    document.getElementById('disp-bet').textContent   = getBet().toLocaleString();
+    document.getElementById('disp-chips').textContent = chips.toLocaleString();
+    document.getElementById('disp-earn').textContent  = earned.toLocaleString();
+}
+
+// ════════════════════════════════════════════
+//   REEL BUILD
+// ════════════════════════════════════════════
+function buildStrip(ri) {
+    const r     = reels[ri];
+    const strip = document.getElementById('strip-' + ri);
+    strip.innerHTML = '';
+    r.symbols = [];
+
+    // Generate N unique symbols with enough cherries (at least 4)
+    for (let i = 0; i < STRIP_N; i++) r.symbols.push(weightedRandom());
+
+    // Ensure at least 4 cherries in the strip for stopping reliability
+    const cherryCount = r.symbols.filter(s => s === '🍒').length;
+    if (cherryCount < 4) {
+        const needed = 4 - cherryCount;
+        const noncherryIdx = r.symbols
+            .map((s, i) => s !== '🍒' ? i : -1)
+            .filter(i => i >= 0);
+        for (let k = 0; k < needed && k < noncherryIdx.length; k++) {
+            const pick = noncherryIdx[Math.floor(Math.random() * noncherryIdx.length)];
+            r.symbols[pick] = '🍒';
+        }
+    }
+
+    // Render twice for seamless wrap
+    for (let pass = 0; pass < 2; pass++) {
+        for (const sym of r.symbols) strip.appendChild(makeCell(sym));
+    }
+
+    r.offset = 0;
+    strip.style.transform = 'translateY(0px)';
+}
+
+function initReels() {
+    for (let ri = 0; ri < 3; ri++) {
+        buildStrip(ri);
+        // Position to center of strip (showing symbols 1,2,3)
+        const strip = document.getElementById('strip-' + ri);
+        reels[ri].offset = 0;
+        strip.style.transform = 'translateY(0px)';
+    }
+}
+
+// ════════════════════════════════════════════
+//   SPIN LOOP (rAF infinite)
+// ════════════════════════════════════════════
+function startReelSpin(ri) {
+    const r = reels[ri];
+    buildStrip(ri);   // fresh symbols each spin
+    r.isSpinning = true;
+
+    const H   = symH();
+    const halfH = STRIP_N * H;
+
+    function tick() {
+        if (!r.isSpinning) return;
+
+        r.offset -= SPIN_SPEED;
+        // Wrap: only wrap within first copy so second copy always seamless
+        if (r.offset <= -halfH) r.offset += halfH;
+
+        document.getElementById('strip-' + ri).style.transform =
+            'translateY(' + r.offset + 'px)';
+
+        r.animId = requestAnimationFrame(tick);
+    }
+    r.animId = requestAnimationFrame(tick);
+}
+
+// ════════════════════════════════════════════
+//   STOP REEL
+// ════════════════════════════════════════════
+function stopReel(ri, targetSym) {
+    return new Promise(resolve => {
+        const r     = reels[ri];
+        const H     = symH();
+        const halfH = STRIP_N * H;
+
+        // Freeze current position
+        r.isSpinning = false;
+        cancelAnimationFrame(r.animId);
+        const capturedOffset = r.offset;
+
+        // Find targetSym positions in strip
+        const candidates = r.symbols
+            .map((s, i) => s === targetSym ? i : -1)
+            .filter(i => i >= 0);
+
+        // If symbol not found (unlikely), force-insert it
+        if (candidates.length === 0) {
+            const fi = Math.floor(Math.random() * STRIP_N);
+            r.symbols[fi] = targetSym;
+            const cells = document.querySelectorAll('#strip-' + ri + ' .sym-cell');
+            const newCell = makeCell(targetSym);
+            cells[fi].innerHTML          = newCell.innerHTML;
+            cells[fi + STRIP_N].innerHTML = newCell.innerHTML;
+            candidates.push(fi);
+        }
+
+        const targetIdx = candidates[Math.floor(Math.random() * candidates.length)];
+
+        // Target Y: when translateY = -(targetIdx - 1) * H, that symbol is centered
+        // (row 0 = top, row 1 = center, row 2 = bottom of the 3-visible window)
+        let targetY = -(targetIdx - 1) * H;
+
+        // Normalise into [-halfH, 0]
+        while (targetY > 0)      targetY -= halfH;
+        while (targetY <= -halfH) targetY += halfH;
+
+        // Make sure we always scroll forward (more negative) from capturedOffset
+        // and add at least 3 symbol heights of travel
+        const MIN_TRAVEL = 3 * H;
+        while (targetY > capturedOffset - MIN_TRAVEL) targetY -= halfH;
+
+        const strip    = document.getElementById('strip-' + ri);
+        const distance = Math.abs(targetY - capturedOffset);
+        // Duration: ~60 frames per SPIN_SPEED px → duration in ms
+        const duration = Math.max(500, Math.min(1400, distance / SPIN_SPEED * (1000 / 60)));
+
+        const anim = strip.animate(
+            [{ transform: 'translateY(' + capturedOffset + 'px)' },
+             { transform: 'translateY(' + targetY + 'px)' }],
+            { duration, easing: 'cubic-bezier(0.17, 0.67, 0.35, 1.0)', fill: 'forwards' }
+        );
+
+        anim.onfinish = () => {
+            strip.style.transform = 'translateY(' + targetY + 'px)';
+            r.offset = targetY;
+            resolve();
+        };
+    });
+}
+
+// ════════════════════════════════════════════
+//   EVALUATE RESULT
+// ════════════════════════════════════════════
+function evaluate(results) {
+    const [a, b, c] = results;
+    const bet = getBet();
+
+    // Cherry rules (cascading)
+    if (a === '🍒') {
+        if (b === '🍒' && c === '🍒') {
+            return { mult: 10, msg: '🍒🍒🍒 — BET × 10!', hl: [0,1,2] };
+        }
+        if (b === '🍒') {
+            return { mult: 5, msg: '🍒🍒 — BET × 5!', hl: [0,1] };
+        }
+        return { mult: 2, msg: '🍒 — BET × 2!', hl: [0] };
+    }
+
+    // 3-of-a-kind
+    if (a === b && b === c) {
+        const TABLE = { '🔔':10, 'BAR':20, '7️⃣':30, '🍇':40, '🍑':60, '🍊':100 };
+        const mult = TABLE[a];
+        if (mult) {
+            const label = a === 'BAR' ? 'BAR BAR BAR' : a + a + a;
+            return { mult, msg: label + ' — BET × ' + mult + '!', hl: [0,1,2] };
+        }
+    }
+
+    return { mult: 0, msg: '', hl: [] };
+}
+
+// ════════════════════════════════════════════
+//   HIGHLIGHT REELS
+// ════════════════════════════════════════════
+function setHighlight(indices) {
+    for (let i = 0; i < 3; i++) {
+        document.getElementById('reel-' + i).classList.toggle('win-hl', indices.includes(i));
+    }
+}
+
+// ════════════════════════════════════════════
+//   LEVER ANIMATION
+// ════════════════════════════════════════════
+async function animateLever() {
+    const lever = document.getElementById('lever');
+    lever.classList.add('pulled');
+    await sleep(320);
+    lever.classList.remove('pulled');
+    await sleep(200);
+}
+
+// ════════════════════════════════════════════
+//   DETERMINE SPIN RESULTS (weighted)
+// ════════════════════════════════════════════
+function pickResults() {
+    // Each reel result is independently random
+    return [weightedRandom(), weightedRandom(), weightedRandom()];
+}
+
+// ════════════════════════════════════════════
+//   MAIN SPIN
+// ════════════════════════════════════════════
+async function doSpin() {
+    if (spinning) return;
+    const bet = getBet();
+    if (chips < bet) {
+        showMsg('칩이 부족합니다!');
+        return;
+    }
+
+    spinning = true;
+    setButtons(false);
+    setHighlight([]);
+    showMsg('');
+
+    chips -= bet;
+    updateDisplays();
+
+    await animateLever();
+
+    const results = pickResults();
+
+    // Start all 3 reels simultaneously
+    for (let ri = 0; ri < 3; ri++) startReelSpin(ri);
+
+    // Stop reels left → right with delay
+    await sleep(1400);
+    await stopReel(0, results[0]);
+
+    await sleep(500);
+    await stopReel(1, results[1]);
+
+    await sleep(500);
+    await stopReel(2, results[2]);
+
+    // Evaluate
+    const { mult, msg, hl } = evaluate(results);
+    if (mult > 0) {
+        const win = bet * mult;
+        chips  += win;
+        earned += win - bet; // net gain
+        setHighlight(hl);
+        showMsg(msg + '  (+ ' + win.toLocaleString() + ' 칩)');
+    } else {
+        showMsg('꽝! 다시 도전하세요.');
+    }
+
+    updateDisplays();
+    spinning = false;
+    setButtons(true);
+}
+
+// ════════════════════════════════════════════
+//   UI HELPERS
+// ════════════════════════════════════════════
+function showMsg(txt) {
+    document.getElementById('result-msg').textContent = txt;
+}
+function setButtons(enabled) {
+    ['btn-spin','btn-bet-up','btn-bet-dn','btn-max','btn-pay'].forEach(id => {
+        document.getElementById(id).disabled = !enabled;
+    });
+    document.getElementById('lever').style.pointerEvents = enabled ? '' : 'none';
+}
+function changeBet(dir) {
+    if (spinning) return;
+    betIdx = Math.max(0, Math.min(BET_STEPS.length - 1, betIdx + dir));
+    // Make sure bet ≤ chips
+    while (betIdx > 0 && BET_STEPS[betIdx] > chips) betIdx--;
+    updateDisplays();
+}
+function setMaxBet() {
+    if (spinning) return;
+    betIdx = BET_STEPS.length - 1;
+    while (betIdx > 0 && BET_STEPS[betIdx] > chips) betIdx--;
+    updateDisplays();
+}
+
+// ════════════════════════════════════════════
+//   EVENT LISTENERS
+// ════════════════════════════════════════════
+document.getElementById('btn-spin').addEventListener('click', doSpin);
+document.getElementById('btn-bet-up').addEventListener('click', () => changeBet(+1));
+document.getElementById('btn-bet-dn').addEventListener('click', () => changeBet(-1));
+document.getElementById('btn-max').addEventListener('click', setMaxBet);
+document.getElementById('btn-pay').addEventListener('click', () => {
+    document.getElementById('paytable-overlay').classList.add('open');
+});
+document.getElementById('btn-pay-close').addEventListener('click', () => {
+    document.getElementById('paytable-overlay').classList.remove('open');
+});
+document.getElementById('lever').addEventListener('click', doSpin);
+
+// Keyboard
+document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT') return;
+    const key = e.key.toLowerCase();
+    if (key === 'w') doSpin();
+    else if (key === 'e') changeBet(+1);
+    else if (key === 'q') changeBet(-1);
+    else if (key === 's') setMaxBet();
+    else if (key === 'f') document.getElementById('btn-pay').click();
+    else if (key === 'escape') document.getElementById('paytable-overlay').classList.remove('open');
+});
+
+// Close modal on overlay click
+document.getElementById('paytable-overlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('paytable-overlay'))
+        document.getElementById('paytable-overlay').classList.remove('open');
+});
+
+// ════════════════════════════════════════════
+//   INIT
+// ════════════════════════════════════════════
+initReels();
+updateDisplays();
+</script>
+</body>
+</html>
