@@ -1314,6 +1314,7 @@ async function animateLever() {
     if (leverSpringAnim) { leverSpringAnim.cancel(); leverSpringAnim = null; }
     const { max } = getLeverRange();
     const ball = document.getElementById('lever-ball');
+    hapticLeverSnap();   // 버튼/키보드로 스핀 시 레버 스냅 햅틱
     // Snap down
     const snapAnim = ball.animate([
         { top: leverBallTop + 'px' },
@@ -1342,6 +1343,7 @@ async function animateLever() {
         leverDragStartBallTop = leverBallTop;
         leverArea.setPointerCapture(e.pointerId);
         e.preventDefault();
+        hapticLeverDragStart();   // 드득드득 시작
     });
 
     leverArea.addEventListener('pointermove', e => {
@@ -1356,6 +1358,8 @@ async function animateLever() {
         if ((newTop - min) / range >= LEVER_SNAP_THRESHOLD) {
             leverAutoCompleted = true;
             leverDragging      = false;
+            hapticLeverDragStop();
+            hapticLeverSnap();    // 스냅 쿵-통통
             leverArea.releasePointerCapture(e.pointerId);
             setLeverBallTop(max);
             springBackLever(max);
@@ -1366,6 +1370,8 @@ async function animateLever() {
     function onRelease(e) {
         if (!leverDragging) return;
         leverDragging = false;
+        hapticLeverDragStop();
+        hapticLeverRelease();    // 살짝 릴리즈
         leverArea.releasePointerCapture(e.pointerId);
         springBackLever(leverBallTop);  // spring back, no spin
     }
@@ -1407,16 +1413,21 @@ async function doSpin(skipLeverAnim = false) {
 
     // Start all 3 reels simultaneously
     for (let ri = 0; ri < 3; ri++) startReelSpin(ri);
+    hapticSpinRumbleStart();    // 드르르륵 시작
 
     // Stop reels left → right with delay
     await sleep(1400);
     await stopReel(0, results[0]);
+    hapticReelStop();           // 첫 번째 릴 쿵
 
     await sleep(500);
     await stopReel(1, results[1]);
+    hapticReelStop();           // 두 번째 릴 쿵
 
     await sleep(500);
     await stopReel(2, results[2]);
+    hapticSpinRumbleStop();     // 룰 종료
+    hapticReelStop();           // 세 번째 릴 쿵
 
     // Evaluate
     const { mult, msg, hl } = evaluate(results);
@@ -1426,9 +1437,11 @@ async function doSpin(skipLeverAnim = false) {
         earned += win - bet; // net gain
         setHighlight(hl);
         showMsg(msg + '  ＋' + win.toLocaleString() + '칩', 'win');
+        setTimeout(() => hapticWin(mult), 120);  // 당첨 축하 패턴
         playWinAnim();
     } else {
         showMsg('꽝!  다시 도전하세요.', 'lose');
+        setTimeout(hapticLose, 80);  // 꽝 툭툭
         startIdleAnim();
     }
 
@@ -1436,6 +1449,75 @@ async function doSpin(skipLeverAnim = false) {
     spinning = false;
     setButtons(true);
 }
+
+// ════════════════════════════════════════════
+//   HAPTIC FEEDBACK
+// ════════════════════════════════════════════
+const HAS_VIB = 'vibrate' in navigator;
+function vib(pattern) { if (HAS_VIB) navigator.vibrate(pattern); }
+
+// Button press — sharp click (딸깍)
+function hapticClick() { vib(12); }
+
+// Lever drag — rhythmic pulse while pulling (드득드득)
+let _leverPulseTimer = null;
+function hapticLeverDragStart() {
+    if (!HAS_VIB) return;
+    clearTimeout(_leverPulseTimer);
+    let step = 0;
+    function pulse() {
+        if (!leverDragging && !leverAutoCompleted) return;
+        // Intensity builds as ball is pulled further
+        const { min, max } = getLeverRange();
+        const ratio = Math.max(0, Math.min(1, (leverBallTop - min) / (max - min)));
+        const dur = Math.round(8 + ratio * 14);   // 8→22ms
+        navigator.vibrate([dur, 42]);
+        _leverPulseTimer = setTimeout(pulse, 50);
+        step++;
+    }
+    pulse();
+}
+function hapticLeverDragStop() {
+    clearTimeout(_leverPulseTimer);
+    _leverPulseTimer = null;
+}
+
+// Lever snap to bottom (스냅!)
+function hapticLeverSnap() { vib([50, 20, 30]); }
+
+// Lever release without triggering spin (살짝 릴리즈)
+function hapticLeverRelease() { vib(20); }
+
+// Spin rumble — continuous while reels spin (드르르륵)
+let _spinRumbleTimer = null;
+function hapticSpinRumbleStart() {
+    if (!HAS_VIB) return;
+    clearTimeout(_spinRumbleTimer);
+    function rumble() {
+        navigator.vibrate([9, 7]);
+        _spinRumbleTimer = setTimeout(rumble, 16);
+    }
+    rumble();
+}
+function hapticSpinRumbleStop() {
+    clearTimeout(_spinRumbleTimer);
+    _spinRumbleTimer = null;
+    if (HAS_VIB) navigator.vibrate(0);
+}
+
+// Reel stop thud (쿵)
+function hapticReelStop() { vib([40, 15, 22]); }
+
+// Win celebration — intensity scales with multiplier
+function hapticWin(mult) {
+    const beats = Math.min(12, Math.max(2, Math.round(mult / 5)));
+    const pat = [];
+    for (let i = 0; i < beats; i++) { pat.push(30); pat.push(18); }
+    vib(pat);
+}
+
+// Lose (툭툭)
+function hapticLose() { vib([18, 28, 18]); }
 
 // ════════════════════════════════════════════
 //   BUTTON ANIMATIONS
@@ -1507,6 +1589,11 @@ function setMaxBet() {
 // ════════════════════════════════════════════
 //   EVENT LISTENERS
 // ════════════════════════════════════════════
+// Button haptic — click feedback on all push-btn presses
+document.querySelector('.controls').addEventListener('pointerdown', e => {
+    if (e.target.closest('.push-btn')) hapticClick();
+});
+
 document.getElementById('btn-spin').addEventListener('click', doSpin);
 document.getElementById('btn-bet-up').addEventListener('click', () => changeBet(+1));
 document.getElementById('btn-bet-dn').addEventListener('click', () => changeBet(-1));
