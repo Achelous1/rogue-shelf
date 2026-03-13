@@ -135,29 +135,57 @@
                 linear-gradient(180deg, #d8d4c0, #a09070);
             z-index: 5;
         }
-        .machine-title {
+        /* ─── Paytable panel in header ───────────────── */
+        .paytable-panel { padding: 7px 8px 5px; }
+        .ptp-title {
             font-family: 'Oswald', sans-serif;
             font-weight: 700;
-            font-size: 1.7rem;
-            letter-spacing: 0.22em;
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
             color: var(--gold-hi);
-            text-shadow:
-                0 0 18px rgba(248,224,96,.75),
-                0 2px 0 #000,
-                0 -1px 0 rgba(255,240,100,.35);
+            text-align: center;
+            text-shadow: 0 0 10px rgba(248,224,96,.55), 0 1px 2px #000;
+            margin-bottom: 5px;
             text-transform: uppercase;
         }
-        .machine-subtitle {
+        .ptp-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3px 5px;
+        }
+        .ptp-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(200,152,12,.2);
+            border-radius: 3px;
+            padding: 2px 5px;
+            gap: 2px;
+        }
+        .ptp-sym {
+            font-size: 0.68rem;
+            letter-spacing: -0.03em;
+            white-space: nowrap;
+        }
+        .ptp-mult {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.64rem;
+            color: var(--gold-hi);
+            text-shadow: 0 0 5px rgba(248,224,96,.45);
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .ptp-jackpot .ptp-mult { color: #ff6644; text-shadow: 0 0 7px rgba(255,100,68,.6); }
+        .ptp-bar {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
             font-size: 0.58rem;
-            letter-spacing: 0.38em;
-            color: #5a5a5a;
-            margin-top: 3px;
-            text-transform: uppercase;
-        }
-        .trim-line {
-            height: 2px;
-            margin: 6px 12% 0;
-            background: linear-gradient(90deg, transparent, var(--gold-mid), transparent);
+            background: #333;
+            color: #fff;
+            padding: 0 3px;
+            border-radius: 2px;
+            border: 1px solid #666;
         }
 
         /* ─── Reel section — recessed panel + chrome sides ── */
@@ -173,7 +201,7 @@
             border-bottom: 3px solid #806808;
             /* Shadow from overhanging header */
             box-shadow: inset 0 8px 24px rgba(0,0,0,.95), inset 0 -6px 16px rgba(0,0,0,.7);
-            overflow: hidden;
+            overflow: visible;
         }
 
         /* Convex-top → concave-mid chrome side columns */
@@ -490,60 +518,196 @@
             margin-bottom: 10px;
         }
 
-        /* Controls */
+        /* ─── Push Button Controls ─────────────────── */
         .controls {
             display: flex;
-            gap: 8px;
-            align-items: center;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 10px;
+            padding: 4px 0 6px;
         }
-        .ctrl-btn {
-            flex: 1;
-            background: linear-gradient(170deg, #d8d8d8, #a8a8a8 55%, #bcbcbc);
-            border: 1px solid #707070;
-            border-radius: 4px;
-            color: #1a1a1a;
-            font-family: 'Oswald', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.04em;
-            cursor: pointer;
-            padding: 9px 4px;
+        .btn-group-left, .btn-group-right {
             display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+        .btn-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .btn-wrap-label {
+            font-size: 0.5rem;
+            color: rgba(0,0,0,.42);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            text-shadow: 0 1px 0 rgba(255,255,255,.5);
+        }
+        /* Generic push-button */
+        .push-btn {
+            border: none;
+            cursor: pointer;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.7);
-            transition: background .1s, transform .1s;
-            white-space: nowrap;
+            line-height: 1.15;
+            position: relative;
+            transition: transform 0.07s, box-shadow 0.07s;
+            user-select: none;
+            outline: none;
+            padding: 0;
         }
-        .ctrl-btn:hover:not(:disabled) {
-            background: linear-gradient(170deg, #ececec, #c0c0c0 55%, #d4d4d4);
-            color: #000;
-        }
-        .ctrl-btn:active:not(:disabled) {
-            transform: translateY(1px);
-            box-shadow: 0 1px 3px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.4);
-        }
-        .ctrl-btn:disabled { opacity: .38; cursor: not-allowed; }
-        .ctrl-btn.spin-btn {
-            flex: 2;
-            background: linear-gradient(170deg, #cc2424, #8c1414);
-            border-color: #a01818;
+        .push-btn:active:not(:disabled) { transform: translateY(5px); }
+        .push-btn:disabled { opacity: .4; cursor: not-allowed; }
+        /* SPIN — large round red */
+        .push-btn-spin {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: radial-gradient(ellipse at 38% 32%,
+                #ff8888 0%, #ee3333 28%, #cc0000 55%, #880000 80%, #5a0000 100%);
             color: #fff;
-            font-size: 0.95rem;
-            padding: 10px 4px;
-            text-shadow: 0 1px 3px rgba(0,0,0,.5);
-            box-shadow: 0 3px 10px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.18);
+            font-size: 1rem;
+            text-shadow: 0 1px 3px rgba(0,0,0,.7);
+            box-shadow:
+                0 7px 0 #4a0000,
+                0 10px 22px rgba(0,0,0,.7),
+                inset 0 3px 7px rgba(255,180,180,.45),
+                inset 0 -3px 5px rgba(0,0,0,.4),
+                0 0 0 3px #6a0000,
+                0 0 0 5px rgba(0,0,0,.55);
         }
-        .ctrl-btn.spin-btn:hover:not(:disabled) {
-            background: linear-gradient(170deg, #dd3232, #a41c1c);
+        .push-btn-spin:active:not(:disabled) {
+            box-shadow:
+                0 2px 0 #4a0000,
+                0 4px 10px rgba(0,0,0,.7),
+                inset 0 3px 7px rgba(255,180,180,.45),
+                inset 0 -3px 5px rgba(0,0,0,.4),
+                0 0 0 3px #6a0000,
+                0 0 0 5px rgba(0,0,0,.55);
         }
-        .ctrl-btn .key {
-            font-size: 0.56rem;
-            color: #555;
-            margin-left: 4px;
+        /* BET / MAX — round yellow */
+        .push-btn-yellow {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: radial-gradient(ellipse at 38% 32%,
+                #ffee88 0%, #ddaa00 30%, #bb8800 58%, #886600 82%, #5a4000 100%);
+            color: #3a2200;
+            font-size: 0.68rem;
+            text-shadow: 0 1px 1px rgba(255,255,255,.25);
+            box-shadow:
+                0 6px 0 #3a2800,
+                0 9px 18px rgba(0,0,0,.6),
+                inset 0 3px 5px rgba(255,235,100,.5),
+                inset 0 -3px 4px rgba(0,0,0,.35),
+                0 0 0 2px #5a4000,
+                0 0 0 4px rgba(0,0,0,.5);
         }
-        .ctrl-btn.spin-btn .key { color: rgba(255,255,255,.45); }
+        .push-btn-yellow:active:not(:disabled) {
+            box-shadow:
+                0 2px 0 #3a2800,
+                0 4px 8px rgba(0,0,0,.6),
+                inset 0 3px 5px rgba(255,235,100,.5),
+                inset 0 -3px 4px rgba(0,0,0,.35),
+                0 0 0 2px #5a4000,
+                0 0 0 4px rgba(0,0,0,.5);
+        }
+        /* 배당 — white square */
+        .push-btn-white {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background: linear-gradient(160deg, #ffffff 0%, #eaeaea 40%, #d0d0d0 100%);
+            color: #333;
+            font-size: 0.68rem;
+            text-shadow: 0 1px 0 rgba(255,255,255,.8);
+            box-shadow:
+                0 6px 0 #888,
+                0 9px 18px rgba(0,0,0,.5),
+                inset 0 2px 5px rgba(255,255,255,.9),
+                inset 0 -2px 4px rgba(0,0,0,.15),
+                0 0 0 2px #aaa,
+                0 0 0 4px rgba(0,0,0,.45);
+        }
+        .push-btn-white:active:not(:disabled) {
+            box-shadow:
+                0 2px 0 #888,
+                0 4px 8px rgba(0,0,0,.5),
+                inset 0 2px 5px rgba(255,255,255,.9),
+                inset 0 -2px 4px rgba(0,0,0,.15),
+                0 0 0 2px #aaa,
+                0 0 0 4px rgba(0,0,0,.45);
+        }
+        .push-btn .btn-label { font-weight: 700; letter-spacing: 0.04em; }
+        .push-btn .key { font-size: 0.44rem; opacity: 0.5; margin-top: 1px; }
+
+        /* ─── Idle attract animations ────────────────── */
+        @keyframes idle-spin-glow {
+            0%, 40%, 100% {
+                box-shadow:
+                    0 7px 0 #4a0000, 0 10px 22px rgba(0,0,0,.7),
+                    inset 0 3px 7px rgba(255,180,180,.45), inset 0 -3px 5px rgba(0,0,0,.4),
+                    0 0 0 3px #6a0000, 0 0 0 5px rgba(0,0,0,.55);
+            }
+            20% {
+                box-shadow:
+                    0 7px 0 #4a0000, 0 10px 22px rgba(0,0,0,.7),
+                    inset 0 3px 7px rgba(255,180,180,.45), inset 0 -3px 5px rgba(0,0,0,.4),
+                    0 0 0 3px #6a0000, 0 0 0 5px rgba(0,0,0,.55),
+                    0 0 30px 12px rgba(255,50,50,.85), 0 0 60px 22px rgba(255,0,0,.35);
+            }
+        }
+        @keyframes idle-bet-glow {
+            0%, 55%, 100% {
+                box-shadow:
+                    0 6px 0 #3a2800, 0 9px 18px rgba(0,0,0,.6),
+                    inset 0 3px 5px rgba(255,235,100,.5), inset 0 -3px 4px rgba(0,0,0,.35),
+                    0 0 0 2px #5a4000, 0 0 0 4px rgba(0,0,0,.5);
+            }
+            75% {
+                box-shadow:
+                    0 6px 0 #3a2800, 0 9px 18px rgba(0,0,0,.6),
+                    inset 0 3px 5px rgba(255,235,100,.5), inset 0 -3px 4px rgba(0,0,0,.35),
+                    0 0 0 2px #5a4000, 0 0 0 4px rgba(0,0,0,.5),
+                    0 0 24px 8px rgba(255,210,0,.9), 0 0 48px 16px rgba(255,150,0,.4);
+            }
+        }
+        @keyframes idle-white-glow {
+            0%, 80%, 100% {
+                box-shadow:
+                    0 6px 0 #888, 0 9px 18px rgba(0,0,0,.5),
+                    inset 0 2px 5px rgba(255,255,255,.9), inset 0 -2px 4px rgba(0,0,0,.15),
+                    0 0 0 2px #aaa, 0 0 0 4px rgba(0,0,0,.45);
+            }
+            90% {
+                box-shadow:
+                    0 6px 0 #888, 0 9px 18px rgba(0,0,0,.5),
+                    inset 0 2px 5px rgba(255,255,255,.9), inset 0 -2px 4px rgba(0,0,0,.15),
+                    0 0 0 2px #aaa, 0 0 0 4px rgba(0,0,0,.45),
+                    0 0 20px 7px rgba(255,255,255,.85), 0 0 40px 14px rgba(180,180,255,.4);
+            }
+        }
+        .push-btn-spin.idle-anim   { animation: idle-spin-glow  3s ease-in-out infinite; }
+        .push-btn-yellow.idle-anim { animation: idle-bet-glow   3s ease-in-out infinite; }
+        .push-btn-white.idle-anim  { animation: idle-white-glow 3s ease-in-out infinite; }
+
+        /* ─── Win celebration animation ─────────────── */
+        @keyframes win-flash {
+            0%   { filter: brightness(1)   saturate(1); }
+            14%  { filter: brightness(2.0) saturate(1.6) hue-rotate(0deg); }
+            28%  { filter: brightness(1)   saturate(1)   hue-rotate(60deg); }
+            42%  { filter: brightness(2.0) saturate(1.6) hue-rotate(120deg); }
+            57%  { filter: brightness(1)   saturate(1)   hue-rotate(180deg); }
+            71%  { filter: brightness(2.0) saturate(1.6) hue-rotate(240deg); }
+            85%  { filter: brightness(1)   saturate(1)   hue-rotate(300deg); }
+            100% { filter: brightness(1)   saturate(1)   hue-rotate(360deg); }
+        }
+        .push-btn.win-anim { animation: win-flash 0.45s ease-in-out 5; }
 
         /* Good luck strip */
         .good-luck {
@@ -589,8 +753,8 @@
         .brand-name {
             font-family: 'Oswald', sans-serif;
             font-weight: 700;
-            font-size: 1.55rem;
-            letter-spacing: 0.28em;
+            font-size: clamp(0.85rem, 4.5vw, 1.55rem);
+            letter-spacing: clamp(0.1em, 1vw, 0.28em);
             color: var(--gold-hi);
             text-shadow:
                 0 0 22px rgba(248,224,96,.65),
@@ -713,11 +877,22 @@
 <div class="machine">
     <div class="trim-top"></div>
 
-    <!-- Header -->
+    <!-- Header — paytable -->
     <div class="machine-header">
-        <div class="machine-title">SHUU'S VEGAS</div>
-        <div class="machine-subtitle">★ &nbsp; CLASSIC SLOT MACHINE &nbsp; ★</div>
-        <div class="trim-line"></div>
+        <div class="paytable-panel">
+            <div class="ptp-title">★ 당첨 배당표 ★</div>
+            <div class="ptp-grid">
+                <div class="ptp-row"><span class="ptp-sym">🍒&thinsp;──</span><span class="ptp-mult">×2</span></div>
+                <div class="ptp-row"><span class="ptp-sym">🔔🔔🔔</span><span class="ptp-mult">×10</span></div>
+                <div class="ptp-row"><span class="ptp-sym">🍇🍇🍇</span><span class="ptp-mult">×40</span></div>
+                <div class="ptp-row"><span class="ptp-sym">🍒🍒&thinsp;─</span><span class="ptp-mult">×5</span></div>
+                <div class="ptp-row"><span class="ptp-sym"><span class="ptp-bar">BAR</span>&thinsp;×3</span><span class="ptp-mult">×20</span></div>
+                <div class="ptp-row"><span class="ptp-sym">🍑🍑🍑</span><span class="ptp-mult">×60</span></div>
+                <div class="ptp-row"><span class="ptp-sym">🍒🍒🍒</span><span class="ptp-mult">×10</span></div>
+                <div class="ptp-row ptp-jackpot"><span class="ptp-sym">7️⃣7️⃣7️⃣</span><span class="ptp-mult">×30</span></div>
+                <div class="ptp-row ptp-jackpot"><span class="ptp-sym">🍊🍊🍊</span><span class="ptp-mult">×100</span></div>
+            </div>
+        </div>
     </div>
 
     <!-- Reels Section -->
@@ -768,11 +943,45 @@
 
         <!-- Buttons -->
         <div class="controls">
-            <button class="ctrl-btn spin-btn" id="btn-spin">SPIN <span class="key">W</span></button>
-            <button class="ctrl-btn" id="btn-bet-up">베팅 ▲<span class="key">E</span></button>
-            <button class="ctrl-btn" id="btn-bet-dn">베팅 ▼<span class="key">Q</span></button>
-            <button class="ctrl-btn" id="btn-max">MAX<span class="key">S</span></button>
-            <button class="ctrl-btn" id="btn-pay">배당<span class="key">F</span></button>
+            <div class="btn-group-left">
+                <div class="btn-wrap">
+                    <button class="push-btn push-btn-yellow" id="btn-bet-dn">
+                        <span class="btn-label">BET▼</span>
+                        <span class="key">Q</span>
+                    </button>
+                    <span class="btn-wrap-label">베팅 ▼</span>
+                </div>
+                <div class="btn-wrap">
+                    <button class="push-btn push-btn-yellow" id="btn-bet-up">
+                        <span class="btn-label">BET▲</span>
+                        <span class="key">E</span>
+                    </button>
+                    <span class="btn-wrap-label">베팅 ▲</span>
+                </div>
+                <div class="btn-wrap">
+                    <button class="push-btn push-btn-yellow" id="btn-max">
+                        <span class="btn-label">MAX</span>
+                        <span class="key">S</span>
+                    </button>
+                    <span class="btn-wrap-label">맥스</span>
+                </div>
+            </div>
+            <div class="btn-wrap">
+                <button class="push-btn push-btn-spin" id="btn-spin">
+                    <span class="btn-label">SPIN</span>
+                    <span class="key">W</span>
+                </button>
+                <span class="btn-wrap-label">스핀</span>
+            </div>
+            <div class="btn-group-right">
+                <div class="btn-wrap">
+                    <button class="push-btn push-btn-white" id="btn-pay">
+                        <span class="btn-label">배당</span>
+                        <span class="key">F</span>
+                    </button>
+                    <span class="btn-wrap-label">배당표</span>
+                </div>
+            </div>
         </div>
 
         <div class="good-luck">◆ &nbsp; GOOD LUCK &nbsp; ◆</div>
@@ -1192,10 +1401,11 @@ async function doSpin(skipLeverAnim = false) {
     if (spinning) return;
     const bet = getBet();
     if (chips < bet) {
-        showMsg('칩이 부족합니다!');
+        showMsg('칩이 부족합니다! 베팅을 줄이세요.');
         return;
     }
 
+    stopIdleAnim();
     spinning = true;
     setButtons(false);
     setHighlight([]);
@@ -1229,13 +1439,37 @@ async function doSpin(skipLeverAnim = false) {
         earned += win - bet; // net gain
         setHighlight(hl);
         showMsg(msg + '  (+ ' + win.toLocaleString() + ' 칩)');
+        playWinAnim();
     } else {
         showMsg('꽝! 다시 도전하세요.');
+        startIdleAnim();
     }
 
     updateDisplays();
     spinning = false;
     setButtons(true);
+}
+
+// ════════════════════════════════════════════
+//   BUTTON ANIMATIONS
+// ════════════════════════════════════════════
+function startIdleAnim() {
+    document.querySelectorAll('.push-btn').forEach(b => b.classList.add('idle-anim'));
+}
+function stopIdleAnim() {
+    document.querySelectorAll('.push-btn').forEach(b => b.classList.remove('idle-anim'));
+}
+function playWinAnim() {
+    const btns = document.querySelectorAll('.push-btn');
+    btns.forEach(b => {
+        b.classList.remove('idle-anim', 'win-anim');
+        void b.offsetWidth; // force reflow to restart animation
+        b.classList.add('win-anim');
+    });
+    setTimeout(() => {
+        btns.forEach(b => b.classList.remove('win-anim'));
+        startIdleAnim();
+    }, 0.45 * 5 * 1000 + 150);
 }
 
 // ════════════════════════════════════════════
@@ -1302,6 +1536,7 @@ document.getElementById('paytable-overlay').addEventListener('click', e => {
 // ════════════════════════════════════════════
 initReels();
 updateDisplays();
+startIdleAnim();
 </script>
 </body>
 </html>
