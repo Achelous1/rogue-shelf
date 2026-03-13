@@ -44,26 +44,37 @@
             padding: 16px;
         }
 
-        /* ─── Machine body — polished chrome ─────── */
+        /* ─── Machine body — ribbed chrome ───────── */
         .machine {
             width: 100%;
             max-width: 520px;
-            background: linear-gradient(160deg,
-                var(--chrome-hi) 0%,
-                var(--chrome-mid) 12%,
-                #e8e8e8 28%,
-                var(--chrome-lo) 48%,
-                #d0d0d0 62%,
-                #b0b0b0 78%,
-                #c8c8c8 100%);
-            border: 3px solid #787878;
+            /* Layered: horizontal ribs over chrome gradient */
+            background-color: #c0c0c0;
+            background-image:
+                repeating-linear-gradient(
+                    180deg,
+                    transparent           0px,
+                    rgba(255,255,255,.13) 1px,
+                    rgba(0,0,0,.09)       2.5px,
+                    transparent           4px
+                ),
+                linear-gradient(170deg,
+                    #ffffff 0%,
+                    #ebebeb 7%,
+                    #d0d0d0 18%,
+                    #b4b4b4 36%,
+                    #cccccc 52%,
+                    #b8b8b8 68%,
+                    #a0a0a0 84%,
+                    #b0b0b0 100%);
+            border: 2px solid #686868;
             border-radius: 10px 10px 6px 6px;
             box-shadow:
-                inset 5px 0 10px rgba(255,255,255,.65),
-                inset -5px 0 10px rgba(0,0,0,.22),
-                inset 0 4px 8px rgba(255,255,255,.5),
-                0 0 0 1px rgba(0,0,0,.35),
-                0 12px 60px rgba(0,0,0,.85),
+                inset 6px 0 14px rgba(255,255,255,.75),
+                inset -6px 0 14px rgba(0,0,0,.28),
+                inset 0 5px 10px rgba(255,255,255,.55),
+                0 0 0 1px rgba(0,0,0,.4),
+                0 14px 60px rgba(0,0,0,.9),
                 0 30px 100px rgba(0,0,0,.5);
             position: relative;
             overflow: visible;
@@ -71,34 +82,58 @@
 
         /* ─── Gold trim bands ──────────────────────── */
         .trim-top, .trim-bot {
-            height: 9px;
-            background: linear-gradient(180deg,
-                #fff4a0 0%,
-                var(--gold-hi) 15%,
-                var(--gold-mid) 40%,
-                #e0b820 60%,
-                var(--gold-lo) 80%,
-                #c09010 100%);
-            border-top: 1px solid rgba(255,255,255,.6);
-            border-bottom: 1px solid rgba(0,0,0,.3);
+            height: 10px;
+            background-image:
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(255,255,255,.18) 0px,
+                    rgba(255,255,255,.06) 2px,
+                    rgba(0,0,0,.12) 4px,
+                    transparent 6px
+                ),
+                linear-gradient(180deg,
+                    #fff8b0 0%,
+                    #f0d050 18%,
+                    #c89010 42%,
+                    #e8c028 62%,
+                    #a07010 82%,
+                    #c8a020 100%);
+            border-top: 1px solid rgba(255,255,255,.65);
+            border-bottom: 1px solid rgba(0,0,0,.35);
         }
-        .trim-top { border-radius: 8px 8px 0 0; }
-        .trim-bot { border-radius: 0 0 4px 4px; }
+        .trim-top { border-radius: 9px 9px 0 0; }
+        .trim-bot { border-radius: 0 0 5px 5px; }
 
-        /* ─── Header — dark control panel ─────────── */
+        /* ─── Header — protrudes forward ──────────── */
         .machine-header {
             padding: 12px 20px 10px;
             text-align: center;
-            background: linear-gradient(180deg, #1c1c1c 0%, #0a0a0a 100%);
-            border-bottom: 4px solid var(--gold-mid);
+            background: linear-gradient(180deg, #1e1e1e 0%, #0a0a0a 100%);
+            border-bottom: 5px solid var(--gold-mid);
             position: relative;
+            z-index: 4;
+            /* Cast shadow down onto reel section — protrusion effect */
+            box-shadow:
+                0 10px 32px rgba(0,0,0,.98),
+                0 4px 12px rgba(0,0,0,.75),
+                inset 0 1px 0 rgba(255,255,255,.08);
+            /* Chrome rib strip along bottom edge */
         }
         .machine-header::after {
             content: '';
             position: absolute;
-            bottom: -7px; left: 10%; right: 10%;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--gold-hi), transparent);
+            bottom: -9px; left: 0; right: 0;
+            height: 5px;
+            background-image:
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(255,255,255,.4) 0px,
+                    rgba(255,255,255,.1) 2px,
+                    rgba(0,0,0,.2) 4px,
+                    transparent 6px
+                ),
+                linear-gradient(180deg, #d8d4c0, #a09070);
+            z-index: 5;
         }
         .machine-title {
             font-family: 'Oswald', sans-serif;
@@ -125,16 +160,70 @@
             background: linear-gradient(90deg, transparent, var(--gold-mid), transparent);
         }
 
-        /* ─── Reel section — black display panel ──── */
+        /* ─── Reel section — recessed panel + chrome sides ── */
         .reel-section {
             display: flex;
             align-items: stretch;
-            padding: 14px 20% 14px 20%;
+            padding: 16px 20% 16px 20%;
             gap: 8px;
             position: relative;
-            background: #080808;
-            border-top: 3px solid #a08010;
-            border-bottom: 3px solid #a08010;
+            z-index: 2;
+            background: #050505;
+            border-top: 3px solid #806808;
+            border-bottom: 3px solid #806808;
+            /* Shadow from overhanging header */
+            box-shadow: inset 0 8px 24px rgba(0,0,0,.95), inset 0 -6px 16px rgba(0,0,0,.7);
+            overflow: hidden;
+        }
+
+        /* Convex-top → concave-mid chrome side columns */
+        .reel-section::before,
+        .reel-section::after {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0;
+            width: 20%;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .reel-section::before {
+            left: 0;
+            background-image:
+                /* Convex highlight upper / concave shadow lower */
+                radial-gradient(ellipse 220% 48% at 60% 28%, rgba(255,255,255,.42) 0%, transparent 55%),
+                radial-gradient(ellipse 220% 44% at 40% 68%, rgba(0,0,0,.60) 0%, transparent 52%),
+                /* Horizontal ribs */
+                repeating-linear-gradient(
+                    180deg,
+                    rgba(255,255,255,.10) 0px,
+                    rgba(255,255,255,.04) 1px,
+                    rgba(0,0,0,.08) 2.5px,
+                    transparent 4px
+                ),
+                /* Base S-curve chrome tone */
+                linear-gradient(180deg,
+                    #e0ddd8 0%, #eeebe6 12%, #c8c5c0 28%,
+                    #787470 46%, #646060 56%,
+                    #808078 68%, #989490 82%, #aeaaa6 100%);
+            box-shadow: inset -3px 0 10px rgba(0,0,0,.55), inset 1px 0 5px rgba(255,255,255,.25);
+        }
+        .reel-section::after {
+            right: 0;
+            background-image:
+                radial-gradient(ellipse 220% 48% at 40% 28%, rgba(255,255,255,.34) 0%, transparent 55%),
+                radial-gradient(ellipse 220% 44% at 60% 68%, rgba(0,0,0,.55) 0%, transparent 52%),
+                repeating-linear-gradient(
+                    180deg,
+                    rgba(255,255,255,.08) 0px,
+                    rgba(255,255,255,.03) 1px,
+                    rgba(0,0,0,.08) 2.5px,
+                    transparent 4px
+                ),
+                linear-gradient(180deg,
+                    #d4d1cc 0%, #e2dfd8 12%, #bcb9b4 28%,
+                    #6c6864 46%, #585450 56%,
+                    #74706c 68%, #8c8884 82%, #a0a09c 100%);
+            box-shadow: inset 3px 0 10px rgba(0,0,0,.55), inset -1px 0 5px rgba(255,255,255,.18);
         }
 
         /* ─── Reels container ──────────────────────── */
@@ -144,14 +233,23 @@
         }
         .reel-frame {
             background: #f5f0e8;
-            border: 4px solid #606060;
+            /* Thick beveled chrome border — like the real machine bezel */
+            border-style: solid;
+            border-width: 8px;
+            border-color: #e8e8e8 #787878 #606060 #d0d0d0;
             border-radius: 3px;
             overflow: hidden;
             position: relative;
+            z-index: 2;
             box-shadow:
-                inset 0 0 24px rgba(0,0,0,.35),
-                0 0 0 1px rgba(255,255,255,.12),
-                0 4px 16px rgba(0,0,0,.8);
+                /* Deep recess shadow */
+                inset 0 6px 18px rgba(0,0,0,.65),
+                inset 0 -4px 12px rgba(0,0,0,.45),
+                inset 4px 0 10px rgba(0,0,0,.3),
+                inset -4px 0 10px rgba(0,0,0,.3),
+                /* Outer chrome edge glow */
+                0 0 0 1px rgba(255,255,255,.2),
+                0 6px 20px rgba(0,0,0,.9);
         }
         .reel-frame::before,
         .reel-frame::after {
@@ -250,72 +348,100 @@
         }
         .lever-area:active { cursor: grabbing; }
         .lever-shaft {
-            width: 10px;
+            width: 11px;
             height: 100%;
-            background: linear-gradient(90deg,
-                #505050 0%, #e0e0e0 35%, #f8f8f8 50%, #c0c0c0 65%, #484848 100%);
+            /* Ribbed chrome rod */
+            background-image:
+                repeating-linear-gradient(
+                    180deg,
+                    rgba(255,255,255,.2) 0px,
+                    transparent 2px,
+                    rgba(0,0,0,.15) 4px,
+                    transparent 6px
+                ),
+                linear-gradient(90deg,
+                    #383838 0%, #f0f0f0 28%, #ffffff 46%, #e0e0e0 58%, #383838 100%);
             border-radius: 5px;
             position: relative;
-            box-shadow: 2px 3px 8px rgba(0,0,0,.7), inset 0 0 3px rgba(255,255,255,.3);
+            box-shadow: 3px 3px 10px rgba(0,0,0,.8), -1px 0 4px rgba(255,255,255,.3);
         }
         .lever-ball {
-            width: 36px;
-            height: 36px;
-            background: radial-gradient(circle at 32% 28%,
-                #4a4a4a 0%, #1c1c1c 45%, #080808 80%);
+            width: 38px;
+            height: 38px;
+            /* Polished chrome ball — bright specular highlight */
+            background: radial-gradient(circle at 34% 28%,
+                #ffffff 0%, #d8d8d8 18%, #a0a0a0 42%, #404040 70%, #101010 100%);
             border-radius: 50%;
-            border: 2px solid #303030;
+            border: 1px solid #282828;
             box-shadow:
-                0 5px 14px rgba(0,0,0,.95),
-                inset 2px 2px 5px rgba(255,255,255,.14),
-                inset -2px -2px 4px rgba(0,0,0,.6);
+                0 6px 18px rgba(0,0,0,.98),
+                inset 3px 3px 7px rgba(255,255,255,.5),
+                inset -3px -3px 6px rgba(0,0,0,.7);
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
             top: 8px;
         }
         .lever-base {
-            width: 24px;
-            height: 14px;
-            background: linear-gradient(180deg, #a0a0a0, #505050);
-            border-radius: 3px;
+            width: 26px;
+            height: 16px;
+            background-image:
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(255,255,255,.25) 0px,
+                    transparent 2px,
+                    rgba(0,0,0,.12) 4px,
+                    transparent 6px
+                ),
+                linear-gradient(180deg, #c8c8c8, #585858);
+            border-radius: 4px;
             position: absolute;
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            box-shadow: 0 2px 6px rgba(0,0,0,.6);
-            border: 1px solid #303030;
+            box-shadow: 0 3px 8px rgba(0,0,0,.7);
+            border: 1px solid #282828;
         }
 
-        /* ─── Footer — gold ribbed control panel ───── */
+        /* ─── Footer — flat chrome control shelf ────── */
         .machine-footer {
-            background: repeating-linear-gradient(
-                180deg,
-                #c09018 0px, #e0b828 1.5px, #a87810 3px, #c89820 4.5px
-            );
+            /* Chrome ribbed panel — flat (not angled) */
+            background-image:
+                repeating-linear-gradient(
+                    180deg,
+                    rgba(255,255,255,.14) 0px,
+                    rgba(255,255,255,.05) 1.5px,
+                    rgba(0,0,0,.10) 3px,
+                    transparent 5px
+                ),
+                linear-gradient(180deg,
+                    #c0bcb8 0%, #d4d0cc 12%, #b8b4b0 30%,
+                    #a8a4a0 60%, #bcb8b4 80%, #c4c0bc 100%);
             padding: 0 16px 12px;
+            position: relative;
+            z-index: 3;
         }
 
         /* Grand prize divider */
         .grand-prize {
             text-align: center;
-            padding: 8px 0 8px;
+            padding: 7px 0 7px;
             position: relative;
         }
         .grand-prize::before, .grand-prize::after {
             content: '';
             position: absolute;
             top: 50%;
-            width: 28%;
+            width: 30%;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0,0,0,.4));
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,.35));
         }
-        .grand-prize::before { left: 4%; }
-        .grand-prize::after  { right: 4%; background: linear-gradient(90deg, rgba(0,0,0,.4), transparent); }
+        .grand-prize::before { left: 2%; }
+        .grand-prize::after  { right: 2%; background: linear-gradient(90deg, rgba(0,0,0,.35), transparent); }
         .grand-prize span {
-            font-size: 0.68rem;
-            letter-spacing: 0.4em;
-            color: rgba(0,0,0,.55);
+            font-size: 0.65rem;
+            letter-spacing: 0.38em;
+            color: rgba(0,0,0,.5);
             text-transform: uppercase;
         }
 
@@ -354,8 +480,8 @@
             font-size: 1rem;
             font-weight: 600;
             letter-spacing: 0.05em;
-            color: #1a0a00;
-            text-shadow: 0 1px 0 rgba(255,255,255,.3);
+            color: #1a1a1a;
+            text-shadow: 0 1px 0 rgba(255,255,255,.45);
             margin-bottom: 10px;
         }
 
@@ -420,7 +546,8 @@
             padding: 6px 0 0;
             font-size: 0.6rem;
             letter-spacing: 0.4em;
-            color: rgba(0,0,0,.45);
+            color: rgba(0,0,0,.4);
+            text-shadow: 0 1px 0 rgba(255,255,255,.5);
         }
 
         /* ─── Ornate brand panel ────────────────────── */
