@@ -11,7 +11,14 @@
         body { font-family: 'Noto Sans KR', sans-serif; }
 
         /* ── 오목판 ── */
-        #board-canvas { cursor: crosshair; }
+        #board-canvas {
+            cursor: crosshair;
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1 / 1;
+            touch-action: manipulation;
+        }
 
         /* ── 로딩 점 애니메이션 ── */
         .dot-ani span { animation: blink 1.4s infinite; }
@@ -118,7 +125,11 @@
             border-radius: 8px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.4), inset 0 0 20px rgba(0,0,0,0.1);
             padding: 12px;
+            width: min(100%, 612px);
+            box-sizing: border-box;
         }
+
+        #game-topbar { width: min(100%, 612px); }
 
         /* ── 타이머 바 ── */
         .timer-bar-wrap {
@@ -138,6 +149,47 @@
             0%,100% { opacity: 1; }
             50%      { opacity: 0.5; }
         }
+
+        @media (max-width: 430px) {
+            #screen-game {
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+
+            #game-topbar-card {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+                gap: 10px 12px;
+                padding: 12px;
+            }
+
+            #game-topbar-card > :first-child {
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            #game-topbar-card > :last-child {
+                grid-column: 2;
+                grid-row: 1;
+                justify-self: end;
+            }
+
+            #turn-info {
+                grid-column: 1 / -1;
+                grid-row: 2;
+                padding: 0;
+                font-size: 0.75rem;
+            }
+
+            #board-wrapper {
+                padding: 8px;
+                border-radius: 6px;
+            }
+
+            .timer-bar-wrap {
+                width: 48px;
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 flex items-center justify-center">
@@ -147,8 +199,9 @@
 ══════════════════════════════════════════ -->
 <div id="screen-lobby" class="screen active flex-col items-center justify-center min-h-screen w-full px-4">
     <div class="text-center max-w-md w-full">
-        <div class="mb-2">
-            <span class="text-7xl">⚫</span><span class="text-6xl">⚪</span>
+        <div class="mb-2 flex items-center justify-center gap-2">
+            <span class="inline-block w-14 h-14 rounded-full bg-black"></span>
+            <span class="inline-block w-14 h-14 rounded-full bg-white border border-slate-300"></span>
         </div>
         <h1 class="text-5xl font-black text-white mb-2 tracking-tight">오목대전</h1>
         <p class="text-slate-400 text-lg mb-1">WebRTC 실시간 2인 대국</p>
@@ -238,10 +291,10 @@
 <!-- ══════════════════════════════════════════
      SCREEN 5: 게임
 ══════════════════════════════════════════ -->
-<div id="screen-game" class="screen flex-col items-center justify-center min-h-screen w-full px-2 py-4">
+<div id="screen-game" class="screen flex-col items-center justify-start min-h-screen w-full px-2 py-4">
     <!-- 상단 플레이어 정보 -->
-    <div class="w-full max-w-2xl mb-3">
-        <div class="flex items-center justify-between bg-white/5 rounded-xl px-4 py-2 border border-white/10">
+    <div id="game-topbar" class="w-full mb-3">
+        <div id="game-topbar-card" class="flex items-center justify-between bg-white/5 rounded-xl px-4 py-2 border border-white/10">
             <!-- 나 -->
             <div class="flex items-center gap-2">
                 <div id="my-stone-icon" class="w-6 h-6 rounded-full shadow flex-shrink-0"></div>
@@ -285,7 +338,7 @@
     </div>
 
     <!-- 하단 -->
-    <div class="mt-3 flex items-center gap-4">
+    <div class="mt-3 flex flex-wrap items-center justify-center gap-3 text-center">
         <div class="text-slate-500 text-xs" id="game-status-text">게임 진행 중</div>
         <button id="btn-resign" onclick="resign()"
             class="btn-primary btn-danger text-sm py-1.5 px-4" style="font-size:0.8rem; padding:6px 16px; border-radius:8px;">
@@ -623,8 +676,8 @@ function setupBoard() {
     const canvas = document.getElementById('board-canvas');
     canvas.width  = CANVAS_SIZE;
     canvas.height = CANVAS_SIZE;
-    canvas.style.width  = CANVAS_SIZE + 'px';
-    canvas.style.height = CANVAS_SIZE + 'px';
+    canvas.style.width  = '100%';
+    canvas.style.height = 'auto';
     canvas.onclick = onBoardClick;
 }
 
