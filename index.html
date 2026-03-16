@@ -3,123 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Toys - 재미있는 도구 모음</title>
-    <meta name="description" content="로또 번호 생성기, 연금복권 번호 생성기, 숫자야구 게임, 슬롯머신 등 다양한 재미있는 온라인 도구 모음입니다. 무료로 사용할 수 있는 유용한 웹 도구들을 만나보세요.">
-    <meta name="keywords" content="온라인 도구, 웹 도구, 로또 번호 생성기, 연금복권 번호 생성기, 연금복권720, 숫자야구, 두뇌 게임, 슬롯머신, 무료 도구, 유틸리티">
+    <title>ROGUE SHELF — 도구와 게임 컬렉션</title>
+    <meta name="description" content="로또 번호 생성기, 연금복권 번호 생성기, 숫자야구 게임, 슬롯머신, 오목대전 등 다양한 온라인 도구와 게임 컬렉션. 무료로 즐길 수 있는 웹 도구 모음.">
+    <meta name="keywords" content="온라인 도구, 웹 도구, 로또 번호 생성기, 연금복권 번호 생성기, 숫자야구, 슬롯머신, 오목대전, 무료 도구, 유틸리티, 게임">
     <meta name="robots" content="index, follow">
-    <meta name="author" content="My Toys">
+    <meta name="author" content="ROGUE SHELF">
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="My Toys - 재미있는 도구 모음">
-    <meta property="og:description" content="로또 번호 생성기, 연금복권 번호 생성기, 숫자야구 게임, 슬롯머신 등 다양한 재미있는 온라인 도구 모음입니다. 무료로 사용할 수 있는 유용한 웹 도구들을 만나보세요.">
+    <meta property="og:title" content="ROGUE SHELF — 도구와 게임 컬렉션">
+    <meta property="og:description" content="로또 번호 생성기, 연금복권 번호 생성기, 숫자야구 게임, 슬롯머신, 오목대전 등 다양한 온라인 도구와 게임 컬렉션.">
     <meta property="og:locale" content="ko_KR">
-    <meta property="og:site_name" content="My Toys">
+    <meta property="og:site_name" content="ROGUE SHELF">
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="My Toys - 재미있는 도구 모음">
-    <meta name="twitter:description" content="로또 번호 생성기, 연금복권 번호 생성기, 숫자야구 게임, 슬롯머신 등 다양한 재미있는 온라인 도구 모음입니다.">
+    <meta name="twitter:title" content="ROGUE SHELF — 도구와 게임 컬렉션">
+    <meta name="twitter:description" content="로또 번호 생성기, 연금복권 번호 생성기, 숫자야구 게임, 슬롯머신, 오목대전 등 다양한 온라인 도구와 게임 컬렉션.">
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- JSON-LD 구조화 데이터 -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": "My Toys",
-      "description": "로또 번호 생성기, 연금복권 번호 생성기, 숫자야구 게임, 슬롯머신 등 다양한 재미있는 온라인 도구 모음",
+      "name": "ROGUE SHELF",
+      "description": "로또 번호 생성기, 연금복권 번호 생성기, 숫자야구 게임, 슬롯머신, 오목대전 등 다양한 온라인 도구와 게임 컬렉션",
       "inLanguage": "ko"
     }
     </script>
+    <style>
+        body { background-color: #0f0f0f; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+        .card-link { border: 1px solid #2a2a2a; transition: border-color 0.2s, background-color 0.2s; }
+        .card-link:hover { border-color: #ffffff; background-color: #181818; }
+        .tag { border: 1px solid #3a3a3a; }
+        .shelf-line { border-top: 1px solid #2a2a2a; }
+        .index-num { font-variant-numeric: tabular-nums; }
+        .coming-soon { border: 1px dashed #2a2a2a; }
+    </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
-    <div class="max-w-4xl mx-auto">
+<body class="min-h-screen text-white p-8">
+    <div class="max-w-5xl mx-auto">
+
         <!-- 헤더 -->
-        <div class="text-center mb-12">
-            <h1 class="text-5xl font-bold text-gray-800 mb-3">🧸 My Toys</h1>
-            <p class="text-gray-500 text-lg">재미있는 도구 모음</p>
-        </div>
-        <!-- 도구 목록 -->
-        <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-            <!-- 로또 번호 생성기 -->
-            <a href="lotto-generator.html"
-                class="group bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md hover:border-blue-300 transition-all duration-200">
-                <div class="text-5xl mb-4">🎱</div>
-                <h2 class="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors mb-2">
-                    로또 번호 생성기
-                </h2>
-                <p class="text-sm text-gray-500">
-                    조건을 설정하고 행운의 로또 번호를 생성하세요. 이전 당첨번호 제외, 연속번호 제한 등 다양한 옵션을 지원합니다.
-                </p>
-                <div class="mt-4 text-xs text-blue-500 font-medium group-hover:underline">
-                    바로가기 →
+        <header class="mb-16 pt-8">
+            <div class="flex items-end justify-between">
+                <div>
+                    <p class="text-xs tracking-[0.3em] text-gray-500 uppercase mb-3">Collection / 2026</p>
+                    <h1 class="text-5xl font-black tracking-tight text-white leading-none">ROGUE<br>SHELF</h1>
                 </div>
-            </a>
-            <!-- 연금복권 번호 생성기 -->
-            <a href="pension-lottery.html"
-                class="group bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md hover:border-blue-300 transition-all duration-200">
-                <div class="text-5xl mb-4">🎰</div>
-                <h2 class="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors mb-2">
-                    연금복권 번호 생성기
-                </h2>
-                <p class="text-sm text-gray-500">
-                    조 선택, 숫자 포함/제외, 연속 동일 숫자 제한 등 다양한 옵션으로 연금복권720+ 번호를 생성하세요.
-                </p>
-                <div class="mt-4 text-xs text-blue-500 font-medium group-hover:underline">바로가기 →</div>
-            </a>
-            <!-- 숫자야구 게임 -->
-            <a href="baseball-game.html"
-                class="group bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md hover:border-blue-300 transition-all duration-200">
-                <div class="text-5xl mb-4">⚾</div>
-                <h2 class="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors mb-2">
-                    숫자야구
-                </h2>
-                <p class="text-sm text-gray-500">
-                    중복 없는 4자리 숫자를 맞추는 추리 게임. 스트라이크와 볼 힌트를 통해 정답을 찾아보세요.
-                </p>
-                <div class="mt-4 text-xs text-blue-500 font-medium group-hover:underline">
-                    바로가기 →
+                <div class="text-right">
+                    <p class="text-xs text-gray-600 tracking-widest uppercase">Tools &amp; Games</p>
+                    <p class="text-xs text-gray-700 mt-1">5 items</p>
                 </div>
-            </a>
-            <!-- 슬롯머신 -->
-            <a href="slot-machine.html"
-                class="group bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md hover:border-blue-300 transition-all duration-200">
-                <div class="text-5xl mb-4">🎰</div>
-                <h2 class="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors mb-2">
-                    슬롯머신
-                </h2>
-                <p class="text-sm text-gray-500">
-                    레트로 Fallout 스타일 슬롯머신. 체리, 7, BAR, 벨 등 다양한 심볼로 잭팟을 노려보세요!
-                </p>
-                <div class="mt-4 text-xs text-blue-500 font-medium group-hover:underline">
-                    바로가기 →
-                </div>
-            </a>
-            <!-- 오목대전 -->
-            <a href="omok-battle.html"
-                class="group bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md hover:border-blue-300 transition-all duration-200">
-                <div class="text-5xl mb-4">⚫</div>
-                <h2 class="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors mb-2">
-                    오목대전
-                </h2>
-                <p class="text-sm text-gray-500">
-                    WebRTC 실시간 2인 오목. 렌주룰 적용 15×15 표준 오목판에서 전 세계 상대와 대국하세요.
-                </p>
-                <div class="mt-4 text-xs text-blue-500 font-medium group-hover:underline">
-                    바로가기 →
-                </div>
-            </a>
-            <!-- 추후 추가될 도구 자리 -->
-            <div class="bg-white border border-dashed border-gray-300 rounded-xl p-6 flex flex-col items-center justify-center text-center opacity-50">
-                <div class="text-4xl mb-3">➕</div>
-                <p class="text-sm text-gray-400">더 많은 도구가 추가될 예정입니다</p>
             </div>
-        </div>
+            <div class="mt-8 shelf-line"></div>
+        </header>
+
+        <!-- 도구 그리드 -->
+        <main>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[#1a1a1a]">
+
+                <!-- 로또 번호 생성기 -->
+                <a href="lotto-generator.html" class="card-link bg-[#0f0f0f] p-6 block group">
+                    <div class="flex items-start justify-between mb-6">
+                        <span class="index-num text-xs text-gray-600 font-mono">01</span>
+                        <div class="flex gap-2">
+                            <span class="tag text-[10px] tracking-widest uppercase text-gray-500 px-2 py-0.5">UTILITY</span>
+                        </div>
+                    </div>
+                    <div class="text-3xl mb-4">🎱</div>
+                    <h2 class="text-base font-semibold text-white mb-2 group-hover:text-gray-300 transition-colors">
+                        로또 번호 생성기
+                    </h2>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        조건 설정으로 행운의 번호 생성. 이전 당첨번호 제외, 연속번호 제한 옵션 지원.
+                    </p>
+                    <div class="mt-6 text-xs text-gray-600 group-hover:text-white transition-colors font-mono">→</div>
+                </a>
+
+                <!-- 연금복권 번호 생성기 -->
+                <a href="pension-lottery.html" class="card-link bg-[#0f0f0f] p-6 block group">
+                    <div class="flex items-start justify-between mb-6">
+                        <span class="index-num text-xs text-gray-600 font-mono">02</span>
+                        <div class="flex gap-2">
+                            <span class="tag text-[10px] tracking-widest uppercase text-gray-500 px-2 py-0.5">UTILITY</span>
+                        </div>
+                    </div>
+                    <div class="text-3xl mb-4">💸</div>
+                    <h2 class="text-base font-semibold text-white mb-2 group-hover:text-gray-300 transition-colors">
+                        연금복권 번호 생성기
+                    </h2>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        조 선택, 숫자 포함/제외 등 다양한 옵션으로 연금복권720+ 번호 생성.
+                    </p>
+                    <div class="mt-6 text-xs text-gray-600 group-hover:text-white transition-colors font-mono">→</div>
+                </a>
+
+                <!-- 숫자야구 게임 -->
+                <a href="baseball-game.html" class="card-link bg-[#0f0f0f] p-6 block group">
+                    <div class="flex items-start justify-between mb-6">
+                        <span class="index-num text-xs text-gray-600 font-mono">03</span>
+                        <div class="flex gap-2">
+                            <span class="tag text-[10px] tracking-widest uppercase text-gray-500 px-2 py-0.5">GAME</span>
+                        </div>
+                    </div>
+                    <div class="text-3xl mb-4">⚾</div>
+                    <h2 class="text-base font-semibold text-white mb-2 group-hover:text-gray-300 transition-colors">
+                        숫자야구
+                    </h2>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        중복 없는 4자리 숫자 추리 게임. 스트라이크와 볼 힌트로 정답을 찾아라.
+                    </p>
+                    <div class="mt-6 text-xs text-gray-600 group-hover:text-white transition-colors font-mono">→</div>
+                </a>
+
+                <!-- 슬롯머신 -->
+                <a href="slot-machine.html" class="card-link bg-[#0f0f0f] p-6 block group">
+                    <div class="flex items-start justify-between mb-6">
+                        <span class="index-num text-xs text-gray-600 font-mono">04</span>
+                        <div class="flex gap-2">
+                            <span class="tag text-[10px] tracking-widest uppercase text-gray-500 px-2 py-0.5">GAME</span>
+                        </div>
+                    </div>
+                    <div class="text-3xl mb-4">🎰</div>
+                    <h2 class="text-base font-semibold text-white mb-2 group-hover:text-gray-300 transition-colors">
+                        슬롯머신
+                    </h2>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        레트로 Fallout 스타일 슬롯머신. 체리, 7, BAR, 벨로 잭팟을 노려라.
+                    </p>
+                    <div class="mt-6 text-xs text-gray-600 group-hover:text-white transition-colors font-mono">→</div>
+                </a>
+
+                <!-- 오목대전 -->
+                <a href="omok-battle.html" class="card-link bg-[#0f0f0f] p-6 block group">
+                    <div class="flex items-start justify-between mb-6">
+                        <span class="index-num text-xs text-gray-600 font-mono">05</span>
+                        <div class="flex gap-2">
+                            <span class="tag text-[10px] tracking-widest uppercase text-gray-500 px-2 py-0.5">GAME</span>
+                            <span class="tag text-[10px] tracking-widest uppercase text-gray-500 px-2 py-0.5">2P</span>
+                        </div>
+                    </div>
+                    <div class="text-3xl mb-4">⚫</div>
+                    <h2 class="text-base font-semibold text-white mb-2 group-hover:text-gray-300 transition-colors">
+                        오목대전
+                    </h2>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        WebRTC 실시간 2인 대전. 렌주룰 15×15 표준 오목판에서 전 세계 상대와 대국.
+                    </p>
+                    <div class="mt-6 text-xs text-gray-600 group-hover:text-white transition-colors font-mono">→</div>
+                </a>
+
+                <!-- 추후 추가될 도구 자리 -->
+                <div class="coming-soon bg-[#0f0f0f] p-6 flex flex-col items-center justify-center text-center opacity-30">
+                    <div class="text-2xl mb-3 text-gray-600">＋</div>
+                    <p class="text-xs text-gray-600 tracking-widest uppercase">Coming Soon</p>
+                </div>
+
+            </div>
+        </main>
+
         <!-- 푸터 -->
-        <div class="mt-16 text-center text-xs text-gray-400 space-y-1">
-            <p>© 2026 My Toys</p>
-            <p>
-                <a href="privacy-policy.html" class="hover:text-gray-600 transition-colors">개인정보처리방침</a>
-            </p>
-        </div>
+        <footer class="mt-16 shelf-line pt-8 pb-4">
+            <div class="flex items-center justify-between">
+                <p class="text-xs text-gray-700">© 2026 ROGUE SHELF</p>
+                <a href="privacy-policy.html" class="text-xs text-gray-700 hover:text-gray-400 transition-colors">개인정보처리방침</a>
+            </div>
+        </footer>
+
     </div>
 </body>
 </html>
