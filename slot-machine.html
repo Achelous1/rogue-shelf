@@ -1015,8 +1015,8 @@
 //   CONSTANTS
 // ════════════════════════════════════════════
 const SYMBOLS  = ['🔔', 'BAR', '7️⃣', '🍇', '🍑', '🍊', '🍒'];
-// Weights: cherry is most common, orange least
-const WEIGHTS  = [12,   10,    8,    14,   10,   6,    40];
+// Weights: cherry toned down so it doesn't win too often
+const WEIGHTS  = [12,   10,    8,    14,   10,   6,     8];
 const STRIP_N  = 24;   // unique symbols per reel
 const SPIN_SPEED = 14; // px per frame during spin (~840px/s at 60fps)
 const BET_STEPS  = [1,5,10,25,50,100,250,500,1000];
@@ -1032,13 +1032,11 @@ let spinning  = false;
 
 // Lever drag state
 const LEVER_BALL_INIT_TOP  = 8;
-const LEVER_SNAP_THRESHOLD = 0.75; // 75% pull triggers auto-spin
 let leverBallTop          = LEVER_BALL_INIT_TOP;
 let leverDragging         = false;
 let leverDragStartY       = 0;
 let leverDragStartBallTop = LEVER_BALL_INIT_TOP;
 let leverSpringAnim       = null;
-let leverAutoCompleted    = false;
 
 const reels = [
     { symbols: [], offset: 0, animId: null, isSpinning: false, stopAnim: null },
@@ -1094,18 +1092,24 @@ function buildStrip(ri) {
     strip.innerHTML = '';
     r.symbols = [];
 
-    // Generate N unique symbols with enough cherries (at least 4)
-    for (let i = 0; i < STRIP_N; i++) r.symbols.push(weightedRandom());
+    // Generate strip — no two consecutive cherries
+    for (let i = 0; i < STRIP_N; i++) {
+        let sym;
+        do { sym = weightedRandom(); }
+        while (sym === '🍒' && i > 0 && r.symbols[i - 1] === '🍒');
+        r.symbols.push(sym);
+    }
 
-    // Ensure at least 4 cherries in the strip for stopping reliability
+    // Ensure at least 2 cherries so stopReel can always find one
     const cherryCount = r.symbols.filter(s => s === '🍒').length;
-    if (cherryCount < 4) {
-        const needed = 4 - cherryCount;
-        const noncherryIdx = r.symbols
-            .map((s, i) => s !== '🍒' ? i : -1)
+    if (cherryCount < 2) {
+        const needed = 2 - cherryCount;
+        // Only insert where neither neighbour is already a cherry
+        const safe = r.symbols
+            .map((s, i) => s !== '🍒' && r.symbols[i-1] !== '🍒' && r.symbols[i+1] !== '🍒' ? i : -1)
             .filter(i => i >= 0);
-        for (let k = 0; k < needed && k < noncherryIdx.length; k++) {
-            const pick = noncherryIdx[Math.floor(Math.random() * noncherryIdx.length)];
+        for (let k = 0; k < needed && k < safe.length; k++) {
+            const pick = safe.splice(Math.floor(Math.random() * safe.length), 1)[0];
             r.symbols[pick] = '🍒';
         }
     }
@@ -1341,9 +1345,8 @@ async function animateLever() {
     leverArea.addEventListener('pointerdown', e => {
         if (spinning) return;
         if (leverSpringAnim) { leverSpringAnim.cancel(); leverSpringAnim = null; }
-        leverDragging      = true;
-        leverAutoCompleted = false;
-        leverDragStartY    = e.clientY;
+        leverDragging         = true;
+        leverDragStartY       = e.clientY;
         leverDragStartBallTop = leverBallTop;
         leverArea.setPointerCapture(e.pointerId);
         e.preventDefault();
@@ -1351,33 +1354,32 @@ async function animateLever() {
     });
 
     leverArea.addEventListener('pointermove', e => {
-        if (!leverDragging || leverAutoCompleted) return;
+        if (!leverDragging) return;
         const { min, max } = getLeverRange();
-        const range  = max - min;
         const deltaY = e.clientY - leverDragStartY;
         const newTop = Math.max(min, Math.min(max, leverDragStartBallTop + deltaY));
         setLeverBallTop(newTop);
-
-        // Auto-complete past threshold
-        if ((newTop - min) / range >= LEVER_SNAP_THRESHOLD) {
-            leverAutoCompleted = true;
-            leverDragging      = false;
-            hapticLeverDragStop();
-            hapticLeverSnap();    // 스냅 쿵-통통
-            leverArea.releasePointerCapture(e.pointerId);
-            setLeverBallTop(max);
-            springBackLever(max);
-            doSpin(true);
-        }
     });
 
     function onRelease(e) {
         if (!leverDragging) return;
         leverDragging = false;
         hapticLeverDragStop();
-        hapticLeverRelease();    // 살짝 릴리즈
         leverArea.releasePointerCapture(e.pointerId);
-        springBackLever(leverBallTop);  // spring back, no spin
+
+        const { min, max } = getLeverRange();
+        const ratio = (leverBallTop - min) / (max - min);
+        if (ratio >= 0.95) {
+            // 끝까지 당겼다가 놓은 경우만 스핀
+            setLeverBallTop(max);
+            hapticLeverSnap();
+            springBackLever(max);
+            doSpin(true);
+        } else {
+            // 중간에 놓으면 그냥 스프링백
+            hapticLeverRelease();
+            springBackLever(leverBallTop);
+        }
     }
     leverArea.addEventListener('pointerup',     onRelease);
     leverArea.addEventListener('pointercancel', onRelease);
