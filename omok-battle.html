@@ -49,9 +49,6 @@
         }
         .coin.flipping { animation: coinFlip 2.2s cubic-bezier(.25,.46,.45,.94) forwards; }
 
-        /* ── 금수 표시 ── */
-        .forbidden-mark { pointer-events: none; }
-
         /* ── 폭죽 confetti ── */
         .confetti-piece {
             position: fixed;
@@ -79,12 +76,6 @@
         @keyframes rainFall {
             0%   { transform: translateY(0); }
             100% { transform: translateY(110vh); }
-        }
-
-        /* ── 착수 애니메이션 ── */
-        @keyframes placeStone {
-            0%   { transform: scale(1.4); opacity: 0.6; }
-            100% { transform: scale(1);   opacity: 1; }
         }
 
         /* ── 승패 배너 ── */
@@ -128,6 +119,25 @@
             box-shadow: 0 8px 30px rgba(0,0,0,0.4), inset 0 0 20px rgba(0,0,0,0.1);
             padding: 12px;
         }
+
+        /* ── 타이머 바 ── */
+        .timer-bar-wrap {
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255,255,255,0.1);
+            overflow: hidden;
+            width: 60px;
+        }
+        .timer-bar {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 1s linear, background-color 0.3s;
+        }
+        .timer-urgent { animation: timerPulse 0.5s ease-in-out infinite; }
+        @keyframes timerPulse {
+            0%,100% { opacity: 1; }
+            50%      { opacity: 0.5; }
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 flex items-center justify-center">
@@ -137,15 +147,13 @@
 ══════════════════════════════════════════ -->
 <div id="screen-lobby" class="screen active flex-col items-center justify-center min-h-screen w-full px-4">
     <div class="text-center max-w-md w-full">
-        <!-- 타이틀 -->
         <div class="mb-2">
             <span class="text-7xl">⚫</span><span class="text-6xl">⚪</span>
         </div>
         <h1 class="text-5xl font-black text-white mb-2 tracking-tight">오목대전</h1>
         <p class="text-slate-400 text-lg mb-1">WebRTC 실시간 2인 대국</p>
-        <p class="text-slate-500 text-sm mb-10">렌주룰 적용 · 15×15 표준 오목판</p>
+        <p class="text-slate-500 text-sm mb-10">렌주룰 적용 · 15×15 · 각 1분 제한</p>
 
-        <!-- 닉네임 입력 -->
         <div class="bg-white/10 backdrop-blur rounded-2xl p-8 shadow-xl border border-white/10">
             <label class="block text-slate-300 text-sm font-semibold mb-2 text-left">닉네임</label>
             <input id="nickname-input" type="text" maxlength="12" placeholder="닉네임을 입력하세요"
@@ -227,22 +235,42 @@
      SCREEN 5: 게임
 ══════════════════════════════════════════ -->
 <div id="screen-game" class="screen flex-col items-center justify-center min-h-screen w-full px-2 py-4">
-    <!-- 상단 정보 -->
+    <!-- 상단 플레이어 정보 -->
     <div class="w-full max-w-2xl mb-3">
         <div class="flex items-center justify-between bg-white/5 rounded-xl px-4 py-2 border border-white/10">
             <!-- 나 -->
-            <div id="player-info-me" class="flex items-center gap-2">
-                <div id="my-stone-icon" class="w-6 h-6 rounded-full shadow"></div>
-                <span id="my-name-display" class="text-white font-semibold text-sm"></span>
-                <span id="my-turn-badge" class="hidden text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full font-bold">내 차례</span>
+            <div class="flex items-center gap-2">
+                <div id="my-stone-icon" class="w-6 h-6 rounded-full shadow flex-shrink-0"></div>
+                <div class="flex flex-col">
+                    <div class="flex items-center gap-1.5">
+                        <span id="my-name-display" class="text-white font-semibold text-sm leading-none"></span>
+                        <span id="my-turn-badge" class="hidden text-xs bg-yellow-400 text-black px-1.5 py-0.5 rounded-full font-bold leading-none">내 차례</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 mt-1">
+                        <span id="my-timer" class="font-mono text-xs font-bold text-white">1:00</span>
+                        <div class="timer-bar-wrap">
+                            <div id="my-timer-bar" class="timer-bar bg-green-400" style="width:100%"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <!-- 턴 표시 -->
-            <div id="turn-info" class="text-slate-300 text-sm font-semibold"></div>
+            <!-- 중앙 -->
+            <div id="turn-info" class="text-slate-300 text-xs font-semibold text-center px-2"></div>
             <!-- 상대 -->
-            <div id="player-info-opp" class="flex items-center gap-2 flex-row-reverse">
-                <div id="opp-stone-icon" class="w-6 h-6 rounded-full shadow"></div>
-                <span id="opp-name-display" class="text-white font-semibold text-sm"></span>
-                <span id="opp-turn-badge" class="hidden text-xs bg-yellow-400 text-black px-2 py-0.5 rounded-full font-bold">차례</span>
+            <div class="flex items-center gap-2 flex-row-reverse">
+                <div id="opp-stone-icon" class="w-6 h-6 rounded-full shadow flex-shrink-0"></div>
+                <div class="flex flex-col items-end">
+                    <div class="flex items-center gap-1.5">
+                        <span id="opp-turn-badge" class="hidden text-xs bg-yellow-400 text-black px-1.5 py-0.5 rounded-full font-bold leading-none">차례</span>
+                        <span id="opp-name-display" class="text-white font-semibold text-sm leading-none"></span>
+                    </div>
+                    <div class="flex items-center gap-1.5 mt-1 flex-row-reverse">
+                        <span id="opp-timer" class="font-mono text-xs font-bold text-white">1:00</span>
+                        <div class="timer-bar-wrap">
+                            <div id="opp-timer-bar" class="timer-bar bg-green-400" style="width:100%"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -253,7 +281,13 @@
     </div>
 
     <!-- 하단 -->
-    <div class="mt-3 text-slate-500 text-xs" id="game-status-text">게임 진행 중</div>
+    <div class="mt-3 flex items-center gap-4">
+        <div class="text-slate-500 text-xs" id="game-status-text">게임 진행 중</div>
+        <button id="btn-resign" onclick="resign()"
+            class="btn-primary btn-danger text-sm py-1.5 px-4" style="font-size:0.8rem; padding:6px 16px; border-radius:8px;">
+            🏳️ 항복
+        </button>
+    </div>
 </div>
 
 <!-- ══════════════════════════════════════════
@@ -277,6 +311,21 @@
 </div>
 
 <!-- ══════════════════════════════════════════
+     RESIGN CONFIRM MODAL
+══════════════════════════════════════════ -->
+<div id="modal-resign" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+    <div class="bg-slate-800 border border-slate-600 rounded-2xl p-8 text-center shadow-2xl max-w-sm w-full mx-4">
+        <div class="text-4xl mb-4">🏳️</div>
+        <h3 class="text-xl font-black text-white mb-2">정말 항복하시겠습니까?</h3>
+        <p class="text-slate-400 mb-6 text-sm">상대방이 승리하게 됩니다</p>
+        <div class="flex gap-3">
+            <button onclick="confirmResign()" class="btn-primary btn-danger flex-1">항복</button>
+            <button onclick="closeResignModal()" class="btn-secondary flex-1">취소</button>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════
      REMATCH REQUEST MODAL
 ══════════════════════════════════════════ -->
 <div id="modal-rematch" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
@@ -296,21 +345,27 @@
 //  상수 & 전역 상태
 // ════════════════════════════════════════════════════════════
 const BOARD_SIZE  = 15;
-const CELL        = 38;           // 셀 크기(px)
-const MARGIN      = 28;           // 보드 여백
+const CELL        = 38;
+const MARGIN      = 28;
 const CANVAS_SIZE = MARGIN * 2 + CELL * (BOARD_SIZE - 1);
 const STONE_R     = CELL * 0.44;
-const SLOTS       = 20;           // 매칭 슬롯 수
+const SLOTS       = 20;
 const SLOT_PREFIX = 'omok-battle-slot-';
+const TURN_TIME   = 60; // 초
 
 let myNickname    = '플레이어';
 let oppNickname   = '상대방';
-let myColor       = null;   // 'black' | 'white'
+let myColor       = null;
 let myTurn        = false;
-let board         = [];     // 0=빈, 1=흑, 2=백
-let lastMove      = null;   // {r,c}
+let board         = [];
+let lastMove      = null;
 let gameOver      = false;
-let winLine       = null;   // [{r,c}, ...]
+let winLine       = null;
+
+// 타이머
+let myTime        = TURN_TIME;
+let oppTime       = TURN_TIME;
+let timerInterval = null;
 
 let peer          = null;
 let conn          = null;
@@ -319,6 +374,13 @@ let currentSlot   = 0;
 let matchingTimer = null;
 let raindrops     = [];
 let confettiPieces= [];
+
+// ════════════════════════════════════════════════════════════
+//  햅틱
+// ════════════════════════════════════════════════════════════
+function haptic(pattern) {
+    if (navigator.vibrate) navigator.vibrate(pattern);
+}
 
 // ════════════════════════════════════════════════════════════
 //  화면 전환
@@ -346,7 +408,7 @@ function startMatching() {
 //  매칭 — 슬롯 기반
 // ════════════════════════════════════════════════════════════
 function trySlot(slot) {
-    if (slot > SLOTS) { slot = 1; }
+    if (slot > SLOTS) slot = 1;
     currentSlot = slot;
     const slotId = SLOT_PREFIX + String(slot).padStart(2, '0');
     document.getElementById('matching-slot-info').textContent = `대기실 ${slot}번 확인 중...`;
@@ -356,28 +418,19 @@ function trySlot(slot) {
     peer = new Peer(slotId, { debug: 0 });
 
     peer.on('open', () => {
-        // 내가 이 슬롯의 호스트
         isHost = true;
         document.getElementById('matching-slot-info').textContent = `대기실 ${slot}번에서 대기 중`;
         peer.on('connection', (c) => {
             conn = c;
             setupConn();
-            // 호스트가 먼저 닉네임 전송
-            conn.on('open', () => {
-                conn.send({ type: 'hello', nickname: myNickname });
-            });
+            conn.on('open', () => conn.send({ type: 'hello', nickname: myNickname }));
         });
-        // 30초 대기 후 다음 슬롯
         matchingTimer = setTimeout(() => trySlot(slot + 1), 30000);
     });
 
     peer.on('error', (err) => {
-        if (err.type === 'unavailable-id') {
-            // 슬롯 사용 중 → 게스트로 연결 시도
-            tryConnect(slot);
-        } else {
-            trySlot(slot + 1);
-        }
+        if (err.type === 'unavailable-id') tryConnect(slot);
+        else trySlot(slot + 1);
     });
 }
 
@@ -391,13 +444,9 @@ function tryConnect(slot) {
     peer.on('open', () => {
         isHost = false;
         conn = peer.connect(slotId, { reliable: true });
-        conn.on('open', () => {
-            conn.send({ type: 'hello', nickname: myNickname });
-        });
+        conn.on('open', () => conn.send({ type: 'hello', nickname: myNickname }));
         conn.on('error', () => trySlot(slot + 1));
         setupConn();
-
-        // 연결 타임아웃
         matchingTimer = setTimeout(() => trySlot(slot + 1), 5000);
     });
 
@@ -428,11 +477,24 @@ function handleData(data) {
             onMatched();
             break;
         case 'coin':
-            // 호스트가 동전 결과를 전송
             onReceiveCoin(data.hostIsBlack);
             break;
         case 'move':
             onReceiveMove(data.r, data.c);
+            break;
+        case 'resign':
+            if (!gameOver) {
+                gameOver = true;
+                stopTimer();
+                showResult(true, '상대방이 항복했습니다');
+            }
+            break;
+        case 'timeout':
+            if (!gameOver) {
+                gameOver = true;
+                stopTimer();
+                showResult(true, '상대방 시간 초과');
+            }
             break;
         case 'rematch-req':
             showRematchModal();
@@ -445,14 +507,12 @@ function handleData(data) {
             document.getElementById('btn-rematch').disabled = false;
             setTimeout(backToLobby, 1500);
             break;
-        case 'resign':
-            handleDisconnect();
-            break;
     }
 }
 
 function handleDisconnect() {
     if (gameOver) return;
+    stopTimer();
     alert('상대방의 연결이 끊어졌습니다.');
     backToLobby();
 }
@@ -463,6 +523,7 @@ function handleDisconnect() {
 function onMatched() {
     document.getElementById('matched-opponent-name').textContent = `👤 ${oppNickname}`;
     showScreen('matched');
+    haptic(50);
 
     let n = 3;
     document.getElementById('countdown-text').textContent = `${n}초 후 선공 결정을 시작합니다`;
@@ -484,7 +545,6 @@ function startCoinFlip() {
     showScreen('coin');
 
     if (isHost) {
-        // 호스트가 결과를 결정하고 전송
         setTimeout(() => {
             const hostIsBlack = Math.random() < 0.5;
             if (conn && conn.open) conn.send({ type: 'coin', hostIsBlack });
@@ -494,11 +554,9 @@ function startCoinFlip() {
             });
         }, 800);
     }
-    // 게스트는 데이터 수신 시 처리
 }
 
 function onReceiveCoin(hostIsBlack) {
-    // 게스트 입장: 호스트가 흑이면 나는 백
     const myIsBlack = !hostIsBlack;
     animateCoin(myIsBlack ? 'black' : 'white', () => {
         myColor = myIsBlack ? 'black' : 'white';
@@ -511,13 +569,12 @@ function animateCoin(result, cb) {
     document.getElementById('coin-waiting').classList.remove('hidden');
     document.getElementById('coin-result').classList.add('hidden');
 
-    // result: 'black' → 정면(흑면) 보임 → finalRot = 0° (or 720°)
-    // result: 'white' → 뒷면(백면) 보임 → finalRot = 180° (or 900°)
-    const finalRot = result === 'black' ? 1440 : 1620; // 짝수×180=흑, 홀수×180=백
+    const finalRot = result === 'black' ? 1440 : 1620;
     coin.style.setProperty('--final-rot', finalRot + 'deg');
     coin.classList.remove('flipping');
-    void coin.offsetWidth; // reflow
+    void coin.offsetWidth;
     coin.classList.add('flipping');
+    haptic([30, 50, 30, 50, 80]);
 
     setTimeout(() => {
         document.getElementById('coin-waiting').classList.add('hidden');
@@ -545,12 +602,15 @@ function startGame() {
     lastMove = null;
     gameOver = false;
     winLine  = null;
-    myTurn   = (myColor === 'black'); // 흑이 선공
+    myTurn   = (myColor === 'black');
+    myTime   = TURN_TIME;
+    oppTime  = TURN_TIME;
 
     setupBoard();
     updatePlayerInfo();
     showScreen('game');
     renderBoard();
+    startTimer();
 }
 
 function setupBoard() {
@@ -565,18 +625,15 @@ function setupBoard() {
 function updatePlayerInfo() {
     const myIsBlack = myColor === 'black';
 
-    document.getElementById('my-stone-icon').style.background =
-        myIsBlack ? '#111' : '#f0f0f0';
-    document.getElementById('my-stone-icon').style.border =
-        myIsBlack ? '1px solid #444' : '2px solid #999';
+    document.getElementById('my-stone-icon').style.background = myIsBlack ? '#111' : '#f0f0f0';
+    document.getElementById('my-stone-icon').style.border = myIsBlack ? '1px solid #444' : '2px solid #999';
     document.getElementById('my-name-display').textContent = myNickname;
 
-    document.getElementById('opp-stone-icon').style.background =
-        myIsBlack ? '#f0f0f0' : '#111';
-    document.getElementById('opp-stone-icon').style.border =
-        myIsBlack ? '2px solid #999' : '1px solid #444';
+    document.getElementById('opp-stone-icon').style.background = myIsBlack ? '#f0f0f0' : '#111';
+    document.getElementById('opp-stone-icon').style.border = myIsBlack ? '2px solid #999' : '1px solid #444';
     document.getElementById('opp-name-display').textContent = oppNickname;
 
+    updateTimerDisplay();
     updateTurnDisplay();
 }
 
@@ -595,12 +652,100 @@ function updateTurnDisplay() {
     if (myTurn) {
         myBadge.classList.remove('hidden');
         oppBadge.classList.add('hidden');
-        turnInfo.textContent = '당신의 차례 ●';
+        turnInfo.textContent = '내 차례 ●';
     } else {
         myBadge.classList.add('hidden');
         oppBadge.classList.remove('hidden');
-        turnInfo.textContent = `${oppNickname}의 차례 ●`;
+        turnInfo.textContent = `${oppNickname}의 차례`;
     }
+}
+
+// ════════════════════════════════════════════════════════════
+//  타이머
+// ════════════════════════════════════════════════════════════
+function startTimer() {
+    stopTimer();
+    timerInterval = setInterval(() => {
+        if (gameOver) { stopTimer(); return; }
+
+        if (myTurn) {
+            myTime = Math.max(0, myTime - 1);
+            if (myTime === 0) {
+                stopTimer();
+                gameOver = true;
+                updateTimerDisplay();
+                if (conn && conn.open) conn.send({ type: 'timeout' });
+                haptic([200, 100, 200]);
+                setTimeout(() => showResult(false, '시간 초과'), 300);
+                return;
+            }
+        } else {
+            oppTime = Math.max(0, oppTime - 1);
+            if (oppTime === 0) {
+                stopTimer();
+                gameOver = true;
+                updateTimerDisplay();
+                setTimeout(() => showResult(true, '상대방 시간 초과'), 300);
+                return;
+            }
+        }
+        updateTimerDisplay();
+    }, 1000);
+}
+
+function stopTimer() {
+    clearInterval(timerInterval);
+    timerInterval = null;
+}
+
+function updateTimerDisplay() {
+    const fmt = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+
+    const myEl  = document.getElementById('my-timer');
+    const oppEl = document.getElementById('opp-timer');
+    const myBar  = document.getElementById('my-timer-bar');
+    const oppBar = document.getElementById('opp-timer-bar');
+
+    myEl.textContent  = fmt(myTime);
+    oppEl.textContent = fmt(oppTime);
+
+    const myPct  = (myTime  / TURN_TIME) * 100;
+    const oppPct = (oppTime / TURN_TIME) * 100;
+
+    myBar.style.width  = myPct  + '%';
+    oppBar.style.width = oppPct + '%';
+
+    // 색상: 10초 이하 빨강, 30초 이하 주황, 그 외 초록
+    const barColor = pct => pct <= 16 ? '#f87171' : pct <= 50 ? '#fb923c' : '#4ade80';
+    myBar.style.backgroundColor  = barColor(myPct);
+    oppBar.style.backgroundColor = barColor(oppPct);
+
+    // 텍스트 색상
+    myEl.className  = `font-mono text-xs font-bold ${myTime  <= 10 ? 'text-red-400 timer-urgent' : 'text-white'}`;
+    oppEl.className = `font-mono text-xs font-bold ${oppTime <= 10 ? 'text-red-400 timer-urgent' : 'text-white'}`;
+}
+
+// ════════════════════════════════════════════════════════════
+//  항복
+// ════════════════════════════════════════════════════════════
+function resign() {
+    if (gameOver) return;
+    document.getElementById('modal-resign').classList.remove('hidden');
+    haptic(30);
+}
+
+function closeResignModal() {
+    document.getElementById('modal-resign').classList.add('hidden');
+}
+
+function confirmResign() {
+    document.getElementById('modal-resign').classList.add('hidden');
+    if (gameOver) return;
+    gameOver = true;
+    stopTimer();
+    if (conn && conn.open) conn.send({ type: 'resign' });
+    haptic([100, 50, 100]);
+    showResult(false, '항복');
 }
 
 // ════════════════════════════════════════════════════════════
@@ -625,54 +770,43 @@ function renderBoard() {
         ctx.beginPath(); ctx.moveTo(MARGIN, y); ctx.lineTo(MARGIN + (BOARD_SIZE-1)*CELL, y); ctx.stroke();
     }
 
-    // 화점 (star points)
+    // 화점
     const stars = [3, 7, 11];
     ctx.fillStyle = '#6B4320';
     stars.forEach(r => stars.forEach(c => {
-        ctx.beginPath();
-        ctx.arc(MARGIN + c*CELL, MARGIN + r*CELL, 4, 0, Math.PI*2);
-        ctx.fill();
+        ctx.beginPath(); ctx.arc(MARGIN + c*CELL, MARGIN + r*CELL, 4, 0, Math.PI*2); ctx.fill();
     }));
-    // 천원
-    ctx.beginPath();
-    ctx.arc(MARGIN + 7*CELL, MARGIN + 7*CELL, 4, 0, Math.PI*2);
-    ctx.fill();
+    ctx.beginPath(); ctx.arc(MARGIN + 7*CELL, MARGIN + 7*CELL, 4, 0, Math.PI*2); ctx.fill();
 
     // 좌표 레이블
     ctx.fillStyle = '#6B4320';
     ctx.font = '11px monospace';
     ctx.textAlign = 'center';
-    const cols = 'ABCDEFGHJKLMNOP'; // I 제외
+    const cols = 'ABCDEFGHJKLMNOP';
     for (let i = 0; i < BOARD_SIZE; i++) {
         ctx.fillText(cols[i], MARGIN + i*CELL, MARGIN - 10);
         ctx.fillText(cols[i], MARGIN + i*CELL, MARGIN + (BOARD_SIZE-1)*CELL + 18);
     }
     ctx.textAlign = 'right';
     for (let i = 0; i < BOARD_SIZE; i++) {
-        const n = BOARD_SIZE - i;
-        ctx.fillText(n, MARGIN - 8, MARGIN + i*CELL + 4);
+        ctx.fillText(BOARD_SIZE - i, MARGIN - 8, MARGIN + i*CELL + 4);
     }
 
-    // 승리 라인 하이라이트
+    // 승리 라인
     if (winLine) {
         ctx.strokeStyle = 'rgba(255,220,0,0.85)';
-        ctx.lineWidth = 7;
-        ctx.lineCap = 'round';
+        ctx.lineWidth = 7; ctx.lineCap = 'round';
         ctx.beginPath();
         ctx.moveTo(MARGIN + winLine[0].c*CELL, MARGIN + winLine[0].r*CELL);
-        for (let k = 1; k < winLine.length; k++) {
+        for (let k = 1; k < winLine.length; k++)
             ctx.lineTo(MARGIN + winLine[k].c*CELL, MARGIN + winLine[k].r*CELL);
-        }
-        ctx.stroke();
-        ctx.lineWidth = 1;
+        ctx.stroke(); ctx.lineWidth = 1;
     }
 
-    // 돌 그리기
-    for (let r = 0; r < BOARD_SIZE; r++) {
-        for (let c = 0; c < BOARD_SIZE; c++) {
+    // 돌
+    for (let r = 0; r < BOARD_SIZE; r++)
+        for (let c = 0; c < BOARD_SIZE; c++)
             if (board[r][c]) drawStone(ctx, r, c, board[r][c]);
-        }
-    }
 
     // 마지막 수 표시
     if (lastMove) {
@@ -683,7 +817,7 @@ function renderBoard() {
         ctx.fill();
     }
 
-    // 금수 표시 (흑 차례일 때만)
+    // 금수 표시: 내 차례이고 내가 흑일 때만
     if (!gameOver && myTurn && myColor === 'black') {
         drawForbidden(ctx);
     }
@@ -694,31 +828,22 @@ function drawStone(ctx, r, c, color) {
     const y = MARGIN + r * CELL;
     const gr = ctx.createRadialGradient(x - STONE_R*0.3, y - STONE_R*0.3, STONE_R*0.1, x, y, STONE_R);
 
-    if (color === 1) { // 흑
-        gr.addColorStop(0, '#555');
-        gr.addColorStop(1, '#000');
-    } else { // 백
-        gr.addColorStop(0, '#fff');
-        gr.addColorStop(1, '#ccc');
+    if (color === 1) {
+        gr.addColorStop(0, '#555'); gr.addColorStop(1, '#000');
+    } else {
+        gr.addColorStop(0, '#fff'); gr.addColorStop(1, '#ccc');
     }
 
-    ctx.beginPath();
-    ctx.arc(x, y, STONE_R, 0, Math.PI*2);
-    ctx.fillStyle = gr;
-    ctx.fill();
-    if (color === 2) {
-        ctx.strokeStyle = '#aaa';
-        ctx.lineWidth = 1;
-        ctx.stroke();
-    }
+    ctx.beginPath(); ctx.arc(x, y, STONE_R, 0, Math.PI*2);
+    ctx.fillStyle = gr; ctx.fill();
+    if (color === 2) { ctx.strokeStyle = '#aaa'; ctx.lineWidth = 1; ctx.stroke(); }
 }
 
 function drawForbidden(ctx) {
     for (let r = 0; r < BOARD_SIZE; r++) {
         for (let c = 0; c < BOARD_SIZE; c++) {
             if (board[r][c] === 0 && isForbidden(r, c)) {
-                const x = MARGIN + c*CELL;
-                const y = MARGIN + r*CELL;
+                const x = MARGIN + c*CELL, y = MARGIN + r*CELL;
                 ctx.strokeStyle = 'rgba(255,60,60,0.85)';
                 ctx.lineWidth = 2;
                 const s = STONE_R * 0.6;
@@ -737,10 +862,8 @@ function onBoardClick(e) {
 
     const canvas = document.getElementById('board-canvas');
     const rect   = canvas.getBoundingClientRect();
-    const scaleX = CANVAS_SIZE / rect.width;
-    const scaleY = CANVAS_SIZE / rect.height;
-    const px = (e.clientX - rect.left) * scaleX;
-    const py = (e.clientY - rect.top)  * scaleY;
+    const px = (e.clientX - rect.left) * (CANVAS_SIZE / rect.width);
+    const py = (e.clientY - rect.top)  * (CANVAS_SIZE / rect.height);
 
     const c = Math.round((px - MARGIN) / CELL);
     const r = Math.round((py - MARGIN) / CELL);
@@ -750,51 +873,48 @@ function onBoardClick(e) {
 
     const colorNum = myColor === 'black' ? 1 : 2;
 
-    // 렌주룰: 흑 금수 체크
     if (colorNum === 1 && isForbidden(r, c)) {
-        flashForbidden(r, c);
+        haptic([50, 30, 50]); // 금수 햅틱
+        document.getElementById('game-status-text').textContent = '⛔ 금수! 그 곳에는 착수할 수 없습니다.';
+        setTimeout(() => {
+            document.getElementById('game-status-text').textContent = '게임 진행 중';
+        }, 1500);
         return;
     }
 
+    // ★ turn을 먼저 내려야 renderBoard에서 금수 X가 안 보임
+    myTurn = false;
     placeMove(r, c, colorNum);
     if (conn && conn.open) conn.send({ type: 'move', r, c });
-
-    myTurn = false;
-    updateTurnDisplay();
 }
 
 function placeMove(r, c, colorNum) {
     board[r][c] = colorNum;
     lastMove = {r, c};
+    haptic(30); // 착수 햅틱
 
     const won = checkWin(r, c, colorNum);
     if (won) {
         winLine  = won;
         gameOver = true;
+        stopTimer();
         renderBoard();
+        updateTurnDisplay();
         const iWon = (colorNum === (myColor === 'black' ? 1 : 2));
+        if (iWon) haptic([100, 50, 100, 50, 200]);
+        else      haptic([400]);
         setTimeout(() => showResult(iWon), 600);
     } else {
         renderBoard();
-        if (!myTurn) {
-            myTurn = true; // 상대 착수 → 내 차례
-            updateTurnDisplay();
-        }
+        updateTurnDisplay();
     }
 }
 
 function onReceiveMove(r, c) {
-    const colorNum = myColor === 'black' ? 2 : 1; // 상대 색
-    placeMove(r, c, colorNum);
+    const colorNum = myColor === 'black' ? 2 : 1;
+    // ★ turn을 먼저 올려야 renderBoard에서 금수 X가 보임
     myTurn = true;
-    updateTurnDisplay();
-}
-
-function flashForbidden(r, c) {
-    document.getElementById('game-status-text').textContent = '⛔ 금수! 그 곳에는 착수할 수 없습니다.';
-    setTimeout(() => {
-        document.getElementById('game-status-text').textContent = '게임 진행 중';
-    }, 1500);
+    placeMove(r, c, colorNum);
 }
 
 // ════════════════════════════════════════════════════════════
@@ -807,7 +927,7 @@ function countDir(r, c, dr, dc, color) {
     for (let i = 1; i <= 5; i++) {
         const nr = r + dr*i, nc = c + dc*i;
         if (nr<0||nr>=BOARD_SIZE||nc<0||nc>=BOARD_SIZE||board[nr][nc]!==color) break;
-        cnt++; cells.push({r:nr,c:nc});
+        cnt++; cells.push({r:nr, c:nc});
     }
     return {cnt, cells};
 }
@@ -817,16 +937,10 @@ function checkWin(r, c, color) {
         const fwd = countDir(r, c,  dr,  dc, color);
         const bwd = countDir(r, c, -dr, -dc, color);
         const total = 1 + fwd.cnt + bwd.cnt;
-
-        if (color === 2 && total >= 5) {
-            // 백: 장목도 승리
+        if (color === 2 && total >= 5)
             return [{r,c}, ...fwd.cells.slice(0,4), ...bwd.cells.slice(0,4)].slice(0,5);
-        }
-        if (color === 1 && total === 5) {
-            // 흑: 정확히 5목만 승리
-            const line = [...bwd.cells.slice().reverse(), {r,c}, ...fwd.cells].slice(0, 5);
-            return line;
-        }
+        if (color === 1 && total === 5)
+            return [...bwd.cells.slice().reverse(), {r,c}, ...fwd.cells].slice(0,5);
     }
     return null;
 }
@@ -835,7 +949,6 @@ function checkWin(r, c, color) {
 //  렌주룰 — 금수 판정
 // ════════════════════════════════════════════════════════════
 function isForbidden(r, c) {
-    // 임시 착수
     board[r][c] = 1;
     const result = isDoubleFour(r, c) || isDoubleThree(r, c) || isOverline(r, c);
     board[r][c] = 0;
@@ -851,35 +964,17 @@ function isOverline(r, c) {
     return false;
 }
 
-// 라인에서 4 개수를 세는 헬퍼
-function countFours(r, c) {
-    let count = 0;
-    for (const [dr, dc] of DIRS) {
-        if (isFour(r, c, dr, dc)) count++;
-    }
-    return count;
-}
-
-function isFour(r, c, dr, dc) {
-    // 방향 [dr,dc]에서 (r,c)가 포함된 열린/닫힌 4 여부
-    // board[r][c]는 이미 1로 세팅된 상태
-    return getLineCount(r, c, dr, dc, 1) === 4 &&
-           !isLineFive(r, c, dr, dc, 1);
-}
-
 function getLineCount(r, c, dr, dc, color) {
     let cnt = 1;
     for (let d = 1; d <= 5; d++) {
         const nr=r+dr*d, nc=c+dc*d;
         if (nr<0||nr>=BOARD_SIZE||nc<0||nc>=BOARD_SIZE) break;
-        if (board[nr][nc] === color) cnt++;
-        else break;
+        if (board[nr][nc] === color) cnt++; else break;
     }
     for (let d = 1; d <= 5; d++) {
         const nr=r-dr*d, nc=c-dc*d;
         if (nr<0||nr>=BOARD_SIZE||nc<0||nc>=BOARD_SIZE) break;
-        if (board[nr][nc] === color) cnt++;
-        else break;
+        if (board[nr][nc] === color) cnt++; else break;
     }
     return cnt;
 }
@@ -888,61 +983,26 @@ function isLineFive(r, c, dr, dc, color) {
     return getLineCount(r, c, dr, dc, color) >= 5;
 }
 
-function isDoubleFour(r, c) {
-    return countFours(r, c) >= 2;
+function isFour(r, c, dr, dc) {
+    return getLineCount(r, c, dr, dc, 1) === 4 && !isLineFive(r, c, dr, dc, 1);
 }
 
-function isDoubleThree(r, c) {
-    let openThrees = 0;
-    for (const [dr, dc] of DIRS) {
-        if (isOpenThree(r, c, dr, dc)) openThrees++;
-    }
-    return openThrees >= 2;
+function countFours(r, c) {
+    let count = 0;
+    for (const [dr, dc] of DIRS) if (isFour(r, c, dr, dc)) count++;
+    return count;
 }
 
-function isOpenThree(r, c, dr, dc) {
-    // 착수점 (r,c)를 포함하는 방향 [dr,dc]의 열린 3 판정
-    // 열린 3: 양쪽이 막히지 않은 3련
-    const seq = getSequence(r, c, dr, dc);
-    return checkOpenThreeSeq(seq);
-}
+function isDoubleFour(r, c) { return countFours(r, c) >= 2; }
 
 function getSequence(r, c, dr, dc) {
-    // 해당 방향의 연속 9칸 배열 반환 (r,c 기준)
     const seq = [];
     for (let d = -4; d <= 4; d++) {
         const nr = r + dr*d, nc = c + dc*d;
-        if (nr < 0 || nr >= BOARD_SIZE || nc < 0 || nc >= BOARD_SIZE) {
-            seq.push(-1); // 벽
-        } else {
-            seq.push(board[nr][nc]);
-        }
+        if (nr < 0 || nr >= BOARD_SIZE || nc < 0 || nc >= BOARD_SIZE) seq.push(-1);
+        else seq.push(board[nr][nc]);
     }
-    return seq; // 인덱스 4가 (r,c)
-}
-
-function checkOpenThreeSeq(seq) {
-    // 열린 3 패턴 (1=흑, 0=빈, -1=벽/백)
-    // seq 중앙(idx=4)을 포함한 열린 3 패턴
-    const s = seq.map(v => v === 1 ? 1 : (v === 0 ? 0 : 2)); // 2=막힘
-    const str = s.join('');
-    const center = 4;
-
-    // 패턴: _111_ 형태 (열린 3)
-    const openThreePatterns = [
-        // 연속 3
-        [0,1,1,1,0],
-        // 띄운 3: 1_11, 11_1
-        [0,1,0,1,1,0],
-        [0,1,1,0,1,0],
-    ];
-
-    for (let start = 0; start <= 4; start++) {
-        for (const pat of openThreePatterns) {
-            if (matchPattern(seq, start, pat, center)) return true;
-        }
-    }
-    return false;
+    return seq;
 }
 
 function matchPattern(seq, start, pat, mustInclude) {
@@ -956,10 +1016,34 @@ function matchPattern(seq, start, pat, mustInclude) {
     return includes;
 }
 
+function checkOpenThreeSeq(seq) {
+    const center = 4;
+    const openThreePatterns = [
+        [0,1,1,1,0],
+        [0,1,0,1,1,0],
+        [0,1,1,0,1,0],
+    ];
+    for (let start = 0; start <= 4; start++)
+        for (const pat of openThreePatterns)
+            if (matchPattern(seq, start, pat, center)) return true;
+    return false;
+}
+
+function isOpenThree(r, c, dr, dc) {
+    return checkOpenThreeSeq(getSequence(r, c, dr, dc));
+}
+
+function isDoubleThree(r, c) {
+    let openThrees = 0;
+    for (const [dr, dc] of DIRS) if (isOpenThree(r, c, dr, dc)) openThrees++;
+    return openThrees >= 2;
+}
+
 // ════════════════════════════════════════════════════════════
 //  결과 화면
 // ════════════════════════════════════════════════════════════
-function showResult(iWon) {
+function showResult(iWon, reason) {
+    stopTimer();
     clearAnimations();
     document.getElementById('result-banner').classList.remove('banner-pop');
     void document.getElementById('result-banner').offsetWidth;
@@ -967,15 +1051,13 @@ function showResult(iWon) {
 
     if (iWon) {
         document.getElementById('result-emoji').textContent = '🏆';
-        document.getElementById('result-title').innerHTML =
-            '<span class="text-yellow-400">승리!</span>';
-        document.getElementById('result-sub').textContent = '훌륭한 대국이었습니다!';
+        document.getElementById('result-title').innerHTML = '<span class="text-yellow-400">승리!</span>';
+        document.getElementById('result-sub').textContent = reason || '훌륭한 대국이었습니다!';
         startConfetti();
     } else {
         document.getElementById('result-emoji').textContent = '😔';
-        document.getElementById('result-title').innerHTML =
-            '<span class="text-slate-400">패배</span>';
-        document.getElementById('result-sub').textContent = '다음엔 꼭 이겨보세요!';
+        document.getElementById('result-title').innerHTML = '<span class="text-slate-400">패배</span>';
+        document.getElementById('result-sub').textContent = reason || '다음엔 꼭 이겨보세요!';
         startRain();
     }
 
@@ -985,7 +1067,7 @@ function showResult(iWon) {
 }
 
 // ════════════════════════════════════════════════════════════
-//  폭죽 애니메이션
+//  폭죽 / 빗방울
 // ════════════════════════════════════════════════════════════
 function startConfetti() {
     const colors = ['#ff4444','#ffcc00','#44ff44','#4488ff','#ff44ff','#44ffff','#ff8800'];
@@ -993,13 +1075,13 @@ function startConfetti() {
         setTimeout(() => {
             const el = document.createElement('div');
             el.className = 'confetti-piece';
-            el.style.left     = Math.random() * 100 + 'vw';
+            el.style.left = Math.random() * 100 + 'vw';
             el.style.background = colors[Math.floor(Math.random()*colors.length)];
-            el.style.width    = (6 + Math.random()*8) + 'px';
-            el.style.height   = (6 + Math.random()*8) + 'px';
+            el.style.width  = (6 + Math.random()*8) + 'px';
+            el.style.height = (6 + Math.random()*8) + 'px';
             el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
             el.style.animationDuration = (2 + Math.random()*2.5) + 's';
-            el.style.animationDelay   = '0s';
+            el.style.animationDelay = '0s';
             document.body.appendChild(el);
             confettiPieces.push(el);
             el.addEventListener('animationend', () => el.remove());
@@ -1007,15 +1089,12 @@ function startConfetti() {
     }
 }
 
-// ════════════════════════════════════════════════════════════
-//  빗방울 애니메이션
-// ════════════════════════════════════════════════════════════
 function startRain() {
     for (let i = 0; i < 60; i++) {
         const el = document.createElement('div');
         el.className = 'raindrop';
-        el.style.left     = Math.random() * 100 + 'vw';
-        el.style.height   = (20 + Math.random() * 40) + 'px';
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.height = (20 + Math.random() * 40) + 'px';
         el.style.animationDuration  = (0.5 + Math.random()*0.5) + 's';
         el.style.animationDelay     = (Math.random()*2) + 's';
         document.body.appendChild(el);
@@ -1024,10 +1103,8 @@ function startRain() {
 }
 
 function clearAnimations() {
-    confettiPieces.forEach(el => el.remove());
-    confettiPieces = [];
-    raindrops.forEach(el => el.remove());
-    raindrops = [];
+    confettiPieces.forEach(el => el.remove()); confettiPieces = [];
+    raindrops.forEach(el => el.remove()); raindrops = [];
 }
 
 // ════════════════════════════════════════════════════════════
@@ -1061,7 +1138,7 @@ function declineRematch() {
 
 function startRematch() {
     clearAnimations();
-    // 선공 재결정 (동전)
+    stopTimer();
     showScreen('coin');
     document.getElementById('coin-result').classList.add('hidden');
     document.getElementById('coin-waiting').classList.remove('hidden');
@@ -1081,7 +1158,9 @@ function startRematch() {
 
 function backToLobby() {
     clearAnimations();
+    stopTimer();
     document.getElementById('modal-rematch').classList.add('hidden');
+    document.getElementById('modal-resign').classList.add('hidden');
     gameOver = true;
     if (peer) { peer.destroy(); peer = null; }
     conn = null;
