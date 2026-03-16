@@ -704,6 +704,13 @@ function stopTimer() {
     timerInterval = null;
 }
 
+function handOffTurn(nextTurnIsMine) {
+    myTurn = nextTurnIsMine;
+    if (nextTurnIsMine) myTime = TURN_TIME;
+    else oppTime = TURN_TIME;
+    updateTimerDisplay();
+}
+
 function updateTimerDisplay() {
     const fmt = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 
@@ -890,7 +897,7 @@ function onBoardClick(e) {
     }
 
     // ★ turn을 먼저 내려야 renderBoard에서 금수 X가 안 보임
-    myTurn = false;
+    handOffTurn(false);
     placeMove(r, c, colorNum);
     if (conn && conn.open) conn.send({ type: 'move', r, c });
 }
@@ -921,7 +928,7 @@ function placeMove(r, c, colorNum) {
 function onReceiveMove(r, c) {
     const colorNum = myColor === 'black' ? 2 : 1;
     // ★ turn을 먼저 올려야 renderBoard에서 금수 X가 보임
-    myTurn = true;
+    handOffTurn(true);
     placeMove(r, c, colorNum);
 }
 
