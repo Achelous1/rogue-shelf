@@ -879,22 +879,42 @@
             width: 100%;
         }
 
-        body.spreadsheet-mode #modal-rematch > div {
+        body.spreadsheet-mode #modal-rematch > div,
+        body.spreadsheet-mode #modal-resign > div {
             background: #ffffff;
             border: 1px solid #d6dde8;
             box-shadow: 0 24px 56px rgba(148, 163, 184, 0.22);
         }
 
-        body.spreadsheet-mode #modal-rematch .text-4xl {
+        body.spreadsheet-mode #modal-rematch .text-4xl,
+        body.spreadsheet-mode #modal-resign .text-4xl {
             display: none;
         }
 
-        body.spreadsheet-mode #modal-rematch-title {
+        body.spreadsheet-mode #modal-rematch-title,
+        body.spreadsheet-mode #modal-resign-title {
             color: #0f172a;
         }
 
-        body.spreadsheet-mode #rematch-requester {
+        body.spreadsheet-mode #rematch-requester,
+        body.spreadsheet-mode #modal-resign-detail {
             color: #64748b;
+        }
+
+        body.spreadsheet-mode #btn-resign-confirm,
+        body.spreadsheet-mode #btn-resign-cancel {
+            box-shadow: none;
+        }
+
+        body.spreadsheet-mode #btn-resign-confirm {
+            background: #0f172a;
+            border-color: #0f172a;
+        }
+
+        body.spreadsheet-mode #btn-resign-cancel {
+            background: #ffffff;
+            color: #475569;
+            border: 1px solid #d6dde8;
         }
 
         body.spreadsheet-mode #lobby-panel,
@@ -1655,11 +1675,11 @@
 <div id="modal-resign" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
     <div class="bg-slate-800 border border-slate-600 rounded-2xl p-8 text-center shadow-2xl max-w-sm w-full mx-4">
         <div class="text-4xl mb-4">🏳️</div>
-        <h3 class="text-xl font-black text-white mb-2">정말 항복하시겠습니까?</h3>
-        <p class="text-slate-400 mb-6 text-sm">상대방이 승리하게 됩니다</p>
+        <h3 id="modal-resign-title" class="text-xl font-black text-white mb-2">정말 항복하시겠습니까?</h3>
+        <p id="modal-resign-detail" class="text-slate-400 mb-6 text-sm">상대방이 승리하게 됩니다</p>
         <div class="flex gap-3">
-            <button onclick="confirmResign()" class="btn-primary btn-danger flex-1">항복</button>
-            <button onclick="closeResignModal()" class="btn-secondary flex-1">취소</button>
+            <button id="btn-resign-confirm" onclick="confirmResign()" class="btn-primary btn-danger flex-1">항복</button>
+            <button id="btn-resign-cancel" onclick="closeResignModal()" class="btn-secondary flex-1">취소</button>
         </div>
     </div>
 </div>
@@ -2375,6 +2395,17 @@ function updateTimerDisplay() {
 // ════════════════════════════════════════════════════════════
 function resign() {
     if (gameOver) return;
+    if (spreadsheetMode) {
+        setText(['modal-resign-title'], '현재 입력 단계를 종료하시겠습니까?');
+        setText(['modal-resign-detail'], '종료 시 상대 참여자에게 현재 검토 단계 종료가 전달됩니다.');
+        setText(['btn-resign-confirm'], '단계 종료');
+        setText(['btn-resign-cancel'], '계속 검토');
+    } else {
+        setText(['modal-resign-title'], '정말 항복하시겠습니까?');
+        setText(['modal-resign-detail'], '상대방이 승리하게 됩니다');
+        setText(['btn-resign-confirm'], '항복');
+        setText(['btn-resign-cancel'], '취소');
+    }
     document.getElementById('modal-resign').classList.remove('hidden');
     haptic(30);
 }
