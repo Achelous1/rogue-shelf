@@ -16,7 +16,6 @@
             display: block;
             width: 100%;
             height: auto;
-            aspect-ratio: 1 / 1;
             touch-action: manipulation;
         }
 
@@ -131,6 +130,972 @@
 
         #game-topbar { width: min(100%, 612px); }
 
+        #sheet-chrome { display: none; }
+        .sfw-only { display: none !important; }
+
+        .sheet-menu-bar,
+        .sheet-toolbar,
+        .sheet-formula-bar {
+            background: #f8fafc;
+            border-bottom: 1px solid #dbe3ec;
+        }
+
+        .sheet-menu-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            color: #334155;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .sheet-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 28px;
+            height: 28px;
+            padding: 0 10px;
+            border-radius: 8px;
+            border: 1px solid #d6dde8;
+            background: #ffffff;
+            color: #475569;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .sheet-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 14px;
+        }
+
+        .sheet-toolbar-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .sheet-formula-bar {
+            display: grid;
+            grid-template-columns: 54px minmax(0, 1fr);
+            gap: 8px;
+            padding: 10px 14px;
+        }
+
+        .sheet-name-box,
+        .sheet-fx-box {
+            height: 34px;
+            border-radius: 8px;
+            border: 1px solid #d6dde8;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            color: #64748b;
+            font-size: 0.76rem;
+        }
+
+        .sheet-name-box {
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .sheet-fx-box {
+            justify-content: flex-start;
+            padding: 0 12px;
+            gap: 8px;
+        }
+
+        .sfw-office-shell {
+            width: min(100%, 920px);
+            background: #ffffff;
+            border: 1px solid #d6dde8;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 24px 48px rgba(148, 163, 184, 0.18);
+            margin-bottom: 18px;
+        }
+
+        .sfw-office-body {
+            padding: 16px 18px;
+            background: #f8fafc;
+        }
+
+        .sfw-kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .sfw-kpi-card {
+            background: #ffffff;
+            border: 1px solid #d6dde8;
+            border-radius: 14px;
+            padding: 12px 14px;
+        }
+
+        .sfw-kpi-label {
+            color: #64748b;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .sfw-kpi-value {
+            color: #0f172a;
+            font-size: 1.05rem;
+            font-weight: 800;
+            margin-top: 4px;
+        }
+
+        .sfw-progress-track {
+            width: 100%;
+            height: 10px;
+            border-radius: 999px;
+            background: #dbe3ec;
+            overflow: hidden;
+            margin-top: 14px;
+        }
+
+        .sfw-progress-bar {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #34d399, #22c55e);
+        }
+
+        .sfw-grid-preview {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .sfw-grid-cell {
+            height: 36px;
+            border-radius: 10px;
+            border: 1px solid #d6dde8;
+            background: linear-gradient(180deg, #ffffff, #f8fafc);
+        }
+
+        .sfw-stage-note {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            border: 1px solid #dbe3ec;
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+
+        .sfw-stage-note::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: #22c55e;
+            flex-shrink: 0;
+        }
+
+        .sfw-doc-section {
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .sfw-doc-heading {
+            color: #0f172a;
+            font-size: clamp(1.4rem, 2.3vw, 1.95rem);
+            font-weight: 800;
+            line-height: 1.25;
+            max-width: 22ch;
+        }
+
+        .sfw-doc-text {
+            color: #475569;
+            font-size: 0.92rem;
+            font-weight: 600;
+        }
+
+        .sfw-doc-muted {
+            color: #64748b;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        .sfw-doc-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .sfw-doc-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #eff6ff;
+            border: 1px solid #dbeafe;
+            color: #2563eb;
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        .sfw-flow-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 120px;
+            gap: 18px;
+            align-items: start;
+        }
+
+        .sfw-order-token {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+            border-radius: 18px;
+            border: 1px solid #d6dde8;
+            background: linear-gradient(180deg, #ffffff, #f8fafc);
+            color: #0f172a;
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .sfw-game-bar {
+            display: none;
+        }
+
+        .sfw-game-title {
+            color: #0f172a;
+            font-size: 0.82rem;
+            font-weight: 800;
+        }
+
+        .sfw-game-meta {
+            color: #64748b;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .sfw-home-shell {
+            width: min(100%, 1120px);
+            background: #ffffff;
+            border: 1px solid #d6dde8;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 24px 48px rgba(148, 163, 184, 0.18);
+            margin-bottom: 18px;
+        }
+
+        .sfw-home-top {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            background: #ffffff;
+        }
+
+        .sfw-home-search {
+            flex: 1;
+            min-width: 0;
+            height: 48px;
+            border-radius: 999px;
+            border: 1px solid #d6dde8;
+            background: #f8fafc;
+            color: #0f172a;
+            padding: 0 18px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .sfw-home-search::placeholder {
+            color: #94a3b8;
+        }
+
+        .sfw-toggle-cluster {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .sfw-quick-link {
+            display: inline-flex;
+            align-items: center;
+            color: #64748b;
+            font-size: 0.84rem;
+            font-weight: 700;
+            line-height: 1;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .sfw-quick-link:hover {
+            color: #334155;
+        }
+
+        .sfw-toggle-label {
+            color: #475569;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .sfw-home-body {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            padding: 14px 22px 18px;
+            background: #ffffff;
+        }
+
+        .sfw-home-footer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 18px 22px 22px;
+            border-top: 1px solid #e2e8f0;
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .sfw-home-footer a {
+            color: #64748b;
+            text-decoration: none;
+        }
+
+        .sfw-home-footer a:hover {
+            color: #334155;
+        }
+
+        .sfw-home-footer-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sfw-section-label {
+            color: #475569;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .sfw-template-row {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .sfw-template-card {
+            border: none;
+            background: transparent;
+            text-align: left;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .sfw-template-thumb {
+            height: 92px;
+            border-radius: 14px;
+            border: 1px solid #d6dde8;
+            background: linear-gradient(180deg, #ffffff, #f8fafc);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.75);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sfw-template-thumb.grid::before,
+        .sfw-template-thumb.grid::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(to right, rgba(148, 163, 184, 0.18) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(148, 163, 184, 0.18) 1px, transparent 1px);
+            background-size: 18px 18px;
+        }
+
+        .sfw-template-thumb.color-a::after { background: linear-gradient(180deg, rgba(59,130,246,0.18), transparent 70%); }
+        .sfw-template-thumb.color-b::after { background: linear-gradient(180deg, rgba(34,197,94,0.18), transparent 70%); }
+        .sfw-template-thumb.color-c::after { background: linear-gradient(180deg, rgba(244,114,182,0.18), transparent 70%); }
+        .sfw-template-thumb.color-d::after { background: linear-gradient(180deg, rgba(234,179,8,0.18), transparent 70%); }
+
+        .sfw-template-plus {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #22c55e;
+            font-weight: 300;
+        }
+
+        .sfw-template-title {
+            color: #334155;
+            font-size: 0.78rem;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        .sfw-file-header,
+        .sfw-file-row {
+            display: grid;
+            grid-template-columns: minmax(0, 2.7fr) minmax(0, 1fr) minmax(0, 1fr) 32px;
+            gap: 14px;
+            align-items: center;
+        }
+
+        .sfw-file-header {
+            color: #64748b;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 8px 6px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .sfw-file-row {
+            width: 100%;
+            border: none;
+            background: transparent;
+            border-top: 1px solid #eef2f7;
+            padding: 14px 6px;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .sfw-file-row:hover {
+            background: #f8fafc;
+        }
+
+        .sfw-file-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #0f172a;
+            font-size: 0.86rem;
+            font-weight: 700;
+        }
+
+        .sfw-file-meta,
+        .sfw-file-owner {
+            color: #64748b;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .sfw-file-dot {
+            color: #94a3b8;
+            text-align: center;
+            font-weight: 900;
+        }
+
+        .sfw-sheet-icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            background: linear-gradient(180deg, #22c55e, #16a34a);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .sfw-sheet-icon::before,
+        .sfw-sheet-icon::after {
+            content: "";
+            position: absolute;
+            background: rgba(255,255,255,0.9);
+        }
+
+        .sfw-sheet-icon::before {
+            left: 4px;
+            right: 4px;
+            top: 6px;
+            height: 1px;
+            box-shadow: 0 4px 0 rgba(255,255,255,0.9);
+        }
+
+        .sfw-sheet-icon::after {
+            top: 4px;
+            bottom: 4px;
+            left: 7px;
+            width: 1px;
+        }
+
+        .sfw-match-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.32);
+            backdrop-filter: blur(2px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 60;
+        }
+
+        .sfw-match-modal {
+            width: min(100%, 420px);
+            background: #ffffff;
+            border: 1px solid #d6dde8;
+            border-radius: 18px;
+            box-shadow: 0 24px 48px rgba(15, 23, 42, 0.18);
+            padding: 24px 22px;
+            text-align: center;
+        }
+
+        .sfw-spinner {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            border: 4px solid #dbe3ec;
+            border-top-color: #22c55e;
+            margin: 0 auto 16px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .sfw-toggle {
+            width: 56px;
+            height: 32px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(148, 163, 184, 0.22);
+            display: inline-flex;
+            align-items: center;
+            padding: 3px;
+            transition: background-color 0.2s ease;
+        }
+
+        .sfw-toggle-knob {
+            width: 24px;
+            height: 24px;
+            border-radius: 999px;
+            background: #ffffff;
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.28);
+            transition: transform 0.2s ease;
+        }
+
+        body.spreadsheet-mode {
+            background: linear-gradient(180deg, #eef2ff 0%, #e2e8f0 100%);
+            display: block;
+        }
+
+        body.spreadsheet-mode .sfw-only {
+            display: block !important;
+        }
+
+        body.spreadsheet-mode #screen-lobby {
+            align-items: stretch;
+            justify-content: flex-start;
+            padding: 0;
+        }
+
+        body.spreadsheet-mode #screen-lobby > .text-center {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+            max-width: none;
+            text-align: left;
+        }
+
+        body.spreadsheet-mode .sfw-home-shell {
+            display: flex !important;
+            flex-direction: column;
+            flex: 1;
+            width: 100%;
+            min-height: 100vh;
+            margin-bottom: 0;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        body.spreadsheet-mode .sfw-home-top {
+            padding: 18px 26px;
+        }
+
+        body.spreadsheet-mode .sfw-home-body {
+            min-height: 0;
+            padding: 18px 26px 18px;
+        }
+
+        body.spreadsheet-mode .sfw-home-footer {
+            padding: 18px 26px 24px;
+            border-top-color: #dbe3ec;
+            background: #f1f5f9;
+        }
+
+        body:not(.spreadsheet-mode) #sfw-match-overlay {
+            display: none !important;
+        }
+
+        body.spreadsheet-mode #sfw-match-overlay.hidden {
+            display: none !important;
+        }
+
+        body.spreadsheet-mode #sfw-match-overlay:not(.hidden) {
+            display: flex !important;
+        }
+
+        body.spreadsheet-mode #screen-lobby,
+        body.spreadsheet-mode #screen-matching,
+        body.spreadsheet-mode #screen-matched,
+        body.spreadsheet-mode #screen-coin,
+        body.spreadsheet-mode #screen-result {
+            color: #334155;
+        }
+
+        body.spreadsheet-mode #screen-result {
+            background: rgba(226, 232, 240, 0.82);
+            backdrop-filter: blur(8px);
+            justify-content: flex-end;
+            align-items: stretch;
+            padding: 24px 24px 24px 0;
+        }
+
+        body.spreadsheet-mode #screen-matched,
+        body.spreadsheet-mode #screen-coin {
+            align-items: center;
+            justify-content: flex-start;
+            gap: 0;
+            padding: 40px 24px;
+        }
+
+        body.spreadsheet-mode #screen-game {
+            align-items: stretch;
+            justify-content: flex-start;
+            padding: 0;
+            gap: 0;
+        }
+
+        body.spreadsheet-mode #game-topbar {
+            width: 100%;
+            margin-bottom: 0;
+        }
+
+        body.spreadsheet-mode #game-topbar-card {
+            width: 100%;
+            border-radius: 0;
+            border-left: none;
+            border-right: none;
+            box-shadow: none;
+            padding: 10px 24px;
+        }
+
+        body.spreadsheet-mode #screen-lobby .normal-hero {
+            display: none;
+        }
+
+        body.spreadsheet-mode #lobby-title,
+        body.spreadsheet-mode #lobby-subtitle,
+        body.spreadsheet-mode #lobby-meta {
+            display: none;
+        }
+
+        body.spreadsheet-mode #lobby-panel,
+        body.spreadsheet-mode #lobby-rule,
+        body.spreadsheet-mode #lobby-home-link {
+            display: none;
+        }
+
+        body.spreadsheet-mode #matching-title,
+        body.spreadsheet-mode #matched-title,
+        body.spreadsheet-mode #coin-title,
+        body.spreadsheet-mode #coin-result-text,
+        body.spreadsheet-mode #result-title {
+            color: #0f172a;
+        }
+
+        body.spreadsheet-mode #result-banner {
+            width: min(100%, 520px);
+            max-width: 520px;
+            padding: 0;
+            overflow: hidden;
+            border-radius: 24px 0 0 24px;
+            background: #ffffff;
+            border: 1px solid #d6dde8;
+            box-shadow: 0 24px 56px rgba(148, 163, 184, 0.22);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        body.spreadsheet-mode #result-emoji,
+        body.spreadsheet-mode #result-title,
+        body.spreadsheet-mode #result-sub {
+            display: none;
+        }
+
+        body.spreadsheet-mode .result-actions {
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: stretch;
+            padding: 0 22px 18px;
+        }
+
+        body.spreadsheet-mode #rematch-status {
+            margin: 0;
+            padding: 0 22px 22px;
+            text-align: left;
+            color: #64748b;
+        }
+
+        body.spreadsheet-mode #result-banner .sheet-menu-bar {
+            padding: 14px 18px;
+            background: #ffffff;
+        }
+
+        body.spreadsheet-mode #btn-rematch,
+        body.spreadsheet-mode #btn-result-home {
+            width: 100%;
+        }
+
+        body.spreadsheet-mode #modal-rematch > div,
+        body.spreadsheet-mode #modal-resign > div {
+            background: #ffffff;
+            border: 1px solid #d6dde8;
+            box-shadow: 0 24px 56px rgba(148, 163, 184, 0.22);
+        }
+
+        body.spreadsheet-mode #modal-rematch .text-4xl,
+        body.spreadsheet-mode #modal-resign .text-4xl {
+            display: none;
+        }
+
+        body.spreadsheet-mode #modal-rematch-title,
+        body.spreadsheet-mode #modal-resign-title {
+            color: #0f172a;
+        }
+
+        body.spreadsheet-mode #rematch-requester,
+        body.spreadsheet-mode #modal-resign-detail {
+            color: #64748b;
+        }
+
+        body.spreadsheet-mode #btn-resign-confirm,
+        body.spreadsheet-mode #btn-resign-cancel {
+            box-shadow: none;
+        }
+
+        body.spreadsheet-mode #btn-resign-confirm {
+            background: #0f172a;
+            border-color: #0f172a;
+        }
+
+        body.spreadsheet-mode #btn-resign-cancel {
+            background: #ffffff;
+            color: #475569;
+            border: 1px solid #d6dde8;
+        }
+
+        body.spreadsheet-mode #lobby-panel,
+        body.spreadsheet-mode #matching-panel {
+            background: #ffffff;
+            border: 1px solid #d6dde8;
+            box-shadow: 0 24px 48px rgba(148, 163, 184, 0.18);
+        }
+
+        body.spreadsheet-mode #screen-matched .sfw-office-shell,
+        body.spreadsheet-mode #screen-coin .sfw-office-shell {
+            width: min(100%, 920px);
+            margin-bottom: 0;
+            box-shadow: 0 18px 36px rgba(148, 163, 184, 0.16);
+        }
+
+        body.spreadsheet-mode #matched-panel,
+        body.spreadsheet-mode #coin-panel {
+            display: none;
+        }
+
+        body.spreadsheet-mode #lobby-subtitle,
+        body.spreadsheet-mode #lobby-meta,
+        body.spreadsheet-mode #matching-slot-info,
+        body.spreadsheet-mode #countdown-text,
+        body.spreadsheet-mode #coin-subtitle,
+        body.spreadsheet-mode #coin-result-sub,
+        body.spreadsheet-mode #coin-waiting,
+        body.spreadsheet-mode #result-sub,
+        body.spreadsheet-mode #rematch-status,
+        body.spreadsheet-mode #screen-lobby a {
+            color: #64748b;
+        }
+
+        body.spreadsheet-mode #lobby-panel label {
+            color: #475569;
+        }
+
+        body.spreadsheet-mode #lobby-panel input {
+            background: #ffffff;
+            border-color: #cbd5e1;
+            color: #0f172a;
+        }
+
+        body.spreadsheet-mode #lobby-panel input::placeholder {
+            color: #94a3b8;
+        }
+
+        body.spreadsheet-mode #btn-start-match,
+        body.spreadsheet-mode #btn-rematch {
+            background: linear-gradient(135deg, #16a34a, #22c55e);
+            box-shadow: 0 10px 24px rgba(34, 197, 94, 0.2);
+        }
+
+        body.spreadsheet-mode .btn-secondary {
+            background: #ffffff;
+            border-color: #cbd5e1;
+            color: #475569;
+        }
+
+        body.spreadsheet-mode #screen-matching .w-24,
+        body.spreadsheet-mode #screen-matched .text-6xl {
+            display: none;
+        }
+
+        body.spreadsheet-mode .coin-black {
+            background: linear-gradient(135deg, #fec9c9, #fda4af);
+            color: #7f1d1d;
+        }
+
+        body.spreadsheet-mode .coin-white {
+            background: linear-gradient(135deg, #afc7d0, #93c5fd);
+            color: #1e3a8a;
+            border-color: #bfdbfe;
+        }
+
+        body.spreadsheet-mode #game-topbar-card {
+            background: rgba(255,255,255,0.84);
+            border-color: #d6dde8;
+            box-shadow: none;
+            padding: 8px 16px;
+            border-radius: 0;
+        }
+
+        body.spreadsheet-mode .sfw-game-bar {
+            display: flex !important;
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        body.spreadsheet-mode .game-player-block,
+        body.spreadsheet-mode .game-turn-legacy {
+            display: none !important;
+        }
+
+        body.spreadsheet-mode #turn-info,
+        body.spreadsheet-mode #my-name-display,
+        body.spreadsheet-mode #opp-name-display,
+        body.spreadsheet-mode #my-timer,
+        body.spreadsheet-mode #opp-timer {
+            color: #334155;
+        }
+
+        body.spreadsheet-mode .timer-bar-wrap {
+            display: none;
+        }
+
+        body.spreadsheet-mode #my-turn-badge,
+        body.spreadsheet-mode #opp-turn-badge {
+            display: none !important;
+        }
+
+        body.spreadsheet-mode #my-stone-icon,
+        body.spreadsheet-mode #opp-stone-icon {
+            width: 18px;
+            height: 18px;
+            box-shadow: none;
+        }
+
+        body.spreadsheet-mode #my-name-display,
+        body.spreadsheet-mode #opp-name-display {
+            font-size: 0.74rem;
+        }
+
+        body.spreadsheet-mode #my-timer,
+        body.spreadsheet-mode #opp-timer,
+        body.spreadsheet-mode #turn-info {
+            color: #64748b;
+            font-size: 0.68rem;
+        }
+
+        body.spreadsheet-mode #board-wrapper {
+            background: #ffffff;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+            overflow: hidden;
+            width: 100%;
+            border-radius: 0;
+            flex: 1;
+        }
+
+        body.spreadsheet-mode #sheet-chrome {
+            display: block;
+        }
+
+        body.spreadsheet-mode #board-canvas {
+            aspect-ratio: auto;
+        }
+
+        body.spreadsheet-mode #btn-resign {
+            background: #ffffff;
+            color: #475569;
+            border: 1px solid #d6dde8;
+            box-shadow: none;
+        }
+
+        body.spreadsheet-mode #game-status-text,
+        body.spreadsheet-mode #result-overlay,
+        body.spreadsheet-mode #result-banner {
+            color: #64748b;
+        }
+
+        body.spreadsheet-mode #game-footer {
+            width: 100%;
+            justify-content: space-between;
+            padding: 6px 12px 10px;
+            background: #f8fafc;
+            border-top: 1px solid #dbe3ec;
+        }
+
+        body.spreadsheet-mode .sfw-toggle {
+            background: #34d399;
+        }
+
+        body.spreadsheet-mode .sfw-toggle-knob {
+            transform: translateX(24px);
+        }
+
         /* ── 타이머 바 ── */
         .timer-bar-wrap {
             height: 4px;
@@ -151,9 +1116,97 @@
         }
 
         @media (max-width: 430px) {
+            .sfw-home-top {
+                align-items: flex-start;
+                flex-direction: column;
+                padding: 16px 14px;
+            }
+
+            .sfw-toggle-cluster {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .sfw-home-footer {
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+
+            body.spreadsheet-mode .sfw-home-footer {
+                margin-left: -14px;
+                margin-right: -14px;
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+
+            .sfw-template-row {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .sfw-file-header,
+            .sfw-file-row {
+                grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr);
+            }
+
+            .sfw-file-header > :nth-child(3),
+            .sfw-file-header > :nth-child(4),
+            .sfw-file-row > :nth-child(3),
+            .sfw-file-row > :nth-child(4) {
+                display: none;
+            }
+
+            .sfw-kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sfw-grid-preview {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+
+            body.spreadsheet-mode #screen-matched,
+            body.spreadsheet-mode #screen-coin {
+                padding: 20px 12px;
+            }
+
+            body.spreadsheet-mode #screen-result {
+                padding: 12px 12px 12px 0;
+            }
+
+            body.spreadsheet-mode #matched-panel,
+            body.spreadsheet-mode #coin-panel {
+                width: 100%;
+                padding: 22px 16px 20px;
+            }
+
+            body.spreadsheet-mode #result-banner {
+                width: 100%;
+                max-width: 100%;
+                border-radius: 20px;
+            }
+
+            body.spreadsheet-mode .sfw-game-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+
+            .sfw-flow-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sfw-order-token {
+                min-height: 88px;
+            }
+
             #screen-game {
                 padding-left: 8px;
                 padding-right: 8px;
+            }
+
+            body.spreadsheet-mode #game-topbar-card,
+            body.spreadsheet-mode #game-footer {
+                padding-left: 12px;
+                padding-right: 12px;
             }
 
             #game-topbar-card {
@@ -199,32 +1252,144 @@
 ══════════════════════════════════════════ -->
 <div id="screen-lobby" class="screen active flex-col items-center justify-center min-h-screen w-full px-4">
     <div class="text-center max-w-md w-full">
-        <div class="mb-2 flex items-center justify-center gap-2">
+        <div class="sfw-only sfw-home-shell text-left">
+            <div class="sfw-home-top">
+                <a href="index.html" class="sfw-quick-link">&lt; 홈으로 돌아가기</a>
+                <input id="sfw-player-input" type="text" maxlength="12" placeholder="문서 검색 또는 담당자 이름" class="sfw-home-search" value="플레이어">
+                <div class="sfw-toggle-cluster">
+                    <div class="sfw-toggle-label">
+                        <div>Workspace View</div>
+                        <div id="sfw-toggle-copy-header" class="text-slate-400">OFF · 일반 오목판</div>
+                    </div>
+                    <button id="sfw-toggle-header" type="button" onclick="toggleSpreadsheetMode()" class="sfw-toggle" aria-pressed="false" aria-label="SFW 스프레드시트 테마 토글">
+                        <span class="sfw-toggle-knob"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="sfw-home-body">
+                <div class="sfw-section-label">새 스프레드시트 시작하기</div>
+                <div class="sfw-template-row">
+                    <button type="button" class="sfw-template-card" onclick="startMatching()">
+                        <div class="sfw-template-thumb"><div class="sfw-template-plus">+</div></div>
+                        <div class="sfw-template-title">빈 스프레드시트</div>
+                    </button>
+                    <button type="button" class="sfw-template-card" onclick="startMatching()">
+                        <div class="sfw-template-thumb grid color-a"></div>
+                        <div class="sfw-template-title">주간 KPI 대시보드</div>
+                    </button>
+                    <button type="button" class="sfw-template-card" onclick="startMatching()">
+                        <div class="sfw-template-thumb grid color-b"></div>
+                        <div class="sfw-template-title">운영 이슈 로그</div>
+                    </button>
+                    <button type="button" class="sfw-template-card" onclick="startMatching()">
+                        <div class="sfw-template-thumb grid color-c"></div>
+                        <div class="sfw-template-title">리스크 검토 보드</div>
+                    </button>
+                    <button type="button" class="sfw-template-card" onclick="startMatching()">
+                        <div class="sfw-template-thumb grid color-d"></div>
+                        <div class="sfw-template-title">예산 집행 트래커</div>
+                    </button>
+                    <button type="button" class="sfw-template-card" onclick="startMatching()">
+                        <div class="sfw-template-thumb grid"></div>
+                        <div class="sfw-template-title">월간 인력 계획</div>
+                    </button>
+                </div>
+
+                <div class="sfw-file-header">
+                    <div>최근 항목</div>
+                    <div>소유자</div>
+                    <div>최근 수정</div>
+                    <div></div>
+                </div>
+                <button type="button" class="sfw-file-row" onclick="startMatching()">
+                    <div class="sfw-file-name"><span class="sfw-sheet-icon"></span><span>2026 사업운영 주간 리뷰</span></div>
+                    <div class="sfw-file-owner">민지현</div>
+                    <div class="sfw-file-meta">2026. 3. 17.</div>
+                    <div class="sfw-file-dot">⋮</div>
+                </button>
+                <button type="button" class="sfw-file-row" onclick="startMatching()">
+                    <div class="sfw-file-name"><span class="sfw-sheet-icon"></span><span>제품 출하 일정 싱크</span></div>
+                    <div class="sfw-file-owner">오세린</div>
+                    <div class="sfw-file-meta">2026. 3. 10.</div>
+                    <div class="sfw-file-dot">⋮</div>
+                </button>
+                <button type="button" class="sfw-file-row" onclick="startMatching()">
+                    <div class="sfw-file-name"><span class="sfw-sheet-icon"></span><span>영업-운영 전환 퍼널</span></div>
+                    <div class="sfw-file-owner">RevenueOps</div>
+                    <div class="sfw-file-meta">2026. 3. 10.</div>
+                    <div class="sfw-file-dot">⋮</div>
+                </button>
+                <button type="button" class="sfw-file-row" onclick="startMatching()">
+                    <div class="sfw-file-name"><span class="sfw-sheet-icon"></span><span>3월 리스크 백로그</span></div>
+                    <div class="sfw-file-owner">나</div>
+                    <div class="sfw-file-meta">2026. 3. 10.</div>
+                    <div class="sfw-file-dot">⋮</div>
+                </button>
+                <button type="button" class="sfw-file-row" onclick="startMatching()">
+                    <div class="sfw-file-name"><span class="sfw-sheet-icon"></span><span>파트너십 실행 캘린더</span></div>
+                    <div class="sfw-file-owner">전략기획팀</div>
+                    <div class="sfw-file-meta">2026. 3. 10.</div>
+                    <div class="sfw-file-dot">⋮</div>
+                </button>
+                <button type="button" class="sfw-file-row" onclick="startMatching()">
+                    <div class="sfw-file-name"><span class="sfw-sheet-icon"></span><span>분기별 코호트 점검표</span></div>
+                    <div class="sfw-file-owner">나</div>
+                    <div class="sfw-file-meta">2026. 2. 10.</div>
+                    <div class="sfw-file-dot">⋮</div>
+                </button>
+            </div>
+            <div class="sfw-home-footer">
+                <div class="sfw-home-footer-links">
+                    <a href="privacy-policy.html">개인정보 처리방침</a>
+                    <a href="index.html">홈으로 돌아가기</a>
+                </div>
+            </div>
+        </div>
+        <div class="normal-hero mb-2 flex items-center justify-center gap-2">
             <span class="inline-block w-14 h-14 rounded-full bg-black"></span>
             <span class="inline-block w-14 h-14 rounded-full bg-white border border-slate-300"></span>
         </div>
-        <h1 class="text-5xl font-black text-white mb-2 tracking-tight">오목대전</h1>
-        <p class="text-slate-400 text-lg mb-1">WebRTC 실시간 2인 대국</p>
-        <p class="text-slate-500 text-sm mb-10">렌주룰 적용 · 15×15 · 각 1분 제한</p>
+        <h1 id="lobby-title" class="text-5xl font-black text-white mb-2 tracking-tight">오목대전</h1>
+        <p id="lobby-subtitle" class="text-slate-400 text-lg mb-1">WebRTC 실시간 2인 대국</p>
+        <p id="lobby-meta" class="text-slate-500 text-sm mb-10">렌주룰 적용 · 15×15 · 각 1분 제한</p>
 
-        <div class="bg-white/10 backdrop-blur rounded-2xl p-8 shadow-xl border border-white/10">
+        <div id="lobby-panel" class="bg-white/10 backdrop-blur rounded-2xl p-8 shadow-xl border border-white/10">
             <label class="block text-slate-300 text-sm font-semibold mb-2 text-left">닉네임</label>
             <input id="nickname-input" type="text" maxlength="12" placeholder="닉네임을 입력하세요"
                 class="w-full bg-white/10 border border-white/20 text-white placeholder-slate-500
                        rounded-xl px-4 py-3 text-lg focus:outline-none focus:border-blue-400 mb-6"
                 value="플레이어">
-            <button onclick="startMatching()" class="btn-primary w-full text-xl py-4">
+            <div id="sfw-toggle-panel" class="mb-6 rounded-xl border border-white/10 bg-slate-900/30 px-4 py-3 text-left">
+                <div class="flex items-center justify-between gap-4">
+                    <div>
+                        <div class="text-sm font-semibold text-white">SFW 스프레드시트 테마</div>
+                        <div id="sfw-toggle-copy" class="text-xs text-slate-400 mt-1">OFF · 일반 오목판</div>
+                    </div>
+                    <button id="sfw-toggle" type="button" onclick="toggleSpreadsheetMode()" class="sfw-toggle" aria-pressed="false" aria-label="SFW 스프레드시트 테마 토글">
+                        <span class="sfw-toggle-knob"></span>
+                    </button>
+                </div>
+            </div>
+            <button id="btn-start-match" onclick="startMatching()" class="btn-primary w-full text-xl py-4">
                 대국 시작
             </button>
         </div>
 
-        <p class="mt-6 text-slate-600 text-xs">
+        <p id="lobby-rule" class="mt-6 text-slate-600 text-xs">
             렌주룰: 흑 기준 쌍삼·쌍사·장목(6목 이상) 금수 적용
         </p>
-        <a href="index.html"
+        <a id="lobby-home-link" href="index.html"
            class="inline-block mt-4 text-slate-600 hover:text-slate-400 text-xs transition-colors">
             ← 홈으로 돌아가기
         </a>
+    </div>
+    <div id="sfw-match-overlay" class="sfw-match-overlay hidden">
+        <div class="sfw-match-modal">
+            <div class="sfw-spinner"></div>
+            <div class="text-lg font-black text-slate-900 mb-2">연결 중입니다...</div>
+            <p id="sfw-match-status" class="text-sm text-slate-500 mb-5">실시간 협업 워크스페이스를 찾는 중입니다.</p>
+            <button type="button" onclick="cancelMatching()" class="btn-secondary">취소</button>
+        </div>
     </div>
 </div>
 
@@ -232,12 +1397,35 @@
      SCREEN 2: 매칭 대기
 ══════════════════════════════════════════ -->
 <div id="screen-matching" class="screen flex-col items-center justify-center min-h-screen w-full px-4">
-    <div class="text-center">
+    <div class="sfw-only sfw-office-shell text-left">
+        <div class="sheet-menu-bar">
+            <span class="text-emerald-600 font-black">Sheets</span>
+            <span>파일</span>
+            <span>편집</span>
+            <span>보기</span>
+            <span>삽입</span>
+            <span>서식</span>
+            <span>공유</span>
+        </div>
+        <div class="sfw-office-body">
+            <div class="sfw-kpi-label">Sync Progress</div>
+            <div class="sfw-kpi-value">공유 문서 작업 환경을 준비하는 중입니다</div>
+            <div class="sfw-progress-track"><div class="sfw-progress-bar" style="width:68%"></div></div>
+            <div class="sfw-grid-preview">
+                <div class="sfw-grid-cell"></div>
+                <div class="sfw-grid-cell"></div>
+                <div class="sfw-grid-cell"></div>
+                <div class="sfw-grid-cell"></div>
+                <div class="sfw-grid-cell"></div>
+            </div>
+        </div>
+    </div>
+    <div id="matching-panel" class="text-center">
         <div class="mb-8 relative">
             <div class="w-24 h-24 rounded-full border-4 border-slate-600 border-t-blue-400 animate-spin mx-auto"></div>
             <span class="absolute inset-0 flex items-center justify-center text-3xl">⚫</span>
         </div>
-        <h2 class="text-2xl font-bold text-white mb-3">
+        <h2 id="matching-title" class="text-2xl font-bold text-white mb-3">
             상대방을 찾고 있는 중입니다
             <span class="dot-ani"><span>.</span><span>.</span><span>.</span></span>
         </h2>
@@ -250,9 +1438,45 @@
      SCREEN 3: 매칭 완료
 ══════════════════════════════════════════ -->
 <div id="screen-matched" class="screen flex-col items-center justify-center min-h-screen w-full px-4">
-    <div class="text-center">
+    <div class="sfw-only sfw-office-shell text-left">
+        <div class="sheet-menu-bar">
+            <span class="text-emerald-600 font-black">Sheets</span>
+            <span>검토</span>
+            <span>메모</span>
+            <span>공동작업</span>
+            <span>히스토리</span>
+        </div>
+        <div class="sfw-office-body">
+            <div class="sfw-kpi-grid">
+                <div class="sfw-kpi-card">
+                    <div class="sfw-kpi-label">참여 상태</div>
+                    <div class="sfw-kpi-value">검토자 연결 완료</div>
+                </div>
+                <div class="sfw-kpi-card">
+                    <div class="sfw-kpi-label">현재 단계</div>
+                    <div class="sfw-kpi-value">세션 승인 준비</div>
+                </div>
+                <div class="sfw-kpi-card">
+                    <div class="sfw-kpi-label">다음 단계</div>
+                    <div class="sfw-kpi-value">입력 권한 배정</div>
+                </div>
+            </div>
+            <div class="sfw-only sfw-doc-section">
+                <div class="sfw-stage-note">공동 검토 세션이 정상적으로 열렸습니다</div>
+                <h3 id="sfw-matched-title" class="sfw-doc-heading">검토 파트너가 워크스페이스에 참여했습니다</h3>
+                <p id="sfw-matched-partner" class="sfw-doc-text"></p>
+                <div class="sfw-doc-chips">
+                    <span class="sfw-doc-chip">실시간 공동 편집</span>
+                    <span class="sfw-doc-chip">작성 잠금 재계산</span>
+                </div>
+                <p id="sfw-countdown-text" class="sfw-doc-muted"></p>
+            </div>
+        </div>
+    </div>
+    <div id="matched-panel" class="text-center">
+        <div class="sfw-only sfw-stage-note">공동 검토 세션이 정상적으로 열렸습니다</div>
         <div class="text-6xl mb-6">🎉</div>
-        <h2 class="text-3xl font-black text-white mb-3">상대방을 찾았습니다!</h2>
+        <h2 id="matched-title" class="text-3xl font-black text-white mb-3">상대방을 찾았습니다!</h2>
         <p id="matched-opponent-name" class="text-xl text-blue-300 mb-8"></p>
         <div class="flex items-center justify-center gap-3">
             <div class="w-3 h-3 rounded-full bg-blue-400 animate-bounce"></div>
@@ -267,14 +1491,41 @@
      SCREEN 4: 선공 결정 (동전 던지기)
 ══════════════════════════════════════════ -->
 <div id="screen-coin" class="screen flex-col items-center justify-center min-h-screen w-full px-4">
-    <div class="text-center">
-        <h2 class="text-2xl font-bold text-white mb-2">선공 결정</h2>
-        <p class="text-slate-400 mb-10 text-sm">동전을 던져 선공(흑돌)을 정합니다</p>
+    <div class="sfw-only sfw-office-shell text-left">
+        <div class="sheet-menu-bar">
+            <span class="text-emerald-600 font-black">Sheets</span>
+            <span>태스크</span>
+            <span>우선순위</span>
+            <span>배정</span>
+            <span>자동화</span>
+        </div>
+        <div class="sfw-office-body">
+            <div class="sfw-kpi-label">권한 배정 엔진</div>
+            <div class="sfw-kpi-value">검토 순서와 입력 우선권을 계산하는 중입니다</div>
+            <div class="sfw-progress-track"><div class="sfw-progress-bar" style="width:82%"></div></div>
+            <div class="sfw-only sfw-doc-section">
+                <div class="sfw-stage-note">검토 세션 권한을 자동 정렬하고 있습니다</div>
+                <div class="sfw-flow-grid">
+                    <div class="flex flex-col gap-3">
+                        <h3 id="sfw-coin-title" class="sfw-doc-heading">입력 권한 배정</h3>
+                        <p id="sfw-coin-subtitle" class="sfw-doc-text">검토 세션 시작 전, 두 참여자의 입력 우선권을 자동으로 산정합니다</p>
+                        <p id="sfw-coin-status" class="sfw-doc-text">입력 우선권 계산 중...</p>
+                        <p id="sfw-coin-detail" class="sfw-doc-muted">1번은 먼저 입력을 시작하고, 2번은 뒤이어 검토를 진행합니다.</p>
+                    </div>
+                    <div id="sfw-coin-indicator" class="sfw-order-token">1</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="coin-panel" class="text-center">
+        <div class="sfw-only sfw-stage-note">검토 세션 권한을 자동 정렬하고 있습니다</div>
+        <h2 id="coin-title" class="text-2xl font-bold text-white mb-2">선공 결정</h2>
+        <p id="coin-subtitle" class="text-slate-400 mb-10 text-sm">동전을 던져 선공(흑돌)을 정합니다</p>
 
         <div class="coin-wrap flex justify-center mb-10">
             <div id="coin" class="coin">
-                <div class="coin-face coin-black">⚫</div>
-                <div class="coin-face coin-white">⚪</div>
+                <div id="coin-face-black" class="coin-face coin-black">⚫</div>
+                <div id="coin-face-white" class="coin-face coin-white">⚪</div>
             </div>
         </div>
 
@@ -295,8 +1546,16 @@
     <!-- 상단 플레이어 정보 -->
     <div id="game-topbar" class="w-full mb-3">
         <div id="game-topbar-card" class="flex items-center justify-between bg-white/5 rounded-xl px-4 py-2 border border-white/10">
+            <div class="sfw-only sfw-game-bar">
+                <div class="flex flex-col gap-1">
+                    <div class="sfw-game-title">Ops Review Matrix</div>
+                    <div id="sfw-game-participants" class="sfw-game-meta"></div>
+                </div>
+                <div id="sfw-game-turn" class="sfw-game-meta"></div>
+                <div id="sfw-game-timing" class="sfw-game-meta"></div>
+            </div>
             <!-- 나 -->
-            <div class="flex items-center gap-2">
+            <div class="game-player-block flex items-center gap-2">
                 <div id="my-stone-icon" class="w-6 h-6 rounded-full shadow flex-shrink-0"></div>
                 <div class="flex flex-col">
                     <div class="flex items-center gap-1.5">
@@ -312,9 +1571,9 @@
                 </div>
             </div>
             <!-- 중앙 -->
-            <div id="turn-info" class="text-slate-300 text-xs font-semibold text-center px-2"></div>
+            <div id="turn-info" class="game-turn-legacy text-slate-300 text-xs font-semibold text-center px-2"></div>
             <!-- 상대 -->
-            <div class="flex items-center gap-2 flex-row-reverse">
+            <div class="game-player-block flex items-center gap-2 flex-row-reverse">
                 <div id="opp-stone-icon" class="w-6 h-6 rounded-full shadow flex-shrink-0"></div>
                 <div class="flex flex-col items-end">
                     <div class="flex items-center gap-1.5">
@@ -334,11 +1593,40 @@
 
     <!-- 오목판 -->
     <div id="board-wrapper">
+        <div id="sheet-chrome">
+            <div class="sheet-menu-bar">
+                <span class="text-emerald-600 font-black">Sheets</span>
+                <span>파일</span>
+                <span>편집</span>
+                <span>보기</span>
+                <span>삽입</span>
+                <span>서식</span>
+                <span>데이터</span>
+                <span>도움말</span>
+            </div>
+            <div class="sheet-toolbar">
+                <div class="sheet-toolbar-group">
+                    <span class="sheet-pill">↶</span>
+                    <span class="sheet-pill">↷</span>
+                    <span class="sheet-pill">100%</span>
+                    <span class="sheet-pill">기본</span>
+                </div>
+                <div class="sheet-toolbar-group">
+                    <span class="sheet-pill">굵게</span>
+                    <span class="sheet-pill">채우기</span>
+                    <span class="sheet-pill">필터</span>
+                </div>
+            </div>
+            <div class="sheet-formula-bar">
+                <div class="sheet-name-box">A1</div>
+                <div class="sheet-fx-box"><span class="font-black text-slate-500">fx</span><span>Ops Sync Matrix</span></div>
+            </div>
+        </div>
         <canvas id="board-canvas"></canvas>
     </div>
 
     <!-- 하단 -->
-    <div class="mt-3 flex flex-wrap items-center justify-center gap-3 text-center">
+    <div id="game-footer" class="mt-3 flex flex-wrap items-center justify-center gap-3 text-center">
         <div class="text-slate-500 text-xs" id="game-status-text">게임 진행 중</div>
         <button id="btn-resign" onclick="resign()"
             class="btn-primary btn-danger text-sm py-1.5 px-4" style="font-size:0.8rem; padding:6px 16px; border-radius:8px;">
@@ -350,16 +1638,30 @@
 <!-- ══════════════════════════════════════════
      SCREEN 6: 결과
 ══════════════════════════════════════════ -->
-<div id="screen-result" class="screen flex-col items-center justify-center min-h-screen w-full px-4">
-    <div id="result-banner" class="text-center banner-pop">
+<div id="screen-result" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-4">
+    <div id="result-banner" class="text-center banner-pop bg-slate-800 border border-slate-600 rounded-2xl p-8 shadow-2xl max-w-md w-full">
+        <div class="sfw-only">
+            <div class="sheet-menu-bar">
+                <span class="text-slate-500 font-bold">문서 상태</span>
+                <span class="ml-auto text-slate-400 text-xs">검토 세션 알림</span>
+            </div>
+            <div class="sfw-office-body text-left">
+                <div id="sfw-result-badge" class="sfw-stage-note">검토 세션 종료 알림</div>
+                <div class="sfw-doc-section">
+                    <h3 id="sfw-result-title" class="sfw-doc-heading">현재 검토 단계가 종료되었습니다</h3>
+                    <p id="sfw-result-summary" class="sfw-doc-text"></p>
+                    <p id="sfw-result-detail" class="sfw-doc-muted"></p>
+                </div>
+            </div>
+        </div>
         <div id="result-emoji" class="text-8xl mb-4"></div>
         <h2 id="result-title" class="text-5xl font-black mb-3"></h2>
         <p id="result-sub" class="text-slate-400 mb-10 text-lg"></p>
-        <div class="flex gap-4 justify-center">
+        <div class="result-actions">
             <button id="btn-rematch" onclick="requestRematch()" class="btn-primary btn-success">
                 재시합 요청
             </button>
-            <button onclick="backToLobby()" class="btn-secondary">
+            <button id="btn-result-home" onclick="backToLobby()" class="btn-secondary">
                 로비로 돌아가기
             </button>
         </div>
@@ -373,11 +1675,11 @@
 <div id="modal-resign" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
     <div class="bg-slate-800 border border-slate-600 rounded-2xl p-8 text-center shadow-2xl max-w-sm w-full mx-4">
         <div class="text-4xl mb-4">🏳️</div>
-        <h3 class="text-xl font-black text-white mb-2">정말 항복하시겠습니까?</h3>
-        <p class="text-slate-400 mb-6 text-sm">상대방이 승리하게 됩니다</p>
+        <h3 id="modal-resign-title" class="text-xl font-black text-white mb-2">정말 항복하시겠습니까?</h3>
+        <p id="modal-resign-detail" class="text-slate-400 mb-6 text-sm">상대방이 승리하게 됩니다</p>
         <div class="flex gap-3">
-            <button onclick="confirmResign()" class="btn-primary btn-danger flex-1">항복</button>
-            <button onclick="closeResignModal()" class="btn-secondary flex-1">취소</button>
+            <button id="btn-resign-confirm" onclick="confirmResign()" class="btn-primary btn-danger flex-1">항복</button>
+            <button id="btn-resign-cancel" onclick="closeResignModal()" class="btn-secondary flex-1">취소</button>
         </div>
     </div>
 </div>
@@ -388,11 +1690,11 @@
 <div id="modal-rematch" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-50">
     <div class="bg-slate-800 border border-slate-600 rounded-2xl p-8 text-center shadow-2xl max-w-sm w-full mx-4">
         <div class="text-4xl mb-4">⚔️</div>
-        <h3 class="text-xl font-black text-white mb-2">재시합 요청</h3>
+        <h3 id="modal-rematch-title" class="text-xl font-black text-white mb-2">재시합 요청</h3>
         <p id="rematch-requester" class="text-slate-400 mb-6 text-sm"></p>
         <div class="flex gap-3">
-            <button onclick="acceptRematch()" class="btn-primary btn-success flex-1">승낙</button>
-            <button onclick="declineRematch()" class="btn-primary btn-danger flex-1">거절</button>
+            <button id="btn-rematch-accept" onclick="acceptRematch()" class="btn-primary btn-success flex-1">승낙</button>
+            <button id="btn-rematch-decline" onclick="declineRematch()" class="btn-primary btn-danger flex-1">거절</button>
         </div>
     </div>
 </div>
@@ -409,6 +1711,7 @@ const STONE_R     = CELL * 0.44;
 const SLOTS       = 20;
 const SLOT_PREFIX = 'omok-battle-slot-';
 const TURN_TIME   = 60; // 초
+const SPREADSHEET_FILL = { 1: '#FEC9C9', 2: '#AFC7D0' };
 
 let myNickname    = '플레이어';
 let oppNickname   = '상대방';
@@ -432,6 +1735,51 @@ let currentSlot   = 0;
 let matchingTimer = null;
 let raindrops     = [];
 let confettiPieces= [];
+let spreadsheetMode = loadSpreadsheetMode();
+
+function getBoardMetrics() {
+    if (!spreadsheetMode) {
+        return {
+            cellW: CELL,
+            cellH: CELL,
+            headerX: MARGIN,
+            headerY: MARGIN,
+            width: CANVAS_SIZE,
+            height: CANVAS_SIZE,
+            stoneR: STONE_R,
+        };
+    }
+
+    const cellW = 86;
+    const cellH = 34;
+    const headerX = 42;
+    const headerY = 26;
+    return {
+        cellW,
+        cellH,
+        headerX,
+        headerY,
+        width: headerX + cellW * BOARD_SIZE,
+        height: headerY + cellH * BOARD_SIZE,
+        stoneR: Math.min(cellW, cellH) * 0.36,
+    };
+}
+
+function loadSpreadsheetMode() {
+    try {
+        return localStorage.getItem('omokSpreadsheetMode') === 'true';
+    } catch (err) {
+        return false;
+    }
+}
+
+function saveSpreadsheetMode() {
+    try {
+        localStorage.setItem('omokSpreadsheetMode', String(spreadsheetMode));
+    } catch (err) {
+        // Ignore storage failures; mode still works for the current session.
+    }
+}
 
 // ════════════════════════════════════════════════════════════
 //  햅틱
@@ -446,6 +1794,85 @@ function haptic(pattern) {
 function showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById('screen-' + id).classList.add('active');
+    if (!spreadsheetMode || id !== 'lobby') setSfwMatchingOverlay(false);
+}
+
+function syncSpreadsheetModeUI() {
+    document.body.classList.toggle('spreadsheet-mode', spreadsheetMode);
+    const toggleStateText = spreadsheetMode ? 'ON · 스프레드시트 위장 모드' : 'OFF · 일반 오목판';
+    ['sfw-toggle', 'sfw-toggle-header'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.setAttribute('aria-pressed', String(spreadsheetMode));
+    });
+    ['sfw-toggle-copy', 'sfw-toggle-copy-header'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = toggleStateText;
+    });
+    syncLobbyInputs(spreadsheetMode ? 'normal' : 'sfw');
+    syncCoinFaces();
+    setText(['btn-resign'], spreadsheetMode ? '세션 종료' : '🏳️ 항복');
+    setText(['game-status-text'], spreadsheetMode ? '공동 편집 세션 진행 중' : '게임 진행 중');
+    if (!spreadsheetMode) setSfwMatchingOverlay(false);
+}
+
+function toggleSpreadsheetMode() {
+    spreadsheetMode = !spreadsheetMode;
+    saveSpreadsheetMode();
+    syncSpreadsheetModeUI();
+    if (document.getElementById('screen-game').classList.contains('active')) {
+        setupBoard();
+        updatePlayerInfo();
+        renderBoard();
+    }
+}
+
+function syncLobbyInputs(source) {
+    const normalInput = document.getElementById('nickname-input');
+    const sfwInput = document.getElementById('sfw-player-input');
+    if (!normalInput || !sfwInput) return;
+
+    if (source === 'sfw') normalInput.value = sfwInput.value;
+    else sfwInput.value = normalInput.value;
+}
+
+function getPlayerNameInput() {
+    const normalInput = document.getElementById('nickname-input');
+    const sfwInput = document.getElementById('sfw-player-input');
+    return spreadsheetMode && sfwInput ? sfwInput : normalInput;
+}
+
+function setCoinFaceDisplay(frontValue, backValue = frontValue) {
+    const blackFace = document.getElementById('coin-face-black');
+    const whiteFace = document.getElementById('coin-face-white');
+    if (!blackFace || !whiteFace) return;
+    blackFace.textContent = frontValue;
+    whiteFace.textContent = backValue;
+}
+
+function setText(ids, value) {
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+    });
+}
+
+function syncCoinFaces() {
+    if (spreadsheetMode) setCoinFaceDisplay('1', '2');
+    else setCoinFaceDisplay('⚫', '⚪');
+}
+
+function setMatchingStatus(message) {
+    const status = message || '대기실 연결 중...';
+    const matchingText = document.getElementById('matching-slot-info');
+    const overlayText = document.getElementById('sfw-match-status');
+    if (matchingText) matchingText.textContent = status;
+    if (overlayText) overlayText.textContent = status;
+}
+
+function setSfwMatchingOverlay(visible) {
+    const overlay = document.getElementById('sfw-match-overlay');
+    if (!overlay) return;
+    overlay.classList.toggle('hidden', !(spreadsheetMode && visible));
 }
 
 // ════════════════════════════════════════════════════════════
@@ -454,11 +1881,29 @@ function showScreen(id) {
 document.getElementById('nickname-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') startMatching();
 });
+document.getElementById('nickname-input').addEventListener('input', () => syncLobbyInputs('normal'));
+document.getElementById('sfw-player-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') startMatching();
+});
+document.getElementById('sfw-player-input').addEventListener('input', () => syncLobbyInputs('sfw'));
+window.addEventListener('resize', () => {
+    if (document.getElementById('screen-game').classList.contains('active')) {
+        syncGameViewportFit();
+    }
+});
+syncSpreadsheetModeUI();
 
 function startMatching() {
-    const input = document.getElementById('nickname-input').value.trim();
+    syncLobbyInputs(spreadsheetMode ? 'sfw' : 'normal');
+    const input = getPlayerNameInput().value.trim();
     myNickname = input || '플레이어';
-    showScreen('matching');
+    setMatchingStatus(spreadsheetMode ? '실시간 협업 워크스페이스에 연결하는 중입니다...' : '대기실 연결 중...');
+    if (spreadsheetMode) {
+        showScreen('lobby');
+        setSfwMatchingOverlay(true);
+    } else {
+        showScreen('matching');
+    }
     trySlot(1);
 }
 
@@ -469,7 +1914,9 @@ function trySlot(slot) {
     if (slot > SLOTS) slot = 1;
     currentSlot = slot;
     const slotId = SLOT_PREFIX + String(slot).padStart(2, '0');
-    document.getElementById('matching-slot-info').textContent = `대기실 ${slot}번 확인 중...`;
+    setMatchingStatus(spreadsheetMode
+        ? `공유 문서 공간 ${slot}번에 접속 중입니다...`
+        : `대기실 ${slot}번 확인 중...`);
 
     if (peer) { peer.destroy(); peer = null; }
 
@@ -477,7 +1924,9 @@ function trySlot(slot) {
 
     peer.on('open', () => {
         isHost = true;
-        document.getElementById('matching-slot-info').textContent = `대기실 ${slot}번에서 대기 중`;
+        setMatchingStatus(spreadsheetMode
+            ? `문서 공간 ${slot}번에서 공동 편집 참여자를 기다리는 중입니다...`
+            : `대기실 ${slot}번에서 대기 중`);
         peer.on('connection', (c) => {
             conn = c;
             setupConn();
@@ -494,7 +1943,9 @@ function trySlot(slot) {
 
 function tryConnect(slot) {
     const slotId = SLOT_PREFIX + String(slot).padStart(2, '0');
-    document.getElementById('matching-slot-info').textContent = `대기실 ${slot}번 연결 중...`;
+    setMatchingStatus(spreadsheetMode
+        ? `문서 공간 ${slot}번에 공동 편집 요청을 보내는 중입니다...`
+        : `대기실 ${slot}번 연결 중...`);
 
     if (peer) { peer.destroy(); peer = null; }
     peer = new Peer(undefined, { debug: 0 });
@@ -515,6 +1966,7 @@ function cancelMatching() {
     clearTimeout(matchingTimer);
     if (peer) { peer.destroy(); peer = null; }
     conn = null;
+    setSfwMatchingOverlay(false);
     showScreen('lobby');
 }
 
@@ -561,7 +2013,9 @@ function handleData(data) {
             startRematch();
             break;
         case 'rematch-dec':
-            document.getElementById('rematch-status').textContent = '상대방이 거절했습니다.';
+            document.getElementById('rematch-status').textContent = spreadsheetMode
+                ? '상대방이 후속 단계 시작 요청을 보류했습니다.'
+                : '상대방이 거절했습니다.';
             document.getElementById('btn-rematch').disabled = false;
             setTimeout(backToLobby, 1500);
             break;
@@ -579,16 +2033,30 @@ function handleDisconnect() {
 //  매칭 완료
 // ════════════════════════════════════════════════════════════
 function onMatched() {
-    document.getElementById('matched-opponent-name').textContent = `👤 ${oppNickname}`;
+    setSfwMatchingOverlay(false);
+    const matchedPartnerText = spreadsheetMode
+        ? `${oppNickname} 님이 검토 세션에 합류했습니다`
+        : `👤 ${oppNickname}`;
+    const matchedTitleText = spreadsheetMode
+        ? '검토 파트너가 워크스페이스에 참여했습니다'
+        : '상대방을 찾았습니다!';
+    setText(['matched-opponent-name', 'sfw-matched-partner'], matchedPartnerText);
+    setText(['matched-title', 'sfw-matched-title'], matchedTitleText);
     showScreen('matched');
     haptic(50);
 
     let n = 3;
-    document.getElementById('countdown-text').textContent = `${n}초 후 선공 결정을 시작합니다`;
+    const countdownText = spreadsheetMode
+        ? `${n}초 후 입력 권한을 자동 정렬합니다`
+        : `${n}초 후 선공 결정을 시작합니다`;
+    setText(['countdown-text', 'sfw-countdown-text'], countdownText);
     const iv = setInterval(() => {
         n--;
         if (n > 0) {
-            document.getElementById('countdown-text').textContent = `${n}초 후 선공 결정을 시작합니다`;
+            const nextCountdownText = spreadsheetMode
+                ? `${n}초 후 입력 권한을 자동 정렬합니다`
+                : `${n}초 후 선공 결정을 시작합니다`;
+            setText(['countdown-text', 'sfw-countdown-text'], nextCountdownText);
         } else {
             clearInterval(iv);
             startCoinFlip();
@@ -600,6 +2068,17 @@ function onMatched() {
 //  동전 던지기
 // ════════════════════════════════════════════════════════════
 function startCoinFlip() {
+    const coinTitle = spreadsheetMode ? '입력 권한 배정' : '선공 결정';
+    const coinSubtitle = spreadsheetMode
+        ? '검토 세션 시작 전, 두 참여자의 입력 우선권을 자동으로 산정합니다'
+        : '동전을 던져 선공(흑돌)을 정합니다';
+    setText(['coin-title', 'sfw-coin-title'], coinTitle);
+    setText(['coin-subtitle', 'sfw-coin-subtitle'], coinSubtitle);
+    if (spreadsheetMode) {
+        setText(['sfw-coin-status'], '입력 우선권 계산 중...');
+        setText(['sfw-coin-detail'], '1번은 먼저 입력을 시작하고, 2번은 뒤이어 검토를 진행합니다.');
+        setText(['sfw-coin-indicator'], '1');
+    }
     showScreen('coin');
 
     if (isHost) {
@@ -626,6 +2105,31 @@ function animateCoin(result, cb) {
     const coin = document.getElementById('coin');
     document.getElementById('coin-waiting').classList.remove('hidden');
     document.getElementById('coin-result').classList.add('hidden');
+    document.getElementById('coin-waiting').innerHTML = spreadsheetMode
+        ? '입력 우선권 계산 중<span class="dot-ani"><span>.</span><span>.</span><span>.</span></span>'
+        : '동전을 던지는 중<span class="dot-ani"><span>.</span><span>.</span><span>.</span></span>';
+
+    if (spreadsheetMode) {
+        coin.classList.remove('flipping');
+        coin.style.transform = 'rotateY(0deg)';
+        let toggle = false;
+        const interval = setInterval(() => {
+            toggle = !toggle;
+            const value = toggle ? '1' : '2';
+            setCoinFaceDisplay(value);
+            setText(['sfw-coin-indicator'], value);
+        }, 180);
+
+        setTimeout(() => {
+            clearInterval(interval);
+            const finalValue = result === 'black' ? '1' : '2';
+            setCoinFaceDisplay(finalValue);
+            setText(['sfw-coin-indicator'], finalValue);
+            document.getElementById('coin-waiting').classList.add('hidden');
+            cb();
+        }, 1800);
+        return;
+    }
 
     const finalRot = result === 'black' ? 1440 : 1620;
     coin.style.setProperty('--final-rot', finalRot + 'deg');
@@ -643,11 +2147,27 @@ function animateCoin(result, cb) {
 function showCoinResult(iAmBlack) {
     document.getElementById('coin-result').classList.remove('hidden');
     if (iAmBlack) {
-        document.getElementById('coin-result-text').textContent = '⚫ 선공입니다!';
-        document.getElementById('coin-result-sub').textContent = '당신이 흑돌로 먼저 시작합니다';
+        const resultText = spreadsheetMode ? '1번 순서가 배정되었습니다' : '⚫ 선공입니다!';
+        const resultSub = spreadsheetMode
+            ? `${myNickname} 님이 먼저 셀을 입력하고, ${oppNickname} 님이 뒤이어 검토를 이어갑니다`
+            : '당신이 흑돌로 먼저 시작합니다';
+        setText(['coin-result-text', 'sfw-coin-status'], resultText);
+        setText(['coin-result-sub', 'sfw-coin-detail'], resultSub);
+        if (spreadsheetMode) {
+            setCoinFaceDisplay('1');
+            setText(['sfw-coin-indicator'], '1');
+        }
     } else {
-        document.getElementById('coin-result-text').textContent = '⚪ 후공입니다';
-        document.getElementById('coin-result-sub').textContent = '상대방이 흑돌로 먼저 시작합니다';
+        const resultText = spreadsheetMode ? '2번 순서로 참여합니다' : '⚪ 후공입니다';
+        const resultSub = spreadsheetMode
+            ? `${oppNickname} 님이 먼저 셀을 입력하고, ${myNickname} 님이 뒤이어 검토를 이어갑니다`
+            : '상대방이 흑돌로 먼저 시작합니다';
+        setText(['coin-result-text', 'sfw-coin-status'], resultText);
+        setText(['coin-result-sub', 'sfw-coin-detail'], resultSub);
+        if (spreadsheetMode) {
+            setCoinFaceDisplay('2');
+            setText(['sfw-coin-indicator'], '2');
+        }
     }
     setTimeout(() => startGame(), 2200);
 }
@@ -661,6 +2181,8 @@ function startGame() {
     gameOver = false;
     winLine  = null;
     forbiddenCache = new Map();
+    document.getElementById('screen-result').classList.add('hidden');
+    setText(['game-status-text'], spreadsheetMode ? '공동 편집 세션 진행 중' : '게임 진행 중');
     myTurn   = (myColor === 'black');
     myTime   = TURN_TIME;
     oppTime  = TURN_TIME;
@@ -674,23 +2196,80 @@ function startGame() {
 
 function setupBoard() {
     const canvas = document.getElementById('board-canvas');
-    canvas.width  = CANVAS_SIZE;
-    canvas.height = CANVAS_SIZE;
-    canvas.style.width  = '100%';
-    canvas.style.height = 'auto';
+    const metrics = getBoardMetrics();
+    canvas.width  = metrics.width;
+    canvas.height = metrics.height;
+    canvas.style.width  = `${metrics.width}px`;
+    canvas.style.height = `${metrics.height}px`;
     canvas.onclick = onBoardClick;
+    requestAnimationFrame(syncGameViewportFit);
+}
+
+function syncGameViewportFit() {
+    const gameScreen = document.getElementById('screen-game');
+    const wrapper = document.getElementById('board-wrapper');
+    const canvas = document.getElementById('board-canvas');
+    const topbar = document.getElementById('game-topbar');
+    const footer = document.getElementById('game-footer');
+    const sheetChrome = document.getElementById('sheet-chrome');
+    if (!gameScreen || !wrapper || !canvas || !topbar || !footer) return;
+
+    const metrics = getBoardMetrics();
+    const screenStyles = getComputedStyle(gameScreen);
+    const wrapperStyles = getComputedStyle(wrapper);
+    const paddingX = parseFloat(wrapperStyles.paddingLeft) + parseFloat(wrapperStyles.paddingRight);
+    const paddingY = parseFloat(wrapperStyles.paddingTop) + parseFloat(wrapperStyles.paddingBottom);
+    const screenPadX = parseFloat(screenStyles.paddingLeft) + parseFloat(screenStyles.paddingRight);
+    const screenPadY = parseFloat(screenStyles.paddingTop) + parseFloat(screenStyles.paddingBottom);
+    const topbarHeight = topbar.getBoundingClientRect().height;
+    const footerHeight = footer.getBoundingClientRect().height;
+    const chromeHeight = spreadsheetMode ? sheetChrome.getBoundingClientRect().height : 0;
+    const availableWidth = Math.max(180, window.innerWidth - screenPadX - 16 - paddingX);
+    const availableHeight = Math.max(180, window.innerHeight - screenPadY - topbarHeight - footerHeight - chromeHeight - 28 - paddingY);
+    const fitByWidth = availableWidth / metrics.width;
+    const fitByHeight = availableHeight / metrics.height;
+    const preferredScale = availableHeight > availableWidth ? fitByWidth : fitByHeight;
+    const scale = Math.max(0.2, Math.min(preferredScale, fitByWidth, fitByHeight, 1));
+    const canvasWidth = Math.round(metrics.width * scale);
+    const canvasHeight = Math.round(metrics.height * scale);
+
+    canvas.style.width = `${canvasWidth}px`;
+    canvas.style.height = `${canvasHeight}px`;
+    wrapper.style.width = `${canvasWidth + paddingX}px`;
+
+    if (spreadsheetMode) {
+        topbar.style.width = '100%';
+        footer.style.width = '100%';
+    } else {
+        const boardWidth = `${canvasWidth + paddingX}px`;
+        topbar.style.width = boardWidth;
+        footer.style.width = boardWidth;
+    }
 }
 
 function updatePlayerInfo() {
     const myIsBlack = myColor === 'black';
+    const myIcon = document.getElementById('my-stone-icon');
+    const oppIcon = document.getElementById('opp-stone-icon');
 
-    document.getElementById('my-stone-icon').style.background = myIsBlack ? '#111' : '#f0f0f0';
-    document.getElementById('my-stone-icon').style.border = myIsBlack ? '1px solid #444' : '2px solid #999';
+    myIcon.style.background = spreadsheetMode
+        ? (myIsBlack ? SPREADSHEET_FILL[1] : SPREADSHEET_FILL[2])
+        : (myIsBlack ? '#111' : '#f0f0f0');
+    myIcon.style.border = spreadsheetMode
+        ? '1px solid #cbd5e1'
+        : (myIsBlack ? '1px solid #444' : '2px solid #999');
+    myIcon.style.borderRadius = spreadsheetMode ? '6px' : '999px';
     document.getElementById('my-name-display').textContent = myNickname;
 
-    document.getElementById('opp-stone-icon').style.background = myIsBlack ? '#f0f0f0' : '#111';
-    document.getElementById('opp-stone-icon').style.border = myIsBlack ? '2px solid #999' : '1px solid #444';
+    oppIcon.style.background = spreadsheetMode
+        ? (myIsBlack ? SPREADSHEET_FILL[2] : SPREADSHEET_FILL[1])
+        : (myIsBlack ? '#f0f0f0' : '#111');
+    oppIcon.style.border = spreadsheetMode
+        ? '1px solid #cbd5e1'
+        : (myIsBlack ? '2px solid #999' : '1px solid #444');
+    oppIcon.style.borderRadius = spreadsheetMode ? '6px' : '999px';
     document.getElementById('opp-name-display').textContent = oppNickname;
+    setText(['sfw-game-participants'], `참여자 ${myNickname} · ${oppNickname}`);
 
     updateTimerDisplay();
     updateTurnDisplay();
@@ -704,18 +2283,33 @@ function updateTurnDisplay() {
     if (gameOver) {
         myBadge.classList.add('hidden');
         oppBadge.classList.add('hidden');
-        turnInfo.textContent = '게임 종료';
+        turnInfo.textContent = spreadsheetMode ? '세션 종료' : '게임 종료';
+        setText(['sfw-game-turn'], '상태 종료');
         return;
     }
 
     if (myTurn) {
-        myBadge.classList.remove('hidden');
-        oppBadge.classList.add('hidden');
-        turnInfo.textContent = '내 차례 ●';
+        if (spreadsheetMode) {
+            myBadge.classList.add('hidden');
+            oppBadge.classList.add('hidden');
+            turnInfo.textContent = '입력 우선권: 나';
+            setText(['sfw-game-turn'], `입력 우선권 ${myNickname}`);
+        } else {
+            myBadge.classList.remove('hidden');
+            oppBadge.classList.add('hidden');
+            turnInfo.textContent = '내 차례 ●';
+        }
     } else {
-        myBadge.classList.add('hidden');
-        oppBadge.classList.remove('hidden');
-        turnInfo.textContent = `${oppNickname}의 차례`;
+        if (spreadsheetMode) {
+            myBadge.classList.add('hidden');
+            oppBadge.classList.add('hidden');
+            turnInfo.textContent = `입력 우선권: ${oppNickname}`;
+            setText(['sfw-game-turn'], `입력 우선권 ${oppNickname}`);
+        } else {
+            myBadge.classList.add('hidden');
+            oppBadge.classList.remove('hidden');
+            turnInfo.textContent = `${oppNickname}의 차례`;
+        }
     }
 }
 
@@ -789,6 +2383,11 @@ function updateTimerDisplay() {
     // 텍스트 색상
     myEl.className  = `font-mono text-xs font-bold ${myTime  <= 10 ? 'text-red-400 timer-urgent' : 'text-white'}`;
     oppEl.className = `font-mono text-xs font-bold ${oppTime <= 10 ? 'text-red-400 timer-urgent' : 'text-white'}`;
+
+    if (spreadsheetMode) {
+        const activeLabel = myTurn ? `${myNickname} ${fmt(myTime)}` : `${oppNickname} ${fmt(oppTime)}`;
+        setText(['sfw-game-timing'], `응답 가능 시간 ${activeLabel}`);
+    }
 }
 
 // ════════════════════════════════════════════════════════════
@@ -796,6 +2395,17 @@ function updateTimerDisplay() {
 // ════════════════════════════════════════════════════════════
 function resign() {
     if (gameOver) return;
+    if (spreadsheetMode) {
+        setText(['modal-resign-title'], '현재 입력 단계를 종료하시겠습니까?');
+        setText(['modal-resign-detail'], '종료 시 상대 참여자에게 현재 검토 단계 종료가 전달됩니다.');
+        setText(['btn-resign-confirm'], '단계 종료');
+        setText(['btn-resign-cancel'], '계속 검토');
+    } else {
+        setText(['modal-resign-title'], '정말 항복하시겠습니까?');
+        setText(['modal-resign-detail'], '상대방이 승리하게 됩니다');
+        setText(['btn-resign-confirm'], '항복');
+        setText(['btn-resign-cancel'], '취소');
+    }
     document.getElementById('modal-resign').classList.remove('hidden');
     haptic(30);
 }
@@ -820,29 +2430,35 @@ function confirmResign() {
 function renderBoard() {
     const canvas = document.getElementById('board-canvas');
     const ctx    = canvas.getContext('2d');
-    ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+    const metrics = getBoardMetrics();
+    ctx.clearRect(0, 0, metrics.width, metrics.height);
+
+    if (spreadsheetMode) {
+        renderSpreadsheetBoard(ctx, metrics);
+        return;
+    }
 
     // 배경
     ctx.fillStyle = '#c8934a';
-    ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+    ctx.fillRect(0, 0, metrics.width, metrics.height);
 
     // 격자
     ctx.strokeStyle = '#8B5E2A';
     ctx.lineWidth = 1;
     for (let i = 0; i < BOARD_SIZE; i++) {
-        const x = MARGIN + i * CELL;
-        const y = MARGIN + i * CELL;
-        ctx.beginPath(); ctx.moveTo(x, MARGIN); ctx.lineTo(x, MARGIN + (BOARD_SIZE-1)*CELL); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(MARGIN, y); ctx.lineTo(MARGIN + (BOARD_SIZE-1)*CELL, y); ctx.stroke();
+        const x = metrics.headerX + i * metrics.cellW;
+        const y = metrics.headerY + i * metrics.cellH;
+        ctx.beginPath(); ctx.moveTo(x, metrics.headerY); ctx.lineTo(x, metrics.headerY + (BOARD_SIZE-1)*metrics.cellH); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(metrics.headerX, y); ctx.lineTo(metrics.headerX + (BOARD_SIZE-1)*metrics.cellW, y); ctx.stroke();
     }
 
     // 화점
     const stars = [3, 7, 11];
     ctx.fillStyle = '#6B4320';
     stars.forEach(r => stars.forEach(c => {
-        ctx.beginPath(); ctx.arc(MARGIN + c*CELL, MARGIN + r*CELL, 4, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(metrics.headerX + c*metrics.cellW, metrics.headerY + r*metrics.cellH, 4, 0, Math.PI*2); ctx.fill();
     }));
-    ctx.beginPath(); ctx.arc(MARGIN + 7*CELL, MARGIN + 7*CELL, 4, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(metrics.headerX + 7*metrics.cellW, metrics.headerY + 7*metrics.cellH, 4, 0, Math.PI*2); ctx.fill();
 
     // 좌표 레이블
     ctx.fillStyle = '#6B4320';
@@ -850,12 +2466,12 @@ function renderBoard() {
     ctx.textAlign = 'center';
     const cols = 'ABCDEFGHJKLMNOP';
     for (let i = 0; i < BOARD_SIZE; i++) {
-        ctx.fillText(cols[i], MARGIN + i*CELL, MARGIN - 10);
-        ctx.fillText(cols[i], MARGIN + i*CELL, MARGIN + (BOARD_SIZE-1)*CELL + 18);
+        ctx.fillText(cols[i], metrics.headerX + i*metrics.cellW, metrics.headerY - 10);
+        ctx.fillText(cols[i], metrics.headerX + i*metrics.cellW, metrics.headerY + (BOARD_SIZE-1)*metrics.cellH + 18);
     }
     ctx.textAlign = 'right';
     for (let i = 0; i < BOARD_SIZE; i++) {
-        ctx.fillText(BOARD_SIZE - i, MARGIN - 8, MARGIN + i*CELL + 4);
+        ctx.fillText(BOARD_SIZE - i, metrics.headerX - 8, metrics.headerY + i*metrics.cellH + 4);
     }
 
     // 승리 라인
@@ -863,9 +2479,9 @@ function renderBoard() {
         ctx.strokeStyle = 'rgba(255,220,0,0.85)';
         ctx.lineWidth = 7; ctx.lineCap = 'round';
         ctx.beginPath();
-        ctx.moveTo(MARGIN + winLine[0].c*CELL, MARGIN + winLine[0].r*CELL);
+        ctx.moveTo(metrics.headerX + winLine[0].c*metrics.cellW, metrics.headerY + winLine[0].r*metrics.cellH);
         for (let k = 1; k < winLine.length; k++)
-            ctx.lineTo(MARGIN + winLine[k].c*CELL, MARGIN + winLine[k].r*CELL);
+            ctx.lineTo(metrics.headerX + winLine[k].c*metrics.cellW, metrics.headerY + winLine[k].r*metrics.cellH);
         ctx.stroke(); ctx.lineWidth = 1;
     }
 
@@ -879,21 +2495,71 @@ function renderBoard() {
         const color = board[lastMove.r][lastMove.c];
         ctx.fillStyle = color === 1 ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.5)';
         ctx.beginPath();
-        ctx.arc(MARGIN + lastMove.c*CELL, MARGIN + lastMove.r*CELL, 5, 0, Math.PI*2);
+        ctx.arc(metrics.headerX + lastMove.c*metrics.cellW, metrics.headerY + lastMove.r*metrics.cellH, 5, 0, Math.PI*2);
         ctx.fill();
     }
 
     // 금수 표시: 흑 플레이어는 항상 표시 (상대 차례에도 다음 수 계획을 위해)
     // myTurn 조건을 제거 — myTurn 때문에 착수 후 X가 사라지는 버그의 근본 원인이었음
     if (!gameOver && myColor === 'black') {
-        drawForbidden(ctx);
+        drawForbidden(ctx, metrics);
+    }
+}
+
+function renderSpreadsheetBoard(ctx, metrics) {
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, metrics.width, metrics.height);
+
+    ctx.fillStyle = '#f1f5f9';
+    ctx.fillRect(0, 0, metrics.width, metrics.headerY);
+    ctx.fillRect(0, 0, metrics.headerX, metrics.height);
+    ctx.fillStyle = '#e2e8f0';
+    ctx.fillRect(0, 0, metrics.headerX, metrics.headerY);
+
+    ctx.strokeStyle = '#d6dde8';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= BOARD_SIZE; i++) {
+        const x = metrics.headerX + i * metrics.cellW;
+        const y = metrics.headerY + i * metrics.cellH;
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, metrics.height); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(metrics.width, y); ctx.stroke();
+    }
+
+    ctx.fillStyle = '#475569';
+    ctx.font = 'bold 12px monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    for (let i = 0; i < BOARD_SIZE; i++) {
+        ctx.fillText(String.fromCharCode(65 + i), metrics.headerX + i * metrics.cellW + metrics.cellW / 2, metrics.headerY / 2);
+        ctx.fillText(String(i + 1), metrics.headerX / 2, metrics.headerY + i * metrics.cellH + metrics.cellH / 2);
+    }
+
+    for (let r = 0; r < BOARD_SIZE; r++)
+        for (let c = 0; c < BOARD_SIZE; c++)
+            if (board[r][c]) drawStone(ctx, r, c, board[r][c]);
+
+    if (lastMove) {
+        ctx.strokeStyle = '#0f172a';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(metrics.headerX + lastMove.c * metrics.cellW + 2, metrics.headerY + lastMove.r * metrics.cellH + 2, metrics.cellW - 4, metrics.cellH - 4);
+    }
+
+    if (!gameOver && myColor === 'black') {
+        drawForbidden(ctx, metrics);
     }
 }
 
 function drawStone(ctx, r, c, color) {
-    const x = MARGIN + c * CELL;
-    const y = MARGIN + r * CELL;
-    const gr = ctx.createRadialGradient(x - STONE_R*0.3, y - STONE_R*0.3, STONE_R*0.1, x, y, STONE_R);
+    const metrics = getBoardMetrics();
+    if (spreadsheetMode) {
+        ctx.fillStyle = SPREADSHEET_FILL[color];
+        ctx.fillRect(metrics.headerX + c * metrics.cellW + 1, metrics.headerY + r * metrics.cellH + 1, metrics.cellW - 2, metrics.cellH - 2);
+        return;
+    }
+
+    const x = metrics.headerX + c * metrics.cellW;
+    const y = metrics.headerY + r * metrics.cellH;
+    const gr = ctx.createRadialGradient(x - metrics.stoneR*0.3, y - metrics.stoneR*0.3, metrics.stoneR*0.1, x, y, metrics.stoneR);
 
     if (color === 1) {
         gr.addColorStop(0, '#555'); gr.addColorStop(1, '#000');
@@ -901,21 +2567,34 @@ function drawStone(ctx, r, c, color) {
         gr.addColorStop(0, '#fff'); gr.addColorStop(1, '#ccc');
     }
 
-    ctx.beginPath(); ctx.arc(x, y, STONE_R, 0, Math.PI*2);
+    ctx.beginPath(); ctx.arc(x, y, metrics.stoneR, 0, Math.PI*2);
     ctx.fillStyle = gr; ctx.fill();
     if (color === 2) { ctx.strokeStyle = '#aaa'; ctx.lineWidth = 1; ctx.stroke(); }
 }
 
-function drawForbidden(ctx) {
+function drawForbidden(ctx, metrics = getBoardMetrics()) {
     for (let r = 0; r < BOARD_SIZE; r++) {
         for (let c = 0; c < BOARD_SIZE; c++) {
             if (board[r][c] === 0 && isForbidden(r, c)) {
-                const x = MARGIN + c*CELL, y = MARGIN + r*CELL;
-                ctx.strokeStyle = 'rgba(255,60,60,0.85)';
-                ctx.lineWidth = 2;
-                const s = STONE_R * 0.6;
-                ctx.beginPath(); ctx.moveTo(x-s, y-s); ctx.lineTo(x+s, y+s); ctx.stroke();
-                ctx.beginPath(); ctx.moveTo(x+s, y-s); ctx.lineTo(x-s, y+s); ctx.stroke();
+                if (spreadsheetMode) {
+                    const cx = metrics.headerX + c * metrics.cellW + metrics.cellW / 2;
+                    const cy = metrics.headerY + r * metrics.cellH + metrics.cellH / 2;
+                    ctx.save();
+                    ctx.fillStyle = '#111111';
+                    ctx.font = `700 ${Math.floor(metrics.cellH * 0.62)}px sans-serif`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('X', cx, cy + 1);
+                    ctx.restore();
+                } else {
+                    ctx.strokeStyle = 'rgba(255,60,60,0.85)';
+                    ctx.lineWidth = 2;
+                    const x = metrics.headerX + c * metrics.cellW;
+                    const y = metrics.headerY + r * metrics.cellH;
+                    const s = metrics.stoneR * 0.6;
+                    ctx.beginPath(); ctx.moveTo(x-s, y-s); ctx.lineTo(x+s, y+s); ctx.stroke();
+                    ctx.beginPath(); ctx.moveTo(x+s, y-s); ctx.lineTo(x-s, y+s); ctx.stroke();
+                }
             }
         }
     }
@@ -929,11 +2608,16 @@ function onBoardClick(e) {
 
     const canvas = document.getElementById('board-canvas');
     const rect   = canvas.getBoundingClientRect();
-    const px = (e.clientX - rect.left) * (CANVAS_SIZE / rect.width);
-    const py = (e.clientY - rect.top)  * (CANVAS_SIZE / rect.height);
+    const metrics = getBoardMetrics();
+    const px = (e.clientX - rect.left) * (metrics.width / rect.width);
+    const py = (e.clientY - rect.top)  * (metrics.height / rect.height);
 
-    const c = Math.round((px - MARGIN) / CELL);
-    const r = Math.round((py - MARGIN) / CELL);
+    const c = spreadsheetMode
+        ? Math.floor((px - metrics.headerX) / metrics.cellW)
+        : Math.round((px - metrics.headerX) / metrics.cellW);
+    const r = spreadsheetMode
+        ? Math.floor((py - metrics.headerY) / metrics.cellH)
+        : Math.round((py - metrics.headerY) / metrics.cellH);
 
     if (r < 0 || r >= BOARD_SIZE || c < 0 || c >= BOARD_SIZE) return;
     if (board[r][c] !== 0) return;
@@ -1183,28 +2867,63 @@ function isDoubleThree(r, c, depth = 0) {
 // ════════════════════════════════════════════════════════════
 //  결과 화면
 // ════════════════════════════════════════════════════════════
+function normalizeSfwReason(reason, iWon) {
+    switch (reason) {
+        case '상대방 시간 초과':
+            return '상대 참여자의 응답 가능 시간이 만료되었습니다.';
+        case '시간 초과':
+            return '내 입력 가능 시간이 만료되었습니다.';
+        case '상대방이 항복했습니다':
+            return '상대 참여자가 세션 종료를 요청했습니다.';
+        case '항복':
+            return '내가 세션 종료를 요청했습니다.';
+        default:
+            return iWon
+                ? '후속 검토 단계를 이어서 열 수 있습니다.'
+                : '필요하면 동일 문서에서 후속 검토 단계를 다시 열 수 있습니다.';
+    }
+}
+
 function showResult(iWon, reason) {
     stopTimer();
     clearAnimations();
+    document.getElementById('screen-result').classList.remove('hidden');
     document.getElementById('result-banner').classList.remove('banner-pop');
     void document.getElementById('result-banner').offsetWidth;
     document.getElementById('result-banner').classList.add('banner-pop');
 
-    if (iWon) {
-        document.getElementById('result-emoji').textContent = '🏆';
-        document.getElementById('result-title').innerHTML = '<span class="text-yellow-400">승리!</span>';
-        document.getElementById('result-sub').textContent = reason || '훌륭한 대국이었습니다!';
-        startConfetti();
+    if (spreadsheetMode) {
+        const sfwTitle = iWon
+            ? '현재 검토 단계가 정상 종료되었습니다'
+            : '현재 검토 단계가 종료되었습니다';
+        const sfwSummary = iWon
+            ? `${myNickname} 님 기준으로 현재 입력 단계가 확정되었습니다.`
+            : `${oppNickname} 님 기준으로 현재 입력 단계가 확정되었습니다.`;
+        const sfwDetail = normalizeSfwReason(reason, iWon);
+        setText(['sfw-result-title'], sfwTitle);
+        setText(['sfw-result-summary'], sfwSummary);
+        setText(['sfw-result-detail'], sfwDetail);
+        setText(['btn-rematch'], '후속 단계 시작');
+        setText(['btn-result-home'], '문서 목록으로 이동');
+        setText(['sfw-result-badge'], iWon ? '검토 단계 완료' : '검토 단계 종료');
     } else {
-        document.getElementById('result-emoji').textContent = '😔';
-        document.getElementById('result-title').innerHTML = '<span class="text-slate-400">패배</span>';
-        document.getElementById('result-sub').textContent = reason || '다음엔 꼭 이겨보세요!';
-        startRain();
+        setText(['btn-rematch'], '재시합 요청');
+        setText(['btn-result-home'], '로비로 돌아가기');
+        if (iWon) {
+            document.getElementById('result-emoji').textContent = '🏆';
+            document.getElementById('result-title').innerHTML = '<span class="text-yellow-400">승리!</span>';
+            document.getElementById('result-sub').textContent = reason || '훌륭한 대국이었습니다!';
+            startConfetti();
+        } else {
+            document.getElementById('result-emoji').textContent = '😔';
+            document.getElementById('result-title').innerHTML = '<span class="text-slate-400">패배</span>';
+            document.getElementById('result-sub').textContent = reason || '다음엔 꼭 이겨보세요!';
+            startRain();
+        }
     }
 
     document.getElementById('rematch-status').textContent = '';
     document.getElementById('btn-rematch').disabled = false;
-    showScreen('result');
 }
 
 // ════════════════════════════════════════════════════════════
@@ -1254,14 +2973,25 @@ function clearAnimations() {
 function requestRematch() {
     if (conn && conn.open) {
         conn.send({ type: 'rematch-req' });
-        document.getElementById('rematch-status').textContent = '재시합 요청 중...';
+        document.getElementById('rematch-status').textContent = spreadsheetMode
+            ? '후속 단계 시작 요청을 전송하는 중입니다...'
+            : '재시합 요청 중...';
         document.getElementById('btn-rematch').disabled = true;
     }
 }
 
 function showRematchModal() {
-    document.getElementById('rematch-requester').textContent =
-        `${oppNickname}이(가) 재시합을 요청했습니다.`;
+    if (spreadsheetMode) {
+        setText(['modal-rematch-title'], '후속 단계 시작 요청');
+        setText(['rematch-requester'], `${oppNickname} 님이 동일 문서에서 후속 검토 단계를 시작하자고 요청했습니다.`);
+        setText(['btn-rematch-accept'], '단계 열기');
+        setText(['btn-rematch-decline'], '보류');
+    } else {
+        setText(['modal-rematch-title'], '재시합 요청');
+        setText(['rematch-requester'], `${oppNickname}이(가) 재시합을 요청했습니다.`);
+        setText(['btn-rematch-accept'], '승낙');
+        setText(['btn-rematch-decline'], '거절');
+    }
     document.getElementById('modal-rematch').classList.remove('hidden');
 }
 
@@ -1280,6 +3010,7 @@ function declineRematch() {
 function startRematch() {
     clearAnimations();
     stopTimer();
+    document.getElementById('screen-result').classList.add('hidden');
     showScreen('coin');
     document.getElementById('coin-result').classList.add('hidden');
     document.getElementById('coin-waiting').classList.remove('hidden');
@@ -1300,6 +3031,7 @@ function startRematch() {
 function backToLobby() {
     clearAnimations();
     stopTimer();
+    document.getElementById('screen-result').classList.add('hidden');
     document.getElementById('modal-rematch').classList.add('hidden');
     document.getElementById('modal-resign').classList.add('hidden');
     gameOver = true;
